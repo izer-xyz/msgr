@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf8">
+		<title>Manage message</title>
+		<meta name="theme-color" content="#dd3300">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link rel="stylesheet" href="/index.css">
+	</head>
+	<body>
+
+		<main>
+			<h1>Manage</h1>
+
+			<div>
+				<p>Calendar</p>
+			</div>
+
+			<form method="POST" action="/api/submit">
+        
+				<div class="input">
+					<label for="date">Date</label>
+					<input id="date" name="date" type="date" />
+				</div>
+        
+				<div class="input">
+					<label for="message">Message</label>
+					<textarea id="message" name="message" > </textarea>
+				</div>
+        
+				<button type="submit">Submit</button>
+			</form>
+		</main>
+
+	</body>
+</html>
