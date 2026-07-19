@@ -35,18 +35,17 @@ Dashboard for daily scheduled activities and recent messages.
 ### EMAIL (*.ics attachment) #Calendar-manager
 Schedule calendar event
 
-'''
+```
 KV.calendar.put(ICS.ID, ICS)
-'''
+```
 
 ### EMAIL (no attachment) #Messages
 Save message (date/time, subject and from)
 
-'''
+```
 KV.messages.put(EMAIL.dateTime + EMAIL.ID, {EMAIL.subject, EMAIL.from})
-'''
+```
 
-.
 ### GET /api/display #Dashboard #Server
 Update Device status, and return content URL / next refresh 
 
@@ -54,14 +53,13 @@ Headers:
  * ID
  * Access-Token 
 
-'''
+```
 messages = KV.messages.list(now().dateTime)
 activities = KV.calendar.list(now().dateTime)
 
 image = Jimp.greyscale(vercel.og(dasboard(now(), messages, activities)))
 KV.cache.put(hash, image)
-
-'''
+```
 
 Response (application/json):
 
@@ -75,9 +73,9 @@ Headers:
 Response (image/png):
  * binary
 
-'''
+```
 return KV.cache.get(hash)
-'''
+```
 
 ### GET /api/setup #Server
 Register new Device
