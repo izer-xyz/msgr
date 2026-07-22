@@ -18,16 +18,16 @@ Dashboard for daily scheduled activities and recent messages.
      * api/image/[hash].js
      * api/setup.js
      * api/log.js
-     * screen/default.js
-     * screen/dashboard.js
+     * screen/default.txs
+     * screen/dashboard.txs
  * Cloudflare KV
    * calendar: date -> ical
    * messages: date-time -> message
    * cache: hash -> image
    * devices: id -> config 
  * Libraries:
-   * @vercel/og - HTML -> SVG -> PNG
-   * Jimp - PNG (RGBA) -> PNG (Greyscale)
+   * takumi-js - HTML  -> Raw
+   * Jimp - Raw (RGBA) -> PNG (Greyscale)
    * ? - ical -> json 
 
 ## APIs
@@ -36,7 +36,7 @@ Dashboard for daily scheduled activities and recent messages.
 Schedule calendar event
 
 ```
-KV.calendar.put(ICS.ID, ICS)
+KV.calendar.put(ICS.date + '.' + ICS.ID, ICS)
 ```
 
 ### EMAIL (no attachment) #Messages
