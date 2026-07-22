@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fast-png": "^8.0.0",
+    "jimp": "1.6.0"
+  }
+}
