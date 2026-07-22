@@ -54,6 +54,8 @@ Headers:
  * Access-Token 
 
 ```
+console.log(`[api/display/${headers.ID}]:  `)
+
 messages = KV.messages.list(now().dateTime)
 activities = KV.calendar.list(now().dateTime)
 
@@ -91,7 +93,11 @@ Device logs
 
 Headers: 
  * ID
- * Access-Token 
+ * Access-Token
+
+```
+console.log(`[api/log/${headers.ID}] ${request.body}`)
+```
 
 Response (application/json):
  * message
