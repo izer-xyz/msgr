@@ -57,7 +57,7 @@ Headers:
 messages = KV.messages.list(now().dateTime)
 activities = KV.calendar.list(now().dateTime)
 
-image = Jimp.greyscale(vercel.og(dasboard(now(), messages, activities)))
+image = Jimp.greyscale(takumi-js(dasboard(now(), messages, activities)))
 KV.cache.put(hash, image)
 ```
 
