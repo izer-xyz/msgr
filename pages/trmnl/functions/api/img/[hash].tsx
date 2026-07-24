@@ -1,4 +1,4 @@
-import { error_image } from "../src/helper.ts";
+import { error_image } from "../../../src/helper.tsx";
 
 export async function onRequest({ params, request, env}) {
   
@@ -10,8 +10,8 @@ export async function onRequest({ params, request, env}) {
   try {
     
   return new Response(
-    env.TRMNL_CACHE.get(params.hash), 
-    { "Content-Type": "image/png" }
+    await(env.TRMNL_CACHE.get(params.hash)), 
+    { headers: { "Content-Type": "image/png"} }
   );
 
   } catch (err) {

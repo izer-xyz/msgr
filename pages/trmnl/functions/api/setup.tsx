@@ -22,7 +22,7 @@ export async function onRequest({ request, env}) {
   return new Response(JSON.stringify({
      "api_key": id,
      "friendly_id": id,
-     "image_url": `${ request.url }/../img/${ id }.png`,
+     "image_url": `${ request.url }/../img/${ id }`,
      "message": "Hello",
      "status": 200
    }), {
