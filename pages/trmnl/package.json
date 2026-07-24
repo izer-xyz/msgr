@@ -1,5 +1,5 @@
 {
-  "name": "msgr-scheduler",
+  "name": "msgr-trmnl",
   "private": true,
   "scripts": {
     "start": "wrangler pages dev public"
