@@ -3,6 +3,8 @@ const DEFAULTS = {
   width: 1872,
   screen: 'welcome',
   refresh_rate: 60, 
+  api_key: null, 
+  friendly_id: null,
 }; 
 
 export default function lookup(headers, kv, persist = true) {
@@ -37,7 +39,6 @@ const TRMNL_HEADERS = [
   ,'battery_voltage'
   ,'fw_version'
   ,'height'
-  ,'host'
   ,'id'
   ,'image_cached'
   ,'model'
