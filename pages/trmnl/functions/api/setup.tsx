@@ -13,7 +13,7 @@ export async function onRequest({ request, env}) {
 
   save(device, env.TRMNL_DEVICES); 
   
-  const filename = process(device, env); 
+  const filename = await process(device, env); 
   
   return new Response(JSON.stringify({
      'api_key': device.api_key,

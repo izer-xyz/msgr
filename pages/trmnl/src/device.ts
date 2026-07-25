@@ -12,7 +12,9 @@ export default function lookup(headers, kv, persist = true) {
   const device = kv.get(headers.get('ID'), 'json');
 
   // All TRMNL headers are uppercase
-  const trmnlHeaders = Object.fromEntries(headers.entries()).filter(([key]) => UPPERCASE.test(key))); 
+  const trmnlHeaders = Object.fromEntries(headers.entries()).filter(
+    ([key]) => UPPERCASE.test(key)
+  ); 
   console.log(`[${ device.ID }] ${ JSON.stringify(trmnlHeaders) }`); 
   
   const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };

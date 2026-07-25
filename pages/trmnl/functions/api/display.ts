@@ -8,7 +8,7 @@ export async function onRequest({ request, env }) {
   
   try {
 
-    const filename = process(device, env); 
+    const filename = await process(device, env); 
     
     let response = JSON.stringify({
       "filename": filename,
