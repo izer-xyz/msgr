@@ -8,8 +8,8 @@ export async function onRequest({ request, env}) {
   const device = lookup(request.headers, env.TRMNL_DEVICES); 
   
   // TODO generate access token 
-  device.api_key = device.ID; 
-  device.friendly_id = device.ID.slice(-5); 
+  device.api_key = device.id; 
+  device.friendly_id = device.id.slice(-5); 
 
   save(device, env.TRMNL_DEVICES); 
   

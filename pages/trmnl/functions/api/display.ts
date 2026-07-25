@@ -17,7 +17,7 @@ export async function onRequest({ request, env }) {
       "image_url": `${ request.url }/../img/${ filename }`,
       //"image_url_timeout": 0,
       //"maximum_compatibility": false,
-      "refresh_rate": device.refresh,
+      "refresh_rate": device.refresh_rate,
       "reset_firmware": false,
       //"special_function": "none",
       //"temperature_profile": "default",
@@ -31,7 +31,7 @@ export async function onRequest({ request, env }) {
       }
     });
   } catch (err) {
-    console.log(`[${ device.ID }] ${ err }`); 
+    console.log(`[${ device.id }] ${ err }`); 
     return new Response('Error', { status: 400 });
   }
 

@@ -16,7 +16,7 @@ export async function onRequest({ params, request, env}) {
     );
 
   } catch (err) {
-    console.log(`[${ device.ID }] ${ JSON.stringify(err) }`);
+    console.log(`[${ device.id }] ${ JSON.stringify(err) }`);
     return screen(device, env, { message: 'Image not found' });  
   }
 };

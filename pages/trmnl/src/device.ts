@@ -1,21 +1,18 @@
 const DEFAULTS = {
-  panel: 'E1003',
   height: 1404,
   width: 1872,
   screen: 'welcome',
-  refresh: 60, 
+  refresh_rate: 60, 
 }; 
-
-const UPPERCASE = /[A-Z]/g
 
 export default function lookup(headers, kv, persist = true) {
   const device = kv.get(headers.get('ID'), 'json');
 
-  // All TRMNL headers are uppercase
-  const trmnlHeaders = Object.fromEntries(headers.entries()).filter(
-    ([key]) => UPPERCASE.test(key)
-  ); 
-  console.log(`[${ device.ID }] ${ JSON.stringify(trmnlHeaders) }`); 
+  // All headers are lowercase
+  const trmnlHeaders = Object.fromEntries(headers.entries().filter(
+    ([key]) => TRMNL_HEADERS.includes(key)
+  )); 
+  console.log(`[${ device.id }] ${ JSON.stringify(trmnlHeaders) }`); 
   
   const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
 
@@ -26,5 +23,31 @@ export default function lookup(headers, kv, persist = true) {
 
 export function save(device, kv) {
   device.updated = new Date().toISOString(); 
-  kv.put(device.ID, JSON.stringify(device));
+  kv.put(device.id, JSON.stringify(device));
 }; 
+
+const TRMNL_HEADERS = [
+  'access_token'
+  ,'battery_capacity'
+  ,'battery_charging'
+  ,'battery_count'
+  ,'battery_current'
+  ,'battery_health'
+  ,'battery_temp'
+  ,'battery_voltage'
+  ,'fw_version'
+  ,'height'
+  ,'host'
+  ,'id'
+  ,'image_cached'
+  ,'model'
+  ,'percent_charged'
+  ,'refresh_rate'
+  ,'rssi'
+  ,'sensors'
+  ,'temperature_profile'
+  ,'update_source'
+  ,'usb_connected'
+  ,'wake_time'
+  ,'width'
+]

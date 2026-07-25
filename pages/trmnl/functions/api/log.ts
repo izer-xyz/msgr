@@ -6,7 +6,7 @@ export async function onRequest({ request }) {
   const device = lookup(request.headers, env.TRMNL_DEVICES); 
   
   request.json().logs.forEach( 
-    x => console.log(`[${ device.ID }] ${ x }`)
+    x => console.log(`[${ device.id }] ${ x }`)
   ); 
 
   return new Response(null, { status: 204 });
