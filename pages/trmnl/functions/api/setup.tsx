@@ -12,7 +12,7 @@ export async function onRequest({ request, env}) {
   // TODO generate access token 
 
   env.TRMNL_CACHE.put(id, await (new ImageResponse(
-    <h2 tw="">Hello ${ id } </h2>,  
+    <h2 tw="">Hello { id } </h2>,  
     {
       width: 1872,
       height: 1404,

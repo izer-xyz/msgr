@@ -5,17 +5,21 @@ export async function onRequest({ params, request, env}) {
   const { pathname } = new URL(request.url);
   const id = request.headers.get("ID"); 
 
-  console.log(`[${ pathname }/${ id }] ${ JSON.stringify(request.headers) }`); 
+  console.log(`[${ pathname }/${ id }] ${ JSON.stringify(Object.fromEntries(request.headers)) }`); 
+
 
   try {
-    
-  return new Response(
-    await(env.TRMNL_CACHE.get(params.hash)), 
-    { headers: { "Content-Type": "image/png"} }
-  );
+    let png = await env.TRMNL_CACHE.get(params.hash, 'arrayBuffer');
+
+    if (!png) throw new Error(`${params.hash} not found`);   
+
+    return new Response(
+      png,  
+      { headers: { 'Content-Type': 'image/png'} }
+    );
 
   } catch (err) {
     console.log(`[${ pathname }/${ id }] ${ JSON.stringify(err) }`);
-    return error_image("Image not found");  
+    return error_image('Image not found');  
   }
 };
