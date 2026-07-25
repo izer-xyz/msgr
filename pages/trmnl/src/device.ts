@@ -8,7 +8,7 @@ const DEFAULTS = {
 }; 
 
 export default function lookup(headers, kv, persist = true) {
-  const device = kv.get(headers.get('ID'), 'json');
+  const device = kv.get(headers.get('id'), 'json');
 
   // All headers are lowercase
   const trmnlHeaders = Object.fromEntries(headers.entries().filter(
