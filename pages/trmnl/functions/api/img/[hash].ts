@@ -3,7 +3,7 @@ import lookup from "../../../src/device.ts";
 
 export async function onRequest({ params, request, env}) {
 
-  let device = lookup(request, env.TRMNL_DEVICES)
+  const device = lookup(request.headers, env.TRMNL_DEVICES)
 
   try {
     let png = await env.TRMNL_CACHE.get(params.hash, 'arrayBuffer');
