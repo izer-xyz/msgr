@@ -1,12 +1,13 @@
+import lookup from '../../src/device.ts'; 
+
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#log
 export async function onRequest({ request }) {
 
-  const { pathname } = new URL(request.url);
-  const id = request.headers.get("ID"); 
+  const device = lookup(request.headers, env.TRMNL_DEVICES); 
   
   request.json().logs.forEach( 
-    x => console.log(`[${ pathname }/${ id }] ${ x }`)
+    x => console.log(`[${ device.ID }] ${ x }`)
   ); 
 
-  return new Response("", { status: 204 });
+  return new Response(null, { status: 204 });
 };

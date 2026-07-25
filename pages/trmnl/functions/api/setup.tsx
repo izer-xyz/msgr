@@ -1,30 +1,26 @@
-import { ImageResponse } from "takumi-js/response";
+import process from '../../src/image.ts';
+import { lookup, save } from '../../src/device.ts'; 
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#setup
 // https://oetiker.github.io/byonk/dev/api/http-api.html#get-apisetup
 export async function onRequest({ request, env}) {
 
-  const { pathname } = new URL(request.url);
-  const id = request.headers.get("ID"); 
+  const device = lookup(request.headers, env.TRMNL_DEVICES); 
   
-  console.log(`[${ pathname }/${ id }] ${ JSON.stringify(request.headers) }`);
-
   // TODO generate access token 
+  device.api_key = device.ID; 
+  device.friendly_id = device.ID.slice(-5); 
 
-  env.TRMNL_CACHE.put(id, await (new ImageResponse(
-    <h2 tw="">Hello { id } </h2>,  
-    {
-      width: 1872,
-      height: 1404,
-    },
-  )).arrayBuffer()); 
+  save(device, env.TRMNL_DEVICES); 
+  
+  const filename = process(device, env); 
   
   return new Response(JSON.stringify({
-     "api_key": id,
-     "friendly_id": id,
-     "image_url": `${ request.url }/../img/${ id }`,
-     "message": "Hello",
-     "status": 200
+     'api_key': device.api_key,
+     'friendly_id': device.friendly_id,
+     'image_url': `${ request.url }/../img/${ filename }`,
+     'message': 'Welcome',
+     'status': 200
    }), {
       headers: {
       'Content-Type': 'application/json;charset=utf-8'
