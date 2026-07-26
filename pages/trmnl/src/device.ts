@@ -5,6 +5,7 @@ const DEFAULTS = {
   refresh_rate: '60', 
   api_key: null, 
   friendly_id: null,
+  depth: '4',
 }; 
 
 export default async function lookup(headers, kv, persist = true) {
