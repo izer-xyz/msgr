@@ -23,8 +23,8 @@ export async function onRequest({ request, env }) {
       //"temperature_profile": "default",
       //"touchbar_mode": "tap",
       "update_firmware": false
-    }, null, 2);
-  
+    });
+    console.log(`[${ device.id }] ${ response }`);  
     return new Response(response, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8'

@@ -1,8 +1,8 @@
 const DEFAULTS = {
-  height: 1404,
-  width: 1872,
+  height: '1404',
+  width: '1872',
   screen: 'welcome',
-  refresh_rate: 60, 
+  refresh_rate: '60', 
   api_key: null, 
   friendly_id: null,
 }; 
@@ -12,11 +12,11 @@ export default async function lookup(headers, kv, persist = true) {
 
   // All headers are lowercase
   const trmnlHeaders = Object.fromEntries(headers.entries().filter(
-    ([key]) => TRMNL_HEADERS.includes(key)
+    ([key]) => true // TRMNL_HEADERS.includes(key)
   )); 
-  console.log(`[${ device.id }] ${ JSON.stringify(trmnlHeaders) }`); 
   
   const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
+  console.log(`[${ newDevice.id }] ${ JSON.stringify(trmnlHeaders) }`); 
 
   if (persist) save(newDevice, kv); 
   
