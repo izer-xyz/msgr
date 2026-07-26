@@ -7,8 +7,8 @@ const DEFAULTS = {
   friendly_id: null,
 }; 
 
-export default function lookup(headers, kv, persist = true) {
-  const device = kv.get(headers.get('id'), 'json');
+export default async function lookup(headers, kv, persist = true) {
+  const device = await kv.get(headers.get('id'), 'json');
 
   // All headers are lowercase
   const trmnlHeaders = Object.fromEntries(headers.entries().filter(

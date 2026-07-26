@@ -5,7 +5,7 @@ import { default as lookup, save } from '../../src/device.ts';
 // https://oetiker.github.io/byonk/dev/api/http-api.html#get-apisetup
 export async function onRequest({ request, env}) {
 
-  const device = lookup(request.headers, env.TRMNL_DEVICES); 
+  const device = await lookup(request.headers, env.TRMNL_DEVICES); 
   
   // TODO generate access token 
   device.api_key = device.id; 

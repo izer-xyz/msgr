@@ -4,7 +4,7 @@ import process from '../../src/image.ts';
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
 
-  const device = lookup(request.headers, env.TRMNL_DEVICES, true); 
+  const device = await lookup(request.headers, env.TRMNL_DEVICES, true); 
   
   try {
 
