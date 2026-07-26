@@ -1,6 +1,6 @@
 
 export default async function process(device, env) {
-  const { default: screen } = await import(`screen/${ device.screen }.tsx`);
+  const { default: screen } = await import(`./screen/${ device.screen }.tsx`);
   const img = await (screen(device, env)).arrayBuffer();
   const filename = await md5(img) + '.png'; 
   env.TRMNL_CACHE.put(filename, img); 
