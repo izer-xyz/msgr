@@ -1,9 +1,10 @@
 import { encode } from "fast-png"; 
+import { Jimp } from "jimp";
 
 export default async function process(device, env) {
   const { default: screen } = await import(`./screen/${ device.screen }.tsx`);
-  const raw = await screen(device, env); 
-  const img = encode(depth(raw, device));
+  let png = (await Jimp.fromBuffer(screen(device, env))).greyscale(); 
+  const img = encode(depth(png.bitmap, Number(device.depth)));
   const filename = await md5(img) + '.png'; 
   env.TRMNL_CACHE.put(filename, img); 
   return filename; 
@@ -18,11 +19,7 @@ async function md5(buffer) {
   ).join('');
 }
 
-function depth(raw, device) {
-  const width = Number(device.width), 
-      height = Numner(device.height), 
-      depth = Number(device.depth); 
-
+function depth({ width, height, data }, depth) {
   let l = width * height,
       out = {
         depth,
@@ -34,7 +31,7 @@ function depth(raw, device) {
 
     for (let i = 0; i < l; i++) { 
       out.data[Math.floor(i * depth / 8)] |=
-        (raw[i * 4] >> (8 - depth)) 
+        (data[i * 4] >> (8 - depth)) 
         <<  (8 - depth * (1 + i % (8 / depth)) )
         ; 
       };

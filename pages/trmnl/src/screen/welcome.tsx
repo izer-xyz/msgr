@@ -1,4 +1,4 @@
-import { render } from 'takumi-js/response';
+import { render } from 'takumi-js';
 
 export default async function screen(device, env) {
   return render(
@@ -6,8 +6,7 @@ export default async function screen(device, env) {
     {
       width: Number(device.width),
       height: Number(device.height),
-      status: 404,
-      format: 'raw'
+      format: 'png'
     },
   );  
 }
