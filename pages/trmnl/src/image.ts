@@ -3,7 +3,7 @@ import { Jimp } from "jimp";
 
 export default async function process(device, env) {
   const { default: render } = await import(`./screen/${ device.screen }.tsx`);
-  let raw = await render(device, env).arrayBuffer(); 
+  let raw = await (render(device, env).arrayBuffer()); 
   let jimp = Jimp.fromBitmap(await decode(raw))
     .greyscale(); 
   const png = encode(depth(jimp.bitmap, Number(device.depth)));
