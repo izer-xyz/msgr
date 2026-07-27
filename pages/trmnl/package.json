@@ -7,6 +7,7 @@
   "dependencies": {
     "react": "^19.2.7",
     "takumi-js": "^2.4.0",
+    "@vercel/og": "^0.11.1",
     "fast-png": "^8.0.0",
     "jimp": "1.6.0"
   },

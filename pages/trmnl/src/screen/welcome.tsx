@@ -1,4 +1,5 @@
-import { ImageResponse } from 'takumi-js/response';
+//import { ImageResponse } from 'takumi-js/response';
+import { ImageResponse } from '@vercel/og'
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleTimeString('fr-FR', { timeZone: 'Indian/Reunion' }); 
