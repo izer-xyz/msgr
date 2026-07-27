@@ -1,8 +1,8 @@
-import { render } from 'takumi-js';
+import { ImageResponse } from 'takumi-js/response';
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleTimeString('fr-FR', { timeZone: 'Indian/Reunion' }); 
-  return render(
+  return new ImageResponse(
     <div tw="flex h-full w-full flex-col justify-center bg-black p-20">
       <div tw="flex flex-col">
         <h1 tw="m-0 text-9xl font-bold leading-none tracking-tighter text-white"> { date } </h1>
