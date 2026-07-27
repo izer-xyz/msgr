@@ -1,11 +1,11 @@
 import { encode } from "fast-png"; 
 import { Jimp } from "jimp";
 
-export default async function process({screen, depth}, env) {
-  const { default: render } = await import(`./screen/${ screen }.tsx`);
+export default async function process(device, env) {
+  const { default: render } = await import(`./screen/${ device.screen }.tsx`);
   let raw = await render(device, env); 
   let jimp = (await Jimp.fromBuffer(raw)).greyscale(); 
-  const png = encode(depth(jimp.bitmap, Number(depth)));
+  const png = encode(depth(jimp.bitmap, Number(device.depth)));
   const filename = await md5(png) + '.png'; 
   env.TRMNL_CACHE.put(filename, png); 
   return filename; 
