@@ -1,12 +1,13 @@
 import { encode } from "fast-png"; 
 import { Jimp } from "jimp";
 
-export default async function process(device, env) {
-  const { default: screen } = await import(`./screen/${ device.screen }.tsx`);
-  let png = (await Jimp.fromBuffer(screen(device, env))).greyscale(); 
-  const img = encode(depth(png.bitmap, Number(device.depth)));
-  const filename = await md5(img) + '.png'; 
-  env.TRMNL_CACHE.put(filename, img); 
+export default async function process({screen, depth}, env) {
+  const { default: screen } = await import(`./screen/${ screen }.tsx`);
+  let raw = await screen(device, env); 
+  let jimp = (await Jimp.fromBuffer(raw)).greyscale(); 
+  const png = encode(depth(jimp.bitmap, Number(depth)));
+  const filename = await md5(png) + '.png'; 
+  env.TRMNL_CACHE.put(filename, png); 
   return filename; 
 }
 
@@ -20,20 +21,19 @@ async function md5(buffer) {
 }
 
 function depth({ width, height, data }, depth) {
-  let l = width * height,
-      out = {
+  let out = {
         depth,
         channels: 1, 
         width,
         height,
-        data:  new Uint8Array(new Array(l * depth / 8)) 
-      };
+        data:  new Uint8Array(new Array(width * height * depth / 8)) 
+  };
 
-    for (let i = 0; i < l; i++) { 
-      out.data[Math.floor(i * depth / 8)] |=
-        (data[i * 4] >> (8 - depth)) 
-        <<  (8 - depth * (1 + i % (8 / depth)) )
-        ; 
-      };
+  for (let i = 0; i < width * height; i++) { 
+    out.data[Math.floor(i * depth / 8)] |=
+      (data[i * 4] >> (8 - depth)) 
+      <<  (8 - depth * (1 + i % (8 / depth)) ); 
+  };
+  
   return out; 
 }
