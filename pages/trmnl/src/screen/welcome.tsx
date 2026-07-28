@@ -12,8 +12,7 @@ export default async function screen(device, env) {
     ,  
     {
       width: Number(device.width),
-      height: Number(device.height),
-      format: 'png'
+      height: Number(device.height)
     },
   );  
 }
