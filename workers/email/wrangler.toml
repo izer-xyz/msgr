@@ -1,0 +1,11 @@
+name = "email"
+main = "src/index.ts"
+compatibility_date = "2026-07-28"
+send_metrics = false
+
+[[kv_namespaces]]
+binding = "MESSAGES"
+id = "messages"
+
+[[email]]
+name = "EMAIL"

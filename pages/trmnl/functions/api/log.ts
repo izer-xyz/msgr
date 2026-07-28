@@ -6,8 +6,8 @@ export async function onRequest({ request, env }) {
   const device = await lookup(request.headers, env.TRMNL_DEVICES); 
   const logs = await (request.json()).logs;
 
-  for(log in logs) {
-    console.log(`[/api/log/${ device.id }] ${ x }`)
+  for(const log of logs) {
+    console.log(`[/api/log/${ device.id }] ${ log }`)
   }
 
   return new Response(null, { status: 204 });

@@ -40,7 +40,7 @@ const IGNORE_HEADERS = [
   'refresh_rate',
   'cf-ray', 
   'accept-encoding',
-  'x-forwarded-proto'
+  'x-forwarded-proto',
   'cf-connecting-ip', 
   'updated', 
   'fw-commit'
