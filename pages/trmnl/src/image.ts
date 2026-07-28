@@ -12,7 +12,7 @@ export default async function process(device, env) {
     .greyscale(); 
   const png = encode(depth(jimp.bitmap, Number(device.depth)));
   const filename = await md5(png) + '.png'; 
-  env.TRMNL_CACHE.put(filename, png); 
+  await env.TRMNL_CACHE.put(filename, png); 
   return filename; 
 }
 
