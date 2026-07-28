@@ -1,4 +1,4 @@
-import { ImageResponse } from 'takumi-js/response';
+import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
 
 export default function screen(device, env, params) {
   return new ImageResponse(
