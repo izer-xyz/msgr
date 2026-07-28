@@ -1,10 +1,11 @@
 import { encode, decode } from "fast-png"; 
 import { Jimp } from "jimp";
-import render from "./screen/welcome.tsx"; 
+import { default as error } from "./screen/error.tsx"; 
 
+const SCREENS = new Map(); 
 
 export default async function process(device, env) {
-  // const { default: render } = await import(`./screen/${ device.screen }.tsx`);
+  let render = SCREENS.get(device.screen) || error; 
   let response = await render(device, env); 
   let raw = await response.arrayBuffer(); 
   let jimp = Jimp.fromBitmap(await decode(raw))
@@ -40,4 +41,8 @@ function depth({ width, height, data }, depth) {
   };
   
   return out; 
+}
+
+export function register(name, function) {
+  SCREENS.set(name, function);
 }
