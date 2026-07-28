@@ -43,6 +43,6 @@ function depth({ width, height, data }, depth) {
   return out; 
 }
 
-export function register(name, function) {
-  SCREENS.set(name, function);
+export function register(name, screen) {
+  SCREENS.set(name, screen);
 }
