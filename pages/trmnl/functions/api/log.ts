@@ -7,7 +7,7 @@ export async function onRequest({ request, env }) {
   const logs = await (request.json()).logs;
 
   for(log in logs) {
-    console.log(`[${ device.id }] ${ x }`)
+    console.log(`[/api/log/${ device.id }] ${ x }`)
   }
 
   return new Response(null, { status: 204 });

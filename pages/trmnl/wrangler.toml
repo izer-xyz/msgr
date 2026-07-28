@@ -14,3 +14,7 @@ id = "trmnl_devices"
 [[kv_namespaces]]
 binding = "MSG_BOARD"
 id = "msg_board"
+
+# [[analytics_engine_datasets]]
+# binding = "TRMNL_ANALYTICS"
+# id = "trmnl_analytics

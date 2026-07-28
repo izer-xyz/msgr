@@ -4,7 +4,22 @@ import process from '../../src/image.ts';
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
 
-  const device = await lookup(request.headers, env.TRMNL_DEVICES, true); 
+  const device = await lookup(request.headers, env.TRMNL_DEVICES, true);
+
+  if (env.TRMNL_ANALYTICS) {
+    env.TRMNL_ANALYTICS.writeDataPoint({
+      blobs: [
+        device['x-real-ip'], 
+        device.model, 
+        device['fw-version'], 
+        device.friendly_id],
+      doubles: [
+        Number(device['wake-time']), 
+        Number(device['battery-voltage']), 
+        Number(device.refresh_rate)],
+      indexes: [device.id],
+    }); 
+  }
   
   const filename = await process(device, env); 
   
@@ -22,7 +37,7 @@ export async function onRequest({ request, env }) {
     //'touchbar_mode': 'tap',
     'update_firmware': false
   });
-  console.log(`[${ device.id }] ${ response }`);  
+  
   return new Response(response, {
     headers: {
       'Content-Type': 'application/json;charset=utf-8'

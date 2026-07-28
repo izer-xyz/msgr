@@ -13,7 +13,7 @@ export default async function lookup(headers, kv, persist = true) {
 
   // All headers are lowercase
   const trmnlHeaders = Object.fromEntries(headers.entries().filter(
-    ([key]) => true // TRMNL_HEADERS.includes(key)
+    ([key]) => !IGNORE_HEADERS.includes(key)
   )); 
   
   const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
@@ -29,27 +29,19 @@ export function save(device, kv) {
   kv.put(device.id, JSON.stringify(device));
 }; 
 
-const TRMNL_HEADERS = [
-  'access_token'
-  ,'battery_capacity'
-  ,'battery_charging'
-  ,'battery_count'
-  ,'battery_current'
-  ,'battery_health'
-  ,'battery_temp'
-  ,'battery_voltage'
-  ,'fw_version'
-  ,'height'
-  ,'id'
-  ,'image_cached'
-  ,'model'
-  ,'percent_charged'
-  ,'refresh_rate'
-  ,'rssi'
-  ,'sensors'
-  ,'temperature_profile'
-  ,'update_source'
-  ,'usb_connected'
-  ,'wake_time'
-  ,'width'
+const IGNORE_HEADERS = [
+  'host', 
+  'connection', 
+  'content-type',
+  'user-agent',
+  'api_key', 
+  'screen',
+  'depth',
+  'refresh_rate',
+  'cf-ray', 
+  'accept-encoding',
+  'x-forwarded-proto'
+  'cf-connecting-ip', 
+  'updated', 
+  'fw-commit'
 ]
