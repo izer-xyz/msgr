@@ -1,7 +1,4 @@
 import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
-import { register } from "../image.ts"; 
-
-register('welcome', screen);
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleTimeString('fr-FR', { timeZone: 'Indian/Reunion' }); 
