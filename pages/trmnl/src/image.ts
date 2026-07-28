@@ -1,8 +1,10 @@
 import { encode, decode } from "fast-png"; 
 import { Jimp } from "jimp";
+import render from "./screen/welcome.tsx"; 
+
 
 export default async function process(device, env) {
-  const { default: render } = await import(`./screen/${ device.screen }.tsx`);
+  // const { default: render } = await import(`./screen/${ device.screen }.tsx`);
   let response = await render(device, env); 
   let raw = await response.arrayBuffer(); 
   let jimp = Jimp.fromBitmap(await decode(raw))
