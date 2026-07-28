@@ -1,13 +1,16 @@
 "$schema" = "./node_modules/wrangler/config-schema.json"
 name = "trmnl"
 compatibility_date = "2026-07-23"
-pages_build_output_dir = "./public"
+send_metrics = false
 
 [[kv_namespaces]]
 binding = "TRMNL_CACHE"
+id = "trmnl_cache"
 
 [[kv_namespaces]]
 binding = "TRMNL_DEVICES"
+id = "trmnl_devices"
 
 [[kv_namespaces]]
 binding = "MSG_BOARD"
+id = "msg_board"
