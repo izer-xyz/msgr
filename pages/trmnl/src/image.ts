@@ -2,10 +2,12 @@ import { encode, decode } from 'fast-png';
 import { Jimp } from 'jimp';
 import error   from './screen/error.tsx'; 
 import welcome from './screen/welcome.tsx'; 
+import board   from './screen/board.tsx'; 
 
 const SCREENS = {
   error, 
-  welcome
+  welcome, 
+  board
 }
 
 export default async function process(device, env) {
