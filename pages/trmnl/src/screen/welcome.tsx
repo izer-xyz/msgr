@@ -13,10 +13,10 @@ export default async function screen(device, env) {
       timeZone: 'Indian/Reunion'
   });
   return new ImageResponse(
-    <div tw="flex h-full w-full flex-col justify-center bg-black p-20">
+    <div tw="flex h-full w-full flex-col justify-center bg-white p-20">
       <div tw="flex flex-col">
-        <h1 tw="m-0 text-9xl font-bold leading-none text-white"> { time } </h1>
-        <h1 tw="m-0 text-9xl font-bold leading-none text-white captialize"> { date } </h1>
+        <h1 tw="m-0 text-9xl font-bold leading-none text-black"> { time } </h1>
+        <h1 tw="m-0 text-9xl font-bold leading-none text-black capitalize"> { date } </h1>
       </div>
     </div>
     ,  
