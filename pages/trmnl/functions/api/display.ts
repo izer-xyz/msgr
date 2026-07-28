@@ -19,6 +19,8 @@ export async function onRequest({ request, env }) {
         Number(device.refresh_rate)],
       indexes: [device.id],
     }); 
+  } else {
+    console.log(`[/api/display/${ device.id }] ${ JSON.stringify(device) }`);
   }
   
   const filename = await process(device, env); 
