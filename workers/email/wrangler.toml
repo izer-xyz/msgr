@@ -7,5 +7,9 @@ send_metrics = false
 binding = "MESSAGES"
 id = "messages"
 
+[[kv_namespaces]]
+binding = "CALENDAR"
+id = "calendar"
+
 [[email]]
 name = "EMAIL"
