@@ -11,7 +11,7 @@ export async function onRequest({ request, env}) {
   device.api_key = device.id; 
   device.friendly_id = device.id.slice(-5); 
 
-  save(device, env.TRMNL_DEVICES); 
+  await save(device, env.TRMNL_DEVICES); 
   
   const filename = await process(device, env); 
   

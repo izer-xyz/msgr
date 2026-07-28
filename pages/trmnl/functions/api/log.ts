@@ -4,7 +4,8 @@ import lookup from '../../src/device.ts';
 export async function onRequest({ request, env }) {
 
   const device = await lookup(request.headers, env.TRMNL_DEVICES); 
-  const logs = await (request.json()).logs;
+  const body = await request.json();
+  const logs = Array.isArray(body?.logs) ? body.logs : [];
 
   for(const log of logs) {
     console.log(`[/api/log/${ device.id }] ${ log }`)

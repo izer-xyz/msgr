@@ -19,14 +19,14 @@ export default async function lookup(headers, kv, persist = true) {
   const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
   console.log(`[${ newDevice.id }] ${ JSON.stringify(trmnlHeaders) }`); 
 
-  if (persist) save(newDevice, kv); 
+  if (persist) await save(newDevice, kv); 
   
   return newDevice;
 }; 
 
-export function save(device, kv) {
+export async function save(device, kv) {
   device.updated = new Date().toISOString(); 
-  kv.put(device.id, JSON.stringify(device));
+  await kv.put(device.id, JSON.stringify(device));
 }; 
 
 const IGNORE_HEADERS = [
