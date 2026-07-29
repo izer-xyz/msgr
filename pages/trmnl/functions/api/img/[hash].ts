@@ -1,6 +1,6 @@
 import error from "../../../src/screen/error.tsx";
 import { default as lookup, DEFAULTS } from "../../../src/device.ts";
-import process from "../../src/image.ts";
+import process from "../../../src/image.ts";
 
 export async function onRequest({ request, env }) {
   try {
