@@ -1,47 +1,54 @@
 export const DEFAULTS = {
-  height: '1404',
-  width: '1872',
-  screen: 'welcome',
-  refresh_rate: '60', 
-  api_key: null, 
+  height: "1404",
+  width: "1872",
+  screen: "welcome",
+  refresh_rate: "60",
+  api_key: null,
   friendly_id: null,
-  depth: '4',
-}; 
+  depth: "4",
+};
 
-export default async function lookup(headers, kv, persist = true) {
-  const device = await kv.get(headers.get('id'), 'json');
+export default async function lookup(headers, kv, persist = false) {
+  const device = await kv.get(headers.get("id"), "json");
 
   // All headers are lowercase
-  const trmnlHeaders = Object.fromEntries(headers.entries().filter(
-    ([key]) => !IGNORE_HEADERS.includes(key)
-  )); 
-  
-  const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
-  console.log(`[${ newDevice.id }] ${ JSON.stringify(trmnlHeaders) }`); 
+  const trmnlHeaders = Object.fromEntries(
+    headers.entries().filter(([key]) => !IGNORE_HEADERS.includes(key)),
+  );
 
-  if (persist) await save(newDevice, kv); 
-  
+  const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
+  console.log(
+    `[INFO /headers/${newDevice.id}] ${JSON.stringify(trmnlHeaders)}`,
+  );
+
+  // only save once a day KV limits apply
+  if (
+    persist &&
+    new Date(device.updated).toDateString() !== new Date().toDateString()
+  ) {
+    await save(newDevice, kv);
+  }
   return newDevice;
-}; 
+}
 
 export async function save(device, kv) {
-  device.updated = new Date().toISOString(); 
+  device.updated = new Date().toISOString();
   await kv.put(device.id, JSON.stringify(device));
-}; 
+}
 
 const IGNORE_HEADERS = [
-  'host', 
-  'connection', 
-  'content-type',
-  'user-agent',
-  'api_key', 
-  'screen',
-  'depth',
-  'refresh_rate',
-  'cf-ray', 
-  'accept-encoding',
-  'x-forwarded-proto',
-  'cf-connecting-ip', 
-  'updated', 
-  'fw-commit'
-]
+  "host",
+  "connection",
+  "content-type",
+  "user-agent",
+  "api_key",
+  "screen",
+  "depth",
+  "refresh_rate",
+  "cf-ray",
+  "accept-encoding",
+  "x-forwarded-proto",
+  "cf-connecting-ip",
+  "updated",
+  "fw-commit",
+];
