@@ -1,14 +1,12 @@
-import screen from "../../../src/screen/error.tsx";
-import lookup from "../../../src/device.ts";
+import error from "../../../src/screen/error.tsx";
+import { default as lookup, DEFAULTS } from "../../../src/device.ts";
+import process from '../../src/image.ts'; 
 
-export async function onRequest({ params, request, env}) {
-
-  const device = await lookup(request.headers, env.TRMNL_DEVICES)
+export async function onRequest({ request, env}) {
 
   try {
-    let png = await env.TRMNL_CACHE.get(params.hash, 'arrayBuffer');
-
-    if (!png) throw new Error(`${ params.hash } not found`);   
+    const device = await lookup(request.headers, env.TRMNL_DEVICES); 
+    const png = process(device, env); 
 
     return new Response(
       png,  
@@ -16,7 +14,7 @@ export async function onRequest({ params, request, env}) {
     );
 
   } catch (err) {
-    console.log(`[/api/img/.../${ device.id }] ${ JSON.stringify(err) }`);
-    return screen(device, env, { message: 'Image not found' });  
+    console.log(`[ERROR /api/img/${ request.headers.get('id') }] ${ JSON.stringify(err) }`);
+    return error(DEFAULTS, env, { message: 'Image not found' });  
   }
 };

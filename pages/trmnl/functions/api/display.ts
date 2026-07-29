@@ -1,5 +1,5 @@
 import lookup from '../../src/device.ts'; 
-import process from '../../src/image.ts'; 
+// import process from '../../src/image.ts'; 
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
@@ -20,10 +20,10 @@ export async function onRequest({ request, env }) {
       indexes: [device.id],
     }); 
   } else {
-    console.log(`[/api/display/${ device.id }] ${ JSON.stringify(device) }`);
+    console.log(`[INFO /api/display/${ device.id }] ${ JSON.stringify(device) }`);
   }
   
-  const filename = await process(device, env); 
+  const filename = Date.now() + ".png"; //await process(device, env); 
   
   let response = JSON.stringify({
     'filename': filename,

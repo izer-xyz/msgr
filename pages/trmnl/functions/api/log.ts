@@ -8,7 +8,7 @@ export async function onRequest({ request, env }) {
   const logs = Array.isArray(body?.logs) ? body.logs : [];
 
   for(const log of logs) {
-    console.log(`[/api/log/${ device.id }] ${ JSON.stringify(log) }`)
+    console.log(`[INFO /api/log/${ device.id }] ${ JSON.stringify(log) }`)
   }
 
   return new Response(null, { status: 204 });

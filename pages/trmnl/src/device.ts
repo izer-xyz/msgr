@@ -1,4 +1,4 @@
-const DEFAULTS = {
+export const DEFAULTS = {
   height: '1404',
   width: '1872',
   screen: 'welcome',

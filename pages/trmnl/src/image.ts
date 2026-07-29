@@ -14,21 +14,9 @@ export default async function process(device, env) {
   let render = SCREENS[device.screen] || error; 
   let response = await render(device, env); 
   let raw = await response.arrayBuffer(); 
-  let jimp = Jimp.fromBitmap(await decode(raw))
-    .greyscale(); 
+  let jimp = Jimp.fromBitmap(await decode(raw)).greyscale(); 
   const png = encode(depth(jimp.bitmap, Number(device.depth)));
-  const filename = await md5(png) + '.png'; 
-  await env.TRMNL_CACHE.put(filename, png, { expirationTtl: 60 * 60 * 1 }); 
-  return filename; 
-}
-
-async function md5(buffer) {
-  return Array.from(
-    new Uint8Array(
-      await crypto.subtle.digest({name: 'MD5'}, buffer)
-    ),
-    (byte) => byte.toString(16).padStart(2, '0')
-  ).join('');
+  return png; 
 }
 
 function depth({ width, height, data }, depth) {
