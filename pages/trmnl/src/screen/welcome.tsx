@@ -1,5 +1,4 @@
-//import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
-import { ImageResponse } from "takumi-js/response"; 
+import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleDateString('fr-FR', {
