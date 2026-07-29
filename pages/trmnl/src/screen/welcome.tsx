@@ -1,4 +1,4 @@
-import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
+import { render } from "takumi-js";
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleDateString("fr-FR", {
@@ -12,18 +12,16 @@ export default async function screen(device, env) {
     timeStyle: "short",
     timeZone: "Indian/Reunion",
   });
-  return new ImageResponse(
-    (
-      <div tw="flex h-full w-full flex-col justify-center bg-white p-20">
-        <div tw="flex flex-col">
-          <h1 tw="m-0 text-9xl font-bold leading-none text-black"> {time} </h1>
-          <h1 tw="m-0 text-9xl font-bold leading-none text-black capitalize">
-            {" "}
-            {date}{" "}
-          </h1>
-        </div>
+  return render(
+    <div tw="flex h-full w-full flex-col justify-center bg-white p-20">
+      <div tw="flex flex-col">
+        <h1 tw="m-0 text-9xl font-bold leading-none text-black"> {time} </h1>
+        <h1 tw="m-0 text-9xl font-bold leading-none text-black capitalize">
+          {" "}
+          {date}{" "}
+        </h1>
       </div>
-    ),
+    </div>,
     {
       width: Number(device.width),
       height: Number(device.height),

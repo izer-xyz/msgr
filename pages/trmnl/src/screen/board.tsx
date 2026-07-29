@@ -1,4 +1,4 @@
-import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
+import { render } from "takumi-js";
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleDateString("fr-FR", {
@@ -12,7 +12,7 @@ export default async function screen(device, env) {
     timeStyle: "short",
     timeZone: "Indian/Reunion",
   });
-  return new ImageResponse(
+  return render(
     (
       <div tw="flex h-full w-full flex-col bg-white p-20 text-6xl">
         <div tw="flex">
