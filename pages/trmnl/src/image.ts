@@ -23,6 +23,7 @@ function greyscale(device, data) {
     channels: 1,
     width: Number(device.width),
     height: Number(device.height),
+    data: null,
   };
   out.data = new Uint8Array(
     new Array((out.width * out.height * out.depth) / 8),
@@ -36,7 +37,7 @@ function greyscale(device, data) {
       0.7152 * data[i * channels + 1]! +
       0.0722 * data[i * channels + 2]!;
 
-    out.data[Math.floor((i * depth) / 8)] |=
+    out.data[Math.floor((i * out.depth) / 8)] |=
       (grey >> (8 - out.depth)) <<
       (8 - out.depth * (1 + (i % (8 / out.depth))));
   }
