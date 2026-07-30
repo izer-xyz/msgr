@@ -1,4 +1,5 @@
 export const DEFAULTS = {
+  id: "undefined",
   height: "1404",
   width: "1872",
   screen: "welcome",
