@@ -13,28 +13,32 @@ const SCREENS = {
 export default async function process(device, env) {
   let render = SCREENS[device.screen] || error;
   let raw = await render(device, env);
-  const png = encode(greyscale(raw, Number(device.depth)));
+  const png = encode(greyscale(device, raw));
   return png;
 }
 
-function greyscale({ width, height, data }, depth) {
+function greyscale(device, data) {
   let out = {
-    depth,
+    depth: Number(device.depth),
     channels: 1,
-    width,
-    height,
-    data: new Uint8Array(new Array((width * height * depth) / 8)),
+    width: Number(device.width),
+    height: Number(device.height),
   };
-  let channels = data.length / (width * height);
+  out.data = new Uint8Array(
+    new Array((out.width * out.height * out.depth) / 8),
+  );
 
-  for (let i = 0; i < width * height; i++) {
+  let channels = data.length / (out.width * out.height);
+
+  for (let i = 0; i < out.width * out.height; i++) {
     let grey =
       0.2126 * data[i * channels]! +
       0.7152 * data[i * channels + 1]! +
       0.0722 * data[i * channels + 2]!;
 
     out.data[Math.floor((i * depth) / 8)] |=
-      (grey >> (8 - depth)) << (8 - depth * (1 + (i % (8 / depth))));
+      (grey >> (8 - out.depth)) <<
+      (8 - out.depth * (1 + (i % (8 / out.depth))));
   }
 
   return out;

@@ -9,8 +9,11 @@ export async function onRequest({ request, env }) {
     return new Response(png, { headers: { "Content-Type": "image/png" } });
   } catch (err) {
     console.log(
-      `[ERROR /api/img/${request.headers.get("id")}] ${JSON.stringify(err)}`,
+      `[ERROR /api/img/${request.headers.get("id")}] ${err}`,
     );
-    return error(DEFAULTS, env, { message: "Image not found" });
-  }
+    return new Response(
+      error(DEFAULTS, env, { message: "Image not found" }), 
+      { headers: { "Content-Type": "image/png" }, status: 404 }
+    );
+}
 }
