@@ -13,12 +13,13 @@ export default async function screen(device, env) {
   });
   let time = new Date().toLocaleTimeString("fr-FR", {
     timeStyle: "short",
-    timeZone: "Indian/Reunion",
+    timeZone: "Australia/Sydney",
+    //timeZone: "Indian/Reunion",
   });
   return render(
     <div tw="flex h-full w-full flex-col bg-white text-black text-5xl px-5 leading-5">
       <div tw="flex">
-        <h1 tw="flex grow">22:00</h1>
+        <h1 tw="flex grow">{time}</h1>
         <h1 tw="capitalize">{date}</h1>
       </div>
       <div tw="flex pt-4">
