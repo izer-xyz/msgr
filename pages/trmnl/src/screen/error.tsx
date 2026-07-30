@@ -8,6 +8,7 @@ export default function screen(device, env, params) {
     {
       width: Number(device.width),
       height: Number(device.height),
+      format: 'raw'
     },
   );
 }

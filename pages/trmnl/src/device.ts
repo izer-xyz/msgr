@@ -24,7 +24,8 @@ export default async function lookup(headers, kv, persist = false) {
   // only save once a day KV limits apply
   if (
     persist &&
-    new Date(device.updated).toDateString() !== new Date().toDateString()
+    new Date(newDevice?.updated || 0).toDateString() !==
+      new Date().toDateString()
   ) {
     await save(newDevice, kv);
   }

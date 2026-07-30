@@ -13,7 +13,7 @@ const SCREENS = {
 export default async function process(device, env) {
   let render = SCREENS[device.screen] || error;
   let raw = await render(device, env);
-  const png = encode(greyscale(decode(raw), Number(device.depth)));
+  const png = encode(greyscale(raw, Number(device.depth)));
   return png;
 }
 

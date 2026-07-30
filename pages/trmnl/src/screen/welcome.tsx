@@ -17,14 +17,14 @@ export default async function screen(device, env) {
       <div tw="flex flex-col">
         <h1 tw="m-0 text-9xl font-bold leading-none text-black"> {time} </h1>
         <h1 tw="m-0 text-9xl font-bold leading-none text-black capitalize">
-          {" "}
-          {date}{" "}
+          {date}
         </h1>
       </div>
     </div>,
     {
       width: Number(device.width),
       height: Number(device.height),
+      format: "raw"
     },
   );
 }
