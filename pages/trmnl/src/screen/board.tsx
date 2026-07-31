@@ -1,5 +1,5 @@
 import { render } from "takumi-js";
-import { fonts } from "takumi-js/helpers";
+import { googleFonts } from "takumi-js/helpers";
 
 export default async function screen(device, env) {
   // celing to the nearest 5 minutes
@@ -72,7 +72,7 @@ export default async function screen(device, env) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
-      fonts: fonts(["Roboto Flex"])
+      fonts: googleFonts(["Roboto Flex"])
     },
   );
 }
