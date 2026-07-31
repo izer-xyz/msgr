@@ -6,9 +6,7 @@
   },
   "dependencies": {
     "react": "^19.2.7",
-    "@cloudflare/pages-plugin-vercel-og": "^0.1.2",
     "fast-png": "^8.0.0",
-    "jimp": "1.6.0",
     "takumi-js": "^2.5.3"
   },
   "devDependencies": {
