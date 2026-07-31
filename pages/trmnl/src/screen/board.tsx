@@ -22,31 +22,31 @@ export default async function screen(device, env) {
   });
   return render(
     <div tw="flex h-full w-full flex-col bg-white font-[Roboto_Flex] text-black text-5xl leading-5">
-      <div tw="flex bg-black text-white px-5">
+      <div tw="flex px-5">
         <h3 tw="grow capitalize self-end">
           {day}, {date}
         </h3>
         <h1 tw="font-900 ">{time}</h1>
       </div>
-      <div tw="flex pt-4 px-5">
+      <div tw="flex pt-4 px-5 font-bold">
         <div tw="flex-1 flex flex-col">
           <div tw="flex ">
             <span tw="pr-12"></span>
-            <span tw="font-bold">Anniversaire de Ming</span>
+            <span tw="">Anniversaire de Ming</span>
           </div>
           <div tw="flex pt-4">
             <span tw="pr-2 flex-none">08:11</span>
-            <span tw="font-bold">Check-up avec nurse</span>
+            <span tw="">Check-up avec nurse</span>
           </div>
           <div tw="flex pt-4">
             <span tw="pr-2 flex-none">10:30</span>
-            <span tw="font-bold">
+            <span tw="">
               Rdv avec la docteur B en ville. La bus part a 10:40.
             </span>
           </div>
           <div tw="flex pt-4">
             <span tw="pr-2 flex-none">12:30</span>
-            <span tw="font-bold">Repas avec Jule a la maison.</span>
+            <span tw="">Repas avec Jule a la maison.</span>
           </div>
         </div>
         <div tw="flex-1 flex flex-col">
