@@ -14,7 +14,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "skipLibCheck": true,
-    "types": ["./worker-configuration.d.ts"]
+    "types": ["@cloudflare/workers-types"]
   },
   "exclude": ["public"],
   "include": ["worker-configuration.d.ts", "**/*.ts", "**/*.tsx"]

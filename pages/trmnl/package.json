@@ -12,6 +12,7 @@
     "takumi-js": "^2.5.3"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250724.0",
     "@types/react": "^19.2.17",
     "typescript": "^7.0.2",
     "wrangler": "^4.111.0"
