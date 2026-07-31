@@ -3,7 +3,8 @@ import { googleFonts } from "takumi-js/helpers";
 
 export default async function screen(device, env) {
   // celing to the nearest 5 minutes
-  let now = new Date(Math.ceil(new Date() / 1000 * 60 * 5));
+  const coef = 1000 * 60 * 5;
+  let now = new Date(Math.ceil(new Date() / coef) * coef);
   let date = now.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
