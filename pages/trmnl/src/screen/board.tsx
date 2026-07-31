@@ -1,4 +1,5 @@
 import { render } from "takumi-js";
+import { fonts } from "takumi-js/helpers";
 
 export default async function screen(device, env) {
   let date = new Date().toLocaleDateString("fr-FR", {
@@ -17,7 +18,7 @@ export default async function screen(device, env) {
     //timeZone: "Indian/Reunion",
   });
   return render(
-    <div tw="flex h-full w-full flex-col bg-white text-black text-5xl px-5 leading-5">
+    <div tw="flex h-full w-full flex-col bg-white font-[Roboto_Flex] text-black text-5xl px-5 leading-5">
       <div tw="flex">
         <h1 tw="flex grow">{time}</h1>
         <h1 tw="capitalize">{date}</h1>
@@ -69,6 +70,7 @@ export default async function screen(device, env) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
+      fonts: fonts(["Roboto Flex"])
     },
   );
 }
