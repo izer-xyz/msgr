@@ -35,17 +35,17 @@ export default async function screen(device, env) {
             <span tw="">Anniversaire de Ming</span>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
-            <span tw="text-gray-500">08:11 </span>
+            <span tw="text-gray-600">08:15 </span>
             <span tw="">Check-up avec nurse</span>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
-            <span tw="text-gray-500">10:30 </span>
+            <span tw="text-gray-700">10:30 </span>
             <span tw="">
               Rdv avec la docteur B en ville. La bus part a 10:40.
             </span>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
-            <span tw="text-gray-500">12:30 </span>
+            <span tw="text-gray-800">12:30 </span>
             <span tw="">Repas avec Jule a la maison.</span>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default async function screen(device, env) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
-      fonts: googleFonts([{name: "Noto Sans", weight: "800..900"}]),
+      fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }
