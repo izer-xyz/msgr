@@ -55,7 +55,7 @@ export default async function screen(device, env) {
               Bonjour Mama - Je te suite une tres belle journee d'ete avec tous
               les mondes!
             </span>
-            <span tw="self-end">Viv' </span>
+            <span tw="self-end"> Viv' </span>
           </div>
 
           <div tw="flex flex-col pl-4 pt-4">
@@ -63,7 +63,7 @@ export default async function screen(device, env) {
               fdj fd kdfjkd fd fdf df djf dkjfkdjf dfkd fkdf dfjkdfkd
               jfkjdkfjdfjkd fk-- fdf df fd d df df
             </span>
-            <span tw="self-end">Gustave </span>
+            <span tw="self-end"> Gustave </span>
           </div>
         </div>
       </div>
