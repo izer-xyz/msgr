@@ -21,7 +21,7 @@ export default async function screen(device, env) {
     //timeZone: "Indian/Reunion",
   });
   return render(
-    <div tw="flex h-full w-full flex-col bg-white font-[Roboto_Flex] text-black text-5xl leading-5">
+    <div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] text-black text-5xl leading-5">
       <div tw="flex px-5">
         <h3 tw="grow capitalize self-end">
           {day}, {date}
@@ -71,7 +71,7 @@ export default async function screen(device, env) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
-      fonts: googleFonts(["Roboto Flex"]),
+      fonts: googleFonts(["Noto Sans"]),
     },
   );
 }
