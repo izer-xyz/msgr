@@ -4,10 +4,6 @@ compatibility_date = "2026-07-23"
 send_metrics = false
 
 [[kv_namespaces]]
-binding = "TRMNL_CACHE"
-id = "trmnl_cache"
-
-[[kv_namespaces]]
 binding = "TRMNL_DEVICES"
 id = "trmnl_devices"
 
