@@ -26,7 +26,7 @@ export default async function screen(device, env) {
         <div tw="grow capitalize self-end ">
           {day}, {date}
         </div>
-        <div tw="">{time}</div>
+        <div tw="text-3xl">{time}</div>
       </div>
       <div tw="flex">
         <div tw="flex-1 flex flex-col">
@@ -51,7 +51,7 @@ export default async function screen(device, env) {
         </div>
         <div tw="flex-1 flex flex-col text-xs font-bold">
           <div tw="flex flex-col pl-4">
-            <span tw="bg-gray-200 px-2 py-1 rounded-lg">
+            <span tw="border-3 border-black px-2 py-1 rounded-lg">
               Bonjour Mama - Je te suite une tres belle journee d'ete avec tous
               les mondes!
             </span>
@@ -59,7 +59,7 @@ export default async function screen(device, env) {
           </div>
 
           <div tw="flex flex-col pl-4 pt-4">
-            <span tw="bg-gray-200 px-2 py-1 rounded-lg">
+            <span tw="border-3 border-black px-2 py-1 rounded-lg">
               fdj fd kdfjkd fd fdf df djf dkjfkdjf dfkd fkdf dfjkdfkd
               jfkjdkfjdfjkd fk-- fdf df fd d df df
             </span>
