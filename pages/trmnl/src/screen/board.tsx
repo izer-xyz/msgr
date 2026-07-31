@@ -35,7 +35,7 @@ export default async function screen(device, env) {
             <span tw="">Anniversaire de Ming</span>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
-            <span tw="text-gray-600">08:15 </span>
+            <span tw="text-gray-700">08:15 </span>
             <span tw="">Check-up avec nurse</span>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
@@ -45,13 +45,13 @@ export default async function screen(device, env) {
             </span>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
-            <span tw="text-gray-800">12:30 </span>
+            <span tw="text-gray-700">12:30 </span>
             <span tw="">Repas avec Jule a la maison.</span>
           </div>
         </div>
         <div tw="flex-1 flex flex-col text-xs font-bold">
           <div tw="flex flex-col pl-4">
-            <span tw="bg-gray-200 p-2 rounded-lg">
+            <span tw="bg-gray-200 px-2 py-1 rounded-lg">
               Bonjour Mama - Je te suite une tres belle journee d'ete avec tous
               les mondes!
             </span>
@@ -59,7 +59,7 @@ export default async function screen(device, env) {
           </div>
 
           <div tw="flex flex-col pl-4 pt-4">
-            <span tw="bg-gray-200 p-2 rounded-lg">
+            <span tw="bg-gray-200 px-2 py-1 rounded-lg">
               fdj fd kdfjkd fd fdf df djf dkjfkdjf dfkd fkdf dfjkdfkd
               jfkjdkfjdfjkd fk-- fdf df fd d df df
             </span>
