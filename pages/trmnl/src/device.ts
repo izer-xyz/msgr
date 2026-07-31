@@ -3,7 +3,7 @@ export const DEFAULTS = {
   height: "1404",
   width: "1872",
   screen: "welcome",
-  refresh_rate: "60",
+  refresh_rate: "300",
   api_key: null,
   friendly_id: null,
   depth: "4",

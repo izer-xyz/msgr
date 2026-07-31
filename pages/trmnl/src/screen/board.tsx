@@ -2,17 +2,19 @@ import { render } from "takumi-js";
 import { fonts } from "takumi-js/helpers";
 
 export default async function screen(device, env) {
-  let date = new Date().toLocaleDateString("fr-FR", {
+  // celing to the nearest 5 minutes
+  let now = new Date(Math.ceil(new Date() / 1000 * 60 * 5));
+  let date = now.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
     day: "numeric",
     timeZone: "Indian/Reunion",
   });
-  let day = new Date().toLocaleDateString("fr-FR", {
+  let day = now.toLocaleDateString("fr-FR", {
     weekday: "long",
     timeZone: "Indian/Reunion",
   });
-  let time = new Date().toLocaleTimeString("fr-FR", {
+  let time = now.toLocaleTimeString("fr-FR", {
     timeStyle: "short",
     timeZone: "Australia/Sydney",
     //timeZone: "Indian/Reunion",
