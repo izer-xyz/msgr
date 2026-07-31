@@ -4,7 +4,7 @@ import { googleFonts } from "takumi-js/helpers";
 export default async function screen(device, env) {
   // celing to the nearest 5 minutes
   const coef = 1000 * 60 * 5;
-  let now = new Date(Math.ceil(new Date() / coef) * coef);
+  let now = new Date(Math.ceil(new Date().getTime() / coef) * coef);
   let date = now.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
@@ -55,7 +55,7 @@ export default async function screen(device, env) {
               Bonjour Mama - Je te suite une tres belle journee d'ete avec tous
               les mondes!
             </span>
-            <span tw="self-end"> Viv' </span>
+            <span tw="self-end">Viv' </span>
           </div>
 
           <div tw="flex flex-col pl-4 pt-4">

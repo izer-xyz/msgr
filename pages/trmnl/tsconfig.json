@@ -11,11 +11,12 @@
     "noEmit": true,
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "skipLibCheck": true,
     "types": ["@cloudflare/workers-types"]
   },
   "exclude": ["public"],
-  "include": ["worker-configuration.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
