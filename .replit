@@ -2,3 +2,23 @@ modules = ["nodejs-24"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["vim"]
+
+[workflows]
+
+[[workflows.workflow]]
+name = "Admin"
+mode = "sequential"
+author = 3410761
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd pages/admin && npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd pages/admin && npm start"
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
