@@ -12,7 +12,7 @@ export async function onRequest({ request, env }) {
 
   await save(device, env.TRMNL_DEVICES);
 
-  const filename = await process(device, env);
+  const filename = Date.now() + ".png"; //await process(device, env);
 
   return new Response(
     JSON.stringify({
