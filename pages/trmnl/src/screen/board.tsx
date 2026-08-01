@@ -26,7 +26,7 @@ export default async function screen(device, env) {
         <div tw="grow capitalize self-end ">
           {day}, {date}
         </div>
-        <div tw="text-3xl">{time}</div>
+        <div tw="text-3xl pr-2">{time}</div>
       </div>
       <div tw="flex">
         <div tw="flex-1 flex flex-col">
@@ -35,18 +35,21 @@ export default async function screen(device, env) {
             <span tw="">L'aide menagere vient</span>
             <div tw="text-xs font-bold pl-1">
               Je bippe pour ouvrir le portail.
+              Je bippe pour ouvrir le portail.
             </div>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
             <span tw="text-gray-700">08:00 </span>
             <span tw="">Je vais au centre</span>
-            <div tw="text-xs font-bold pl-1">
+           <div tw="text-xs font-bold pl-1">
               Les ambulanciers viennent me chercher a 10:40
             </div>
-          </div>
+           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
             <span tw="text-gray-700">10:30 </span>
-            <span tw="">Rdv avec le dr B.</span>
+            <span tw="">
+              Rdv avec le dr B.
+            </span>
             <div tw="text-xs font-bold pl-1">
               Je vais en ville. La bus part a 10:40. La bus part a 10:40
             </div>
@@ -55,22 +58,29 @@ export default async function screen(device, env) {
             <span tw="text-gray-700">12:30 </span>
             <span tw="">Repas avec Jule </span>
             <div tw="text-xs font-bold pl-1">
-              Je vais en ville. La bus part a 10:40.
+              Je vais en ville. La bus part a 10:40. La bus part a 10:40
             </div>
           </div>
         </div>
-        <div tw="flex-1 flex flex-col text-xs font-bold">
+        <div tw="flex-1 flex flex-col text-xs font-bold pr-2">
           <div tw="flex flex-col pl-4">
             <span tw="border-3 border-black px-2 py-1 rounded-lg">
-              Bonjour Mama - Je te suite une tres belle journee d'ete avec tous
-              les mondes!
+              Bonjour Mama - Je te souhaite une tres belle journee avec les filles et tes petites filles.
+              Gros bisous et calins!
             </span>
             <span tw="self-end">Viv' </span>
           </div>
 
           <div tw="flex flex-col pl-4 pt-4">
             <span tw="border-3 border-black px-2 py-1 rounded-lg">
-              fdj fd kdfjkd fd fdf df djf dkjfkdjf dfkd fkdf dfjkdfkd
+              Nous passons te voir en debut d'apres midi avec le nouveau jeu que tu as demande.
+              Bippe nous le portail stp, j'ai perdu mon bip
+            </span>
+            <span tw="self-end"> Viv et Mika </span>
+          </div>
+          <div tw="flex flex-col pl-4 pt-4">
+            <span tw="border-3 border-black px-2 py-1 rounded-lg">
+              On t'appelle demain matin avant t fkdf dfjkdfkd
               jfkjdkfjdfjkd fk-- fdf df fd d df df
             </span>
             <span tw="self-end"> Gustave </span>
