@@ -33,20 +33,26 @@ export default async function screen(device, env) {
           <div tw="bg-gray-200 p-1 rounded-lg">
             <span tw=""></span>
             <span tw="">Anniversaire de Ming</span>
+            <div tw="text-xs">Je vais en ville. La bus part a 10:40.</div>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
             <span tw="text-gray-700">08:15 </span>
             <span tw="">Check-up avec nurse</span>
+            <div tw="text-xs">
+              Je vais en ville. La bus part a 10:40.La bus part a 10:40
+            </div>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
             <span tw="text-gray-700">10:30 </span>
-            <span tw="">
-              Rdv avec la docteur B en ville. La bus part a 10:40.
-            </span>
+            <span tw="">Rdv avec le docteur Banor.</span>
+            <div tw="text-xs">
+              Je vais en ville. La bus part a 10:40. La bus part a 10:40
+            </div>
           </div>
           <div tw="mt-5 bg-gray-200 p-1 rounded-lg">
             <span tw="text-gray-700">12:30 </span>
             <span tw="">Repas avec Jule a la maison.</span>
+            <div tw="text-xs">Je vais en ville. La bus part a 10:40.</div>
           </div>
         </div>
         <div tw="flex-1 flex flex-col text-xs font-bold">
