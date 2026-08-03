@@ -1,16 +1,36 @@
-export async function onRequestPost({ request }) {
-	try {
-		let input = await request.formData();
+// POST -> save message (create or update)
+// GET -> list all (top?) messages
+// DELETE -> Delete message
 
-    let value = JSON.stringify({"message": input["message"]}, null, 2);
-    context.env.messages.put(input["id"] + ":" + input["date"], value);
-    
-		return new Response(value, {
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8'
-			}
-		});
-	} catch (err) {
-		return new Response('Error', { status: 400 });
-	}
+// message.id: day of week (DOF-0..DOF-6) or YYYY-MM-DD.HH.mm.reference
+// message.date: timestamp
+// message.from: from who
+// message.content: content
+
+import Query from "./query.js";
+
+const PREFIX = "M";
+
+export async function onRequestGet({ request, env }) {
+	let date = new Date().toISOString().slice(0, 10);
+	let day = new Date().getDay();
+
+	let messages = await new Query(PREFIX, { date, day }, env.MESSAGES).list();
+	console.log(`messages ${JSON.stringify(messages)}`);
+
+	return new Response(JSON.stringify({ date, messages }), {
+		headers: {
+			"Content-Type": "application/json;charset=utf-8",
+		},
+	});
+}
+
+export async function onRequestPost({ request, env }) {
+	await new Query(PREFIX, await request.json(), env.MESSAGES).save();
+	return onRequestGet({ request, env });
+}
+
+export async function onRequestDelete({ request, env }) {
+	await new Query(PREFIX, await request.json(), env.MESSAGES).delete();
+	return onRequestGet({ request, env });
 }

@@ -19,24 +19,119 @@
 				<p>Calendar</p>
 			</div>
 
-			<form method="POST" action="/api/messages">
-				<div class="input">
-					<label for="id">Id</label>
-					<input id="id" name="id" type="text" value="1" />
-				</div>
+			<div x-data="context" x-init="list">
+				<form @submit.prevent="save(msg)">
+					<div class="input">
+						<input id="id" name="id" type="hidden" x-model="msg.id" />
+					</div>
+					<div class="input">
+						<label for="date">Date</label>
+						<input id="date" name="date" type="text" x-model="msg.date" />
+					</div>
+					<div class="input">
+						<input id="time" name="time" type="hidden" x-model="msg.time" />
+					</div>
+					<div class="input">
+						<label for="day">Day</label>
+						<input id="day" name="day" type="text" x-model="msg.day" />
+					</div>
+					<div class="input">
+						<input
+							id="refrence"
+							name="refrence"
+							type="hidden"
+							x-model="msg.reference"
+						/>
+					</div>
+					<div class="input">
+						<label for="message">Message</label>
+						<input
+							id="message"
+							name="message"
+							autofocus
+							x-model="msg.message"
+						/>
+					</div>
+					<div class="input">
+						<label for="from">From</label>
+						<input id="from" name="from" x-model="msg.from" />
+					</div>
+					<button type="submit">Submit</button>
+				</form>
 
-				<div class="input">
-					<label for="date">Date</label>
-					<input id="date" name="date" type="date" value="2026/12/31" />
-				</div>
-
-				<div class="input">
-					<label for="message">Message</label>
-					<textarea id="message" name="message"> </textarea>
-				</div>
-
-				<button type="submit">Submit</button>
-			</form>
+				<template x-for="msg in msgs">
+					<form @submit.prevent="save(msg)">
+						<div class="input">
+							<input id="id" name="id" type="hidden" x-model="msg.id" />
+						</div>
+						<div class="input">
+							<label for="date">Date</label>
+							<input id="date" name="date" type="text" x-model="msg.date" />
+						</div>
+						<div class="input">
+							<input id="time" name="time" type="hidden" x-model="msg.time" />
+						</div>
+						<div class="input">
+							<label for="day">Day</label>
+							<input id="day" name="day" type="text" x-model="msg.day" />
+						</div>
+						<div class="input">
+							<input
+								id="refrence"
+								name="refrence"
+								type="hidden"
+								x-model="msg.reference"
+							/>
+						</div>
+						<div class="input">
+							<label for="message">Message</label>
+							<input
+								id="message"
+								name="message"
+								autofocus
+								x-model="msg.message"
+							/>
+						</div>
+						<div class="input">
+							<label for="from">From</label>
+							<input id="from" name="from" x-model="msg.from" />
+						</div>
+						<button type="submit">Submit</button>
+					</form>
+				</template>
+			</div>
 		</main>
+		<script>
+			function context() {
+				return {
+					msgs: [],
+					msg: {
+						date: new Date().toISOString().slice(0, 10),
+						message: "hello",
+						time: "",
+						from: "",
+						id: "",
+						reference: "",
+						day: "",
+					},
+					async list() {
+						this.msgs = (await (await fetch("/api/messages")).json()).messages;
+						console.log(this.msgs);
+					},
+
+					async save(msg) {
+						this.msgs = (
+							await (
+								await fetch("/api/messages", {
+									method: "POST",
+									body: JSON.stringify(msg),
+								})
+							).json()
+						).messages;
+						console.log(this.msgs);
+					},
+				};
+			}
+		</script>
 	</body>
 </html>

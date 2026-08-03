@@ -1,2 +1,1 @@
-docker run --rm -it --entrypoint "bash" -v .:/home/node/code --network host node
-
+docker run --rm -it -u node -w /home/node/code -v .:/home/node/code --entrypoint npm --network host node start
