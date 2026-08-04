@@ -29,8 +29,11 @@ export default class Query {
 		let keys = [...dateList?.keys, ...dayList?.keys].map((key) => key.name);
 		console.log(`list ${JSON.stringify(keys)}`);
 
-		return (await Promise.all(await this.store.get(keys, "json"))).map(
-			(i) => i[1],
+		if (keys.length === 0) return [];
+
+		return (await Promise.all(await this.store.get(keys, "json"))).reduce(
+			(list, i) => (i[1] ? list.push(i[1]) && list : list),
+			[],
 		);
 	}
 
@@ -43,20 +46,20 @@ export default class Query {
 		].join(".");
 
 		if (this.item.id && this.item.id !== id) {
-			this.delete();
+			await this.delete();
 		}
 
 		this.item.id = id;
 		// TODO set TTL
 		console.log(`save ${id}`);
-		this.store.put(id, JSON.stringify(this.item));
+		await this.store.put(id, JSON.stringify(this.item));
 
 		return this;
 	}
 
 	async delete() {
-		console.log(`delete ${id}`);
-		this.store.delete(this.item.id);
+		console.log(`delete ${this.item.id}`);
+		await this.store.delete(this.item.id);
 		return this;
 	}
 }

@@ -6,34 +6,47 @@
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+			rel="stylesheet"
+		/>
 		<script
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
 	</head>
 	<body>
-		<main>
+		<main class="font-[Noto_Sans]">
 			<h1>Manage</h1>
-
 			<div>
 				<p>Calendar</p>
 			</div>
 
-			<div x-data="context" x-init="list">
+			<div x-data="context" x-init="list" class="text-2xl">
 				<form @submit.prevent="save(msg)">
 					<div class="input">
 						<input id="id" name="id" type="hidden" x-model="msg.id" />
 					</div>
 					<div class="input">
-						<label for="date">Date</label>
-						<input id="date" name="date" type="text" x-model="msg.date" />
+						<input id="date" name="date" type="hidden" x-model="msg.date" />
 					</div>
 					<div class="input">
 						<input id="time" name="time" type="hidden" x-model="msg.time" />
 					</div>
 					<div class="input">
 						<label for="day">Day</label>
-						<input id="day" name="day" type="text" x-model="msg.day" />
+						<select id="day" name="day" type="text" x-model="msg.day">
+							<option value=""></option>
+							<option value="0">Sunday</option>
+							<option value="1">Monday</option>
+							<option value="2">Tuesday</option>
+							<option value="3">Wednesday</option>
+							<option value="4">Thursday</option>
+							<option value="5">Friday</option>
+							<option value="6">Saturday</option>
+						</select>
 					</div>
 					<div class="input">
 						<input
@@ -59,76 +72,67 @@
 					<button type="submit">Submit</button>
 				</form>
 
-				<template x-for="msg in msgs">
-					<form @submit.prevent="save(msg)">
-						<div class="input">
-							<input id="id" name="id" type="hidden" x-model="msg.id" />
+				<div class="">
+					<template x-for="item in msgs">
+						<div>
+							<div class="">
+								<span class="" x-text="item.message"></span>
+								<span class="" x-text="item.from"></span>
+							</div>
+							<a href="" @click.prevent="msg = item">edit</a>
+							<a href="" @click.prevent="remove(item)">delete</a>
 						</div>
-						<div class="input">
-							<label for="date">Date</label>
-							<input id="date" name="date" type="text" x-model="msg.date" />
-						</div>
-						<div class="input">
-							<input id="time" name="time" type="hidden" x-model="msg.time" />
-						</div>
-						<div class="input">
-							<label for="day">Day</label>
-							<input id="day" name="day" type="text" x-model="msg.day" />
-						</div>
-						<div class="input">
-							<input
-								id="refrence"
-								name="refrence"
-								type="hidden"
-								x-model="msg.reference"
-							/>
-						</div>
-						<div class="input">
-							<label for="message">Message</label>
-							<input
-								id="message"
-								name="message"
-								autofocus
-								x-model="msg.message"
-							/>
-						</div>
-						<div class="input">
-							<label for="from">From</label>
-							<input id="from" name="from" x-model="msg.from" />
-						</div>
-						<button type="submit">Submit</button>
-					</form>
-				</template>
+					</template>
+				</div>
 			</div>
 		</main>
 		<script>
+			const DEFAULT = {
+				date: "",
+				message: "",
+				time: "",
+				from: "",
+				id: "",
+				reference: "",
+				day: "",
+			};
+
 			function context() {
 				return {
 					msgs: [],
 					msg: {
-						date: new Date().toISOString().slice(0, 10),
-						message: "hello",
-						time: "",
-						from: "",
-						id: "",
-						reference: "",
-						day: "",
+						...DEFAULT,
 					},
 					async list() {
-						this.msgs = (await (await fetch("/api/messages")).json()).messages;
-						console.log(this.msgs);
+						await this.fetch("GET");
 					},
 
 					async save(msg) {
-						this.msgs = (
-							await (
-								await fetch("/api/messages", {
-									method: "POST",
-									body: JSON.stringify(msg),
-								})
-							).json()
-						).messages;
-						console.log(this.msgs);
+						if (msg.day == "") {
+							let now = new Date();
+							msg.date = now.toISOString().slice(0, 10);
+							msg.time = now.toLocaleTimeString("fr-FR", {
+								timeStyle: "short",
+								timeZone: "Indian/Reunion",
+							});
+						}
+						let response = await this.fetch("POST", msg);
+						// todo check for errors.
+						this.msg = { ...DEFAULT };
+					},
+					async remove(msg) {
+						this.msg = { id: "", referece: "", ...msg };
+						await this.fetch("DELETE", msg);
+					},
+					async fetch(method, msg) {
+						let response = await (
+							await fetch("/api/messages", {
+								method: method,
+								body: msg ? JSON.stringify(msg) : null,
+							})
+						).json();
+						this.msgs = response.messages;
+						return response;
 					},
 				};
 			}

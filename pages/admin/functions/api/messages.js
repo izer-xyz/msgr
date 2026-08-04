@@ -16,7 +16,6 @@ export async function onRequestGet({ request, env }) {
 	let day = new Date().getDay();
 
 	let messages = await new Query(PREFIX, { date, day }, env.MESSAGES).list();
-	console.log(`messages ${JSON.stringify(messages)}`);
 
 	return new Response(JSON.stringify({ date, messages }), {
 		headers: {
