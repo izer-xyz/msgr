@@ -12,8 +12,9 @@ import Query from "./query.js";
 const PREFIX = "M";
 
 export async function onRequestGet({ request, env }) {
-	let date = new Date().toISOString().slice(0, 10);
-	let day = new Date().getDay();
+	const { search } = new URL(request.url);
+	let date = search.substring(1);
+	let day = new Date(date).getDay();
 
 	let messages = await new Query(PREFIX, { date, day }, env.MESSAGES).list();
 

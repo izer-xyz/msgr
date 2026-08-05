@@ -22,11 +22,11 @@ export default class Query {
 			? this.store.list({ prefix })
 			: { keys: [] });
 
-		prefix = [this.type, "D", this.item.day].join(".");
+		prefix = [this.type, "D"].join(".");
 		console.log(`list ${prefix}`);
 		let dayList = await this.store.list({ prefix });
 
-		let keys = [...dateList?.keys, ...dayList?.keys].map((key) => key.name);
+		let keys = [...dayList?.keys, ...dateList?.keys].map((key) => key.name);
 		console.log(`list ${JSON.stringify(keys)}`);
 
 		if (keys.length === 0) return [];
@@ -40,8 +40,8 @@ export default class Query {
 	async save() {
 		let id = [
 			this.type,
-			this.item.date || "D." + this.item.day,
-			this.item.time,
+			this.item.date || "D" + this.item.day,
+			this.item.date && this.item.time,
 			this.item.reference,
 		].join(".");
 
