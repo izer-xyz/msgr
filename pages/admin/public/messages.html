@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf8" />
-		<title>Manage message</title>
+		<title>Messagerie</title>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -12,69 +12,71 @@
 			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
 			rel="stylesheet"
 		/>
+		<link href="https://unpkg.com/tailwindcss@1.0.6/dist/tailwind.min.css" rel="stylesheet"></link>
 		<script
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
 		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
+		<style>
+			#preview {
+				background: #a0a0a0; 
+				height: 24em;
+			}
+		</style>
 	</head>
-	<body>
-		<main class="font-[Noto_Sans]">
-			<h1>Admin</h1>
+	<body style="font-size: 24px; font-family: 'Noto Sans', sans-serif; width: 20em; margin: auto;">
+		<main class="font-bold">
 			<div>
-				<p>Messanges</p>
+				<p> Messagerie | <a href="">Calandrier</a> | <a href="">Aperçu</a> </p>
 			</div>
 
-			<div x-data="context" x-init="list" class="">
-				<span x-text="now()"></span>
-				<form @submit.prevent="save(msg)">
-					<input name="id" type="text" x-model="msg.id" />
-					<input name="date" type="text" x-model="msg.date" />
-					<input name="time" type="text" x-model="msg.time" />
-					<input name="refrence" type="text" x-model="msg.reference" />
-					<input name="day" type="text" x-model="msg.day" />
-					<div class="input">
+			<div x-data="context" x-init="list">
+				<form @submit.prevent="save(msg)" class="flex flex-col py-4">
+					<input name="id" type="hidden" x-model="msg.id" />
+					<input name="date" type="hidden" x-model="msg.date" />
+					<input name="time" type="hidden" x-model="msg.time" />
+					<input name="refrence" type="hidden" x-model="msg.reference" />
+					<input name="day" type="hidden" x-model="msg.day" />
+					<div class="w-full my-4">
 						<select
 							@change="msg = (day === '' ? { ...DEFAULT } : { ...DEFAULT } ) "
 							x-model="day"
 						>
-							<option value="">Today</option>
-							<option value="1">Monday</option>
-							<option value="2">Tuesday</option>
-							<option value="3">Wednesday</option>
-							<option value="4">Thursday</option>
-							<option value="5">Friday</option>
-							<option value="6">Saturday</option>
-							<option value="7">Sunday</option>
+							<option value="" x-text="now()[0]"></option>
+							<option value="1">Lu</option>
+							<option value="2">Ma</option>
+							<option value="3">Me</option>
+							<option value="4">Je</option>
+							<option value="5">Ve</option>
+							<option value="6">Sa</option>
+							<option value="7">Di</option>
 						</select>
 					</div>
-					<div class="input">
-						<label for="message">Message</label>
-						<input
-							id="message"
-							name="message"
-							autofocus
-							x-model="msg.message"
-						/>
+					<textarea 
+						id="message"
+						name="message"
+						autofocus
+						x-model="msg.message"
+						class="font-bold border border-black p-2 mx-4"
+						rows="3"
+						placeholder="Tapez votre message ici"
+					></textarea>
+					<input id="from" name="from" x-model="msg.from" placeholder="De" class="w-1/4 mx-4 my-2 p-2 self-end border border-black"/>
+					<div class="justify-end flex font-normal">
+						<a href="" x-show="msg.id" @click.prevent="remove(msg)" class="text-lg place-self-center">Supprimer</a> 
+						<button type="submit" class="mx-4 px-2 rounded-lg bg-black text-white font-bold">Envoyer</button>
 					</div>
-					<div class="input">
-						<label for="from">From</label>
-						<input id="from" name="from" x-model="msg.from" />
-					</div>
-					<a href="" x-show="msg.id" @click.prevent="remove(msg)">delete</a>
-					<button type="submit">Submit</button>
 				</form>
 
-				<div class="">
+				<h1 class="py-4">Aperçu</h1>
+				<div id="preview" class="flex-1 flex flex-col p-4">
 					<template x-for="item in msgs">
-						<div
-							x-show="item.day === day || day ==='' && item.day === now()[2]"
-							@click.prevent="(msg === item ? msg = { ...DEFAULT } : msg = item)"
-						>
-							<div class="">
-								<span class="" x-text="item.message"></span>
-								<span class="" x-text="item.from"></span>
-							</div>
+						<div class="flex flex-col" x-show="item.day === day || day ==='' && item.day === now()[2]"
+							@click.prevent="(msg === item ? msg = { ...DEFAULT } : msg = item)">
+							<span :class="item.day && 'border-4'" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.message">
+							</span>
+							<span class="self-end" x-text="item.from"></span>
 						</div>
 					</template>
 				</div>
