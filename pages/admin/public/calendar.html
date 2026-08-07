@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>Calandrier</title>
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<link href="https://unpkg.com/tailwindcss@1.0.6/dist/tailwind.min.css" rel="stylesheet"></link>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+		></script>
+		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
+		<style>
+			#preview {
+				background: #a0a0a0; 
+				height: 24em;
+			}
+		</style>
+	</head>
+	<body style="font-size: 24px; font-family: 'Noto Sans', sans-serif; width: 20em; margin: auto;">
+		<main class="font-bold">
+			<div>
+				<p> <a href="messages">Messagerie</a> | Calandrier | <a href="">Aperçu</a> </p>
+			</div>
+
+			<div x-data="context" x-init="list">
+				<form @submit.prevent="save(cal)" class="flex flex-col py-4">
+					
+					<input name="id" type="hidden" x-model="cal.id" />
+					<input name="date" type="hidden" x-model="cal.date" />
+					<input name="refrence" type="hidden" x-model="cal.reference" />
+					<input name="day" type="hidden" x-model="cal.day" />
+					<input name="from" type="hidden"x-model="cal.from" />
+					
+					<div class="w-full my-4">
+						<select
+							@change="cal = ( $el.selectedIndex === 0 ? { ...DEFAULT, date: $el.value } : { ...DEFAULT, day: $el.value } )"
+							x-model="selected"
+						>
+							<option x-text="now()[0]"></option>
+							<option value="1">Lu</option>
+							<option value="2">Ma</option>
+							<option value="3">Me</option>
+							<option value="4">Je</option>
+							<option value="5">Ve</option>
+							<option value="6">Sa</option>
+							<option value="7">Di</option>
+						</select>
+					</div>
+					<select name="time" x-model="cal.time" class="font-bold border border-black p-2 mx-4">
+						<option value="">--:--</option>
+						<option>08:00</option>
+						<option>08:15</option>
+						<option>08:30</option>
+						<option>08:45</option>
+						<option>09:00</option>
+						<option>09:15</option>
+						<option>09:30</option>
+						<option>09:45</option>
+						<option>10:00</option>
+						<option>10:15</option>
+						<option>10:30</option>
+						<option>10:45</option>
+					</select>
+
+					<input name="subject" type="text" x-model="cal.subject" x-init="$watch('cal.subject', () => $el.focus())" placeholder="Titre" class="font-bold border border-black p-2 mx-4"/>
+					<textarea 
+						id="content"
+						name="content"
+						autofocus
+						x-model="cal.content"
+						class="font-bold border border-black p-2 mx-4"
+						rows="3"
+						placeholder="Tapez votre message ici et appuyez sur Entrée pour valider."
+						@keydown.enter.prevent="$el.form.requestSubmit()"
+					></textarea>
+					<div class="justify-end flex font-normal">
+						<a href="" x-show="cal.id" @click.prevent="remove(cal)" class="text-lg place-self-center">Supprimer</a> 
+						<button type="submit" class="mx-4 px-2 rounded-lg bg-black text-white font-bold">Valider</button>
+					</div>
+				</form>
+
+				<h1 class="py-4">Aperçu</h1>
+				<div id="preview" class="flex-1 flex flex-col p-4">
+					<template x-for="item in calendar">
+						<div class="flex flex-col" x-show="item.day === selected || item.date === selected || selected === now()[0] && item.day === now()[2]"
+							@click.prevent="(cal === item ? cal = { ...DEFAULT } : cal = item)">
+							<span class="" x-text="item.time"></span>
+							<span :class="{'border-4': item.day, 'bg-white': item.id == cal.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.subject"></span>
+							<span x-text="item.content"></span>
+						</div>
+					</template>
+				</div>
+			</div>
+		</main>
+		<script>
+			const DEFAULT = {
+				date: "",
+				subject: "",
+				content: "",
+				time: "",
+				from: "",
+				id: "",
+				reference: "",
+				day: "",
+				flag: "", 
+			};
+
+			function now() {
+					return luxon.DateTime.now()
+						.setZone("Indian/Reunion")
+						.toFormat("yyyy-LL-dd TT c")
+						.split(" ");
+				}
+
+			function context() {
+				return {
+					DEFAULT,
+					calendar: [],
+					cal: {
+						...DEFAULT,
+						date: now()[0]
+					},
+					selected: now()[0],
+					now() { return now() },
+
+					async list() {
+						await this.fetch("GET");
+					},
+
+					async save(cal) {
+						let response = await this.fetch("POST", cal);
+						// todo check for errors.
+						this.cal = { ...DEFAULT };
+					},
+
+					async remove(cal) {
+						this.cal = { ...cal, id: "", reference: "" };
+						await this.fetch("DELETE", cal);
+					},
+
+					async fetch(method, cal) {
+						let response = await (
+							await fetch(`/api/calendar?${this.now()[0]}`, {
+								method: method,
+								body: cal ? JSON.stringify(cal) : null,
+							})
+						).json();
+						this.calendar = response.calendar;
+						return response;
+					},
+				};
+			}
+		</script>
+	</body>
+</html>

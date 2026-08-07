@@ -11,19 +11,34 @@
 
 // Special case: override day of week YYYY-MM-dd.DOF-X[.HH:mm]
 
-export async function onRequestPost({ request }) {
-	try {
-		let input = await request.formData();
+import Query from "./query.js";
 
-    let value = JSON.stringify({"message": input["message"]}, null, 2);
-    context.env.messages.put(input["id"] + ":" + input["date"], value);
-    
-		return new Response(value, {
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8'
-			}
-		});
-	} catch (err) {
-		return new Response('Error', { status: 400 });
-	}
+const PREFIX = "C";
+
+export async function onRequestGet({ request, env }) {
+	const { search } = new URL(request.url);
+	let date = search.substring(1);
+	let day = new Date(date).getDay();
+
+	let calendar = await new Query(
+		PREFIX,
+		{ date: date.slice(0, 7), day },
+		env.MESSAGES,
+	).list();
+
+	return new Response(JSON.stringify({ date, calendar }), {
+		headers: {
+			"Content-Type": "application/json;charset=utf-8",
+		},
+	});
+}
+
+export async function onRequestPost({ request, env }) {
+	await new Query(PREFIX, await request.json(), env.MESSAGES).save();
+	return onRequestGet({ request, env });
+}
+
+export async function onRequestDelete({ request, env }) {
+	await new Query(PREFIX, await request.json(), env.MESSAGES).delete();
+	return onRequestGet({ request, env });
 }

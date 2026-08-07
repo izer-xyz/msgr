@@ -41,7 +41,7 @@ export default class Query {
 		let id = [
 			this.type,
 			this.item.date || "D" + this.item.day,
-			this.item.date && this.item.time,
+			this.item.time,
 			this.item.reference,
 		].join(".");
 
