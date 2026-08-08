@@ -40,7 +40,7 @@
 					<input name="day" type="hidden" x-model="msg.day" />
 					<div class="w-full my-4">
 						<select
-							@change="msg = (selected === '' ? { ...DEFAULT } : { ...DEFAULT } ) "
+							@change="msg = (selected === '' ? { ...DEFAULT } : { ...DEFAULT, day: selected} ) "
 							x-model="selected"
 						>
 							<option value="" x-text="now()[0]"></option>

@@ -20,13 +20,13 @@ export async function onRequestGet({ request, env }) {
 	let date = search.substring(1);
 	let day = new Date(date).getDay();
 
-	let calendar = await new Query(
+	let events = await new Query(
 		PREFIX,
 		{ date: date.slice(0, 7), day },
 		env.MESSAGES,
 	).list();
 
-	return new Response(JSON.stringify({ date, calendar }), {
+	return new Response(JSON.stringify({ date, events }), {
 		headers: {
 			"Content-Type": "application/json;charset=utf-8",
 		},

@@ -22,7 +22,7 @@ export default class Query {
 			? this.store.list({ prefix })
 			: { keys: [] });
 
-		prefix = [this.type, "D"].join(".");
+		prefix = [this.type, "D" + this.item.day].join(".");
 		console.log(`list ${prefix}`);
 		let dayList = await this.store.list({ prefix });
 

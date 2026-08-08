@@ -32,17 +32,16 @@
 			</div>
 
 			<div x-data="context" x-init="list">
-				<form @submit.prevent="save(cal)" class="flex flex-col py-4">
+				<form @submit.prevent="save(event)" class="flex flex-col py-4">
 					
-					<input name="id" type="hidden" x-model="cal.id" />
-					<input name="date" type="hidden" x-model="cal.date" />
-					<input name="refrence" type="hidden" x-model="cal.reference" />
-					<input name="day" type="hidden" x-model="cal.day" />
-					<input name="from" type="hidden"x-model="cal.from" />
+					<input name="id" type="hidden" x-model="event.id" />
+					<input name="date" type="text" x-model="event.date" />
+					<input name="refrence" type="hidden" x-model="event.reference" />
+					<input name="day" type="text" x-model="event.day" />
+					<input name="from" type="hidden"x-model="event.from" />
 					
 					<div class="w-full my-4">
 						<select
-							@change="cal = ( $el.selectedIndex === 0 ? { ...DEFAULT, date: $el.value } : { ...DEFAULT, day: $el.value } )"
 							x-model="selected"
 						>
 							<option x-text="now()[0]"></option>
@@ -55,46 +54,43 @@
 							<option value="7">Di</option>
 						</select>
 					</div>
-					<select name="time" x-model="cal.time" class="font-bold border border-black p-2 mx-4">
+					<div>
+						<div></div>
+					</div>
+					<select name="time" x-model="event.time" class="font-bold border border-black p-2 mx-4">
 						<option value="">--:--</option>
 						<option>08:00</option>
-						<option>08:15</option>
 						<option>08:30</option>
-						<option>08:45</option>
 						<option>09:00</option>
-						<option>09:15</option>
 						<option>09:30</option>
-						<option>09:45</option>
 						<option>10:00</option>
-						<option>10:15</option>
 						<option>10:30</option>
-						<option>10:45</option>
 					</select>
 
-					<input name="subject" type="text" x-model="cal.subject" x-init="$watch('cal.subject', () => $el.focus())" placeholder="Titre" class="font-bold border border-black p-2 mx-4"/>
+					<input name="subject" type="text" x-model="event.subject" x-init="$watch('event.subject', () => $el.focus())" placeholder="Titre" class="font-bold border border-black p-2 mx-4"/>
 					<textarea 
 						id="content"
 						name="content"
 						autofocus
-						x-model="cal.content"
+						x-model="event.content"
 						class="font-bold border border-black p-2 mx-4"
 						rows="3"
 						placeholder="Tapez votre message ici et appuyez sur Entrée pour valider."
 						@keydown.enter.prevent="$el.form.requestSubmit()"
 					></textarea>
 					<div class="justify-end flex font-normal">
-						<a href="" x-show="cal.id" @click.prevent="remove(cal)" class="text-lg place-self-center">Supprimer</a> 
+						<a href="" x-show="event.id" @click.prevent="remove(event)" class="text-lg place-self-center">Supprimer</a> 
 						<button type="submit" class="mx-4 px-2 rounded-lg bg-black text-white font-bold">Valider</button>
 					</div>
 				</form>
 
 				<h1 class="py-4">Aperçu</h1>
 				<div id="preview" class="flex-1 flex flex-col p-4">
-					<template x-for="item in calendar">
+					<template x-for="item in events">
 						<div class="flex flex-col" x-show="item.day === selected || item.date === selected || selected === now()[0] && item.day === now()[2]"
-							@click.prevent="(cal === item ? cal = { ...DEFAULT } : cal = item)">
+							@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)">
 							<span class="" x-text="item.time"></span>
-							<span :class="{'border-4': item.day, 'bg-white': item.id == cal.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.subject"></span>
+							<span :class="{'border-4': item.day, 'bg-white': item.id == event.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.subject"></span>
 							<span x-text="item.content"></span>
 						</div>
 					</template>
@@ -124,10 +120,9 @@
 			function context() {
 				return {
 					DEFAULT,
-					calendar: [],
-					cal: {
-						...DEFAULT,
-						date: now()[0]
+					events: [],
+						event: {
+						...DEFAULT
 					},
 					selected: now()[0],
 					now() { return now() },
@@ -136,25 +131,33 @@
 						await this.fetch("GET");
 					},
 
-					async save(cal) {
-						let response = await this.fetch("POST", cal);
+					async save(event) {
+						if (event.day === "" && event.date === "") {
+							if (this.selected.length === 1) {
+								event.day = this.selected; 
+							} else {
+								event.date = this.selected; 
+							}
+						}
+						let response = await this.fetch("POST", event);
 						// todo check for errors.
-						this.cal = { ...DEFAULT };
+						this.event = { ...DEFAULT };
+						//this.selected = ""; 
 					},
 
-					async remove(cal) {
-						this.cal = { ...cal, id: "", reference: "" };
-						await this.fetch("DELETE", cal);
+					async remove(event) {
+						this.event = { ...event, id: "", reference: "" };
+						await this.fetch("DELETE", event);
 					},
 
-					async fetch(method, cal) {
+					async fetch(method, event) {
 						let response = await (
 							await fetch(`/api/calendar?${this.now()[0]}`, {
 								method: method,
-								body: cal ? JSON.stringify(cal) : null,
+								body: event ? JSON.stringify(event) : null,
 							})
 						).json();
-						this.calendar = response.calendar;
+						this.events = response.events;
 						return response;
 					},
 				};
