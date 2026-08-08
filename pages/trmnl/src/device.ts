@@ -20,18 +20,27 @@ export default async function lookup(headers, kv, persist = false) {
     headers.entries().filter(([key]) => !IGNORE_HEADERS.includes(key)),
   );
 
-  const newDevice = { ...DEFAULTS, ...device, ...trmnlHeaders };
+  const newDevice = {
+    ...DEFAULTS,
+    ...device,
+    ...trmnlHeaders,
+  };
   console.log(
     `[INFO /headers/${newDevice.id}] ${JSON.stringify(trmnlHeaders)}`,
   );
 
-  // only save once a day KV limits apply
+  let refresh_rate = getSleepTime(newDevice);
+
+  // only save twice a day KV limits apply
   if (
-    persist &&
-    new Date(newDevice?.updated || 0).toDateString() !==
-      new Date().toDateString()
+    (persist &&
+      new Date(newDevice?.updated || 0).toDateString() !==
+        new Date().toDateString()) ||
+    refresh_rate !== newDevice.refresh_rate
   ) {
     await save(newDevice, kv);
+    // don't save the refresh rate when asleep
+    newDevice.refresh_rate = refresh_rate;
   }
   return newDevice;
 }
@@ -39,6 +48,43 @@ export default async function lookup(headers, kv, persist = false) {
 export async function save(device, kv) {
   device.updated = new Date().toISOString();
   await kv.put(device.id, JSON.stringify(device));
+}
+
+function getSleepTime(device) {
+  let refresh_rate = 0;
+
+  if (
+    device.sleep_from &&
+    device.sleep_to &&
+    device.sleep_from !== device.sleep_to
+  ) {
+    let from = device.sleep_from
+      .split(":")
+      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+
+    let to = device.sleep_to
+      .split(":")
+      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+
+    let now = new Date()
+      .toLocaleTimeString("fr-FR", {
+        timeStyle: "short",
+        timeZone: device.time_zone,
+      })
+      .split(":")
+      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+
+    if (now < to && ((from < to && from < now) || from > to)) {
+      refresh_rate = to - now - 2 * device.refresh_rate;
+    } else if (from > to && from < now) {
+      refresh_rate = to + 24 * 60 * 60 - now - 2 * device.refresh_rate;
+    }
+  }
+
+  refresh_rate =
+    refresh_rate > device.refresh_rate ? refresh_rate : device.refresh_rate;
+
+  return refresh_rate;
 }
 
 const IGNORE_HEADERS = [
