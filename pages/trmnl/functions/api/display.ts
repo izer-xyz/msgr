@@ -5,7 +5,7 @@ export async function onRequest({ request, env }) {
   const device = await lookup(request.headers, env.TRMNL_DEVICES, true);
 
   if (env.TRMNL_ANALYTICS) {
-    saveMetrics(env.TRMNL_ANALYTIC, device);
+    saveMetrics(env.TRMNL_ANALYTICS, device);
   } else {
     console.log(`[INFO /api/display/${device.id}] ${JSON.stringify(device)}`);
   }
