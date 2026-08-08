@@ -37,8 +37,8 @@ export async function onRequest({ request, env }) {
   });
 }
 
-function saveMetrics(env, device) {
-  env.TRMNL_ANALYTICS.writeDataPoint({
+function saveMetrics(analytics, device) {
+  analytics.writeDataPoint({
     blobs: [
       device["x-real-ip"],
       device.model,
