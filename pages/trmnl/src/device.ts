@@ -10,6 +10,7 @@ export const DEFAULTS = {
   sleep_from: "",
   sleep_to: "",
   time_zone: "Indian/Reunion",
+  sleep: "",
 };
 
 export default async function lookup(headers, kv, persist = false) {
@@ -38,6 +39,11 @@ export default async function lookup(headers, kv, persist = false) {
         new Date().toDateString()) ||
     refresh_rate !== newDevice.refresh_rate
   ) {
+    if (refresh_rate !== newDevice.refresh_rate) {
+      newDevice.sleep = refresh_rate;
+    } else {
+      newDevice.sleep = "";
+    }
     await save(newDevice, kv);
     // don't save the refresh rate when asleep
     newDevice.refresh_rate = refresh_rate;
