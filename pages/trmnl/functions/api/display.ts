@@ -1,31 +1,20 @@
 import lookup from "../../src/device.ts";
-// import process from '../../src/image.ts';
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
   const device = await lookup(request.headers, env.TRMNL_DEVICES, true);
 
   if (env.TRMNL_ANALYTICS) {
-    env.TRMNL_ANALYTICS.writeDataPoint({
-      blobs: [
-        device["x-real-ip"],
-        device.model,
-        device["fw-version"],
-        device.friendly_id,
-      ],
-      doubles: [
-        Number(device["wake-time"]),
-        Number(device["battery-voltage"]),
-        Number(device.refresh_rate),
-      ],
-      indexes: [device.id],
-    });
+    saveMetrics(env.ANALYTICS, device);
   } else {
     console.log(`[INFO /api/display/${device.id}] ${JSON.stringify(device)}`);
   }
 
-  const filename = Date.now() + ".png"; //await process(device, env);
+  const filename = Date.now() + ".png";
 
+  let refresh = getRefreshRate(device);
+
+  // blackout screen during sleep time
   let response = JSON.stringify({
     filename: filename,
     //'firmware_url': null,
@@ -33,7 +22,7 @@ export async function onRequest({ request, env }) {
     image_url: `${request.url}/../img/${filename}`,
     //'image_url_timeout': 0,
     //'maximum_compatibility': false,
-    refresh_rate: device.refresh_rate,
+    refresh_rate: refresh,
     reset_firmware: false,
     //'special_function': 'none',
     //'temperature_profile': 'default',
@@ -46,4 +35,58 @@ export async function onRequest({ request, env }) {
       "Content-Type": "application/json;charset=utf-8",
     },
   });
+}
+
+function saveMetrics(env, device) {
+  env.TRMNL_ANALYTICS.writeDataPoint({
+    blobs: [
+      device["x-real-ip"],
+      device.model,
+      device["fw-version"],
+      device.friendly_id,
+    ],
+    doubles: [
+      Number(device["wake-time"]),
+      Number(device["battery-voltage"]),
+      Number(device.refresh_rate),
+    ],
+    indexes: [device.id],
+  });
+}
+
+function getRefreshRate(device) {
+  let refresh_rate = 0;
+
+  if (
+    device.sleep_from &&
+    device.sleep_to &&
+    device.sleep_from !== device.sleep_to
+  ) {
+    let from = device.sleep_from
+      .split(":")
+      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+
+    let to = device.sleep_to
+      .split(":")
+      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+
+    let now = new Date()
+      .toLocaleDateString("fr-FR", {
+        timeStyle: "medium",
+        timeZone: device.time_zone,
+      })
+      .split(":")
+      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+
+    if (now < to && ((from < to && from < now) || from > to)) {
+      refresh_rate = to - now - 2 * device.refresh_rate;
+    } else if (from > to && from < now) {
+      refresh_rate = to + 24 * 60 * 60 - now - 2 * device.refresh_rate;
+    }
+  }
+
+  refresh_rate =
+    refresh_rate > device.refresh_rate ? refresh_rate : device.refresh_rate;
+
+  return refresh_rate;
 }

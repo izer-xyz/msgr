@@ -7,6 +7,9 @@ export const DEFAULTS = {
   api_key: null,
   friendly_id: null,
   depth: "4",
+  sleep_from: "",
+  sleep_to: "",
+  time_zone: "Indian/Reunion",
 };
 
 export default async function lookup(headers, kv, persist = false) {
