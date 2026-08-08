@@ -71,8 +71,8 @@ function getRefreshRate(device) {
       .reduce((r, v) => r * 60 + Number(v) * 60, 0);
 
     let now = new Date()
-      .toLocaleDateString("fr-FR", {
-        timeStyle: "medium",
+      .toLocaleTimeString("fr-FR", {
+        timeStyle: "short",
         timeZone: device.time_zone,
       })
       .split(":")
