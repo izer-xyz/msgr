@@ -18,7 +18,7 @@ const PREFIX = "C";
 export async function onRequestGet({ request, env }) {
 	const { search } = new URL(request.url);
 	let date = search.substring(1);
-	let day = new Date(date).getDay();
+	let day = new Date(date).getDay() || 7; // Sunday is 7 not 0
 
 	let events = await new Query(
 		PREFIX,

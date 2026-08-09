@@ -32,12 +32,13 @@ export default async function lookup(headers, kv, persist = false) {
 
   let refresh_rate = getSleepTime(newDevice);
 
-  // only save twice a day KV limits apply
+  // only save twice/3 a day KV limits apply
   if (
     (persist &&
       new Date(newDevice?.updated || 0).toDateString() !==
         new Date().toDateString()) ||
-    refresh_rate !== newDevice.refresh_rate
+    refresh_rate !== newDevice.refresh_rate ||
+    newDevice.sleep !== ""
   ) {
     if (refresh_rate !== newDevice.refresh_rate) {
       newDevice.sleep = refresh_rate;

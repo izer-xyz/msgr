@@ -50,9 +50,11 @@ export default class Query {
 		}
 
 		this.item.id = id;
-		// TODO set TTL
-		console.log(`save ${id}`);
-		await this.store.put(id, JSON.stringify(this.item));
+		// expire after ~1 month
+		let expiration =
+			this.item.date &&
+			new Date(this.item.date).getTime() + 31 * 24 * 60 * 60 * 1000;
+		await this.store.put(id, JSON.stringify(this.item), { expiration });
 
 		return this;
 	}

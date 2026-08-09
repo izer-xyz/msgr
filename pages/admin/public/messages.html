@@ -54,14 +54,14 @@
 						</select>
 					</div>
 					<textarea 
-						id="message"
-						name="message"
+						id="content"
+						name="content"
 						autofocus
-						x-model="msg.message"
+						x-model="msg.content"
 						class="font-bold border border-black p-2 mx-4"
 						rows="3"
 						placeholder="Tapez votre message ici et appuyez sur Entrée pour envoyer."
-						x-init="$watch('msg.message', () => $el.focus())"
+						x-init="$watch('msg.content', () => $el.focus())"
 						@keydown.enter.prevent="$el.form.requestSubmit()"
 					></textarea>
 					<input id="from" name="from" x-model="msg.from" placeholder="De" class="w-1/4 mx-4 my-2 p-2 self-end border border-black"/>
@@ -76,7 +76,7 @@
 					<template x-for="item in msgs">
 						<div class="flex flex-col" x-show="item.day === selected || selected ==='' && item.day === now()[2]"
 							@click.prevent="(msg === item ? msg = { ...DEFAULT } : msg = item)">
-							<span :class="{'border-4': item.day, 'bg-white': item.id == msg.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.message">
+							<span :class="{'border-4': item.day, 'bg-white': item.id == msg.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.content">
 							</span>
 							<span class="self-end" x-text="item.from"></span>
 						</div>
@@ -87,7 +87,7 @@
 		<script>
 			const DEFAULT = {
 				date: "",
-				message: "",
+				content: "",
 				time: "",
 				from: "",
 				id: "",
