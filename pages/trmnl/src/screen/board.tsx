@@ -29,13 +29,13 @@ export default async function screen(device, env) {
   let dayOfWeek = new Date(dateTime[0]).getDay() || 7; // Sun is 7 not 0
 
   let messageKeys = [
-    ...(await env.MESSAGES.list({ prefix: `M.D${dayOfWeek}` })).keys,
-    ...(await env.MESSAGES.list({ prefix: `M.${dateTime[0]}` })).keys,
+    ...(await env.TRMNL_BOARD.list({ prefix: `M.D${dayOfWeek}` })).keys,
+    ...(await env.TRMNL_BOARD.list({ prefix: `M.${dateTime[0]}` })).keys,
   ].map((key) => key.name);
 
   let eventKeys = [
-    ...(await env.MESSAGES.list({ prefix: `C.D${dayOfWeek}` })).keys,
-    ...(await env.MESSAGES.list({ prefix: `C.${dateTime[0]}` })).keys,
+    ...(await env.TRMNL_BOARD.list({ prefix: `C.D${dayOfWeek}` })).keys,
+    ...(await env.TRMNL_BOARD.list({ prefix: `C.${dateTime[0]}` })).keys,
   ].map((key) => key.name);
 
   let messages = messageKeys.length

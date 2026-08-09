@@ -23,7 +23,7 @@ export async function onRequestGet({ request, env }) {
 	let events = await new Query(
 		PREFIX,
 		{ date: date.slice(0, 7), day },
-		env.MESSAGES,
+		env.TRMNL_BOARD,
 	).list();
 
 	return new Response(JSON.stringify({ date, events }), {
@@ -34,11 +34,11 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequestPost({ request, env }) {
-	await new Query(PREFIX, await request.json(), env.MESSAGES).save();
+	await new Query(PREFIX, await request.json(), env.TRMNL_BOARD).save();
 	return onRequestGet({ request, env });
 }
 
 export async function onRequestDelete({ request, env }) {
-	await new Query(PREFIX, await request.json(), env.MESSAGES).delete();
+	await new Query(PREFIX, await request.json(), env.TRMNL_BOARD).delete();
 	return onRequestGet({ request, env });
 }
