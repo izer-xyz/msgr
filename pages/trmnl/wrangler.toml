@@ -11,6 +11,11 @@ id = "trmnl_devices"
 binding = "MSG_BOARD"
 id = "msg_board"
 
+[[kv_namespaces]]
+binding = "MESSAGES"
+id = "trmnl_messages"
+
+
 # [[analytics_engine_datasets]]
 # binding = "TRMNL_ANALYTICS"
 # id = "trmnl_analytics

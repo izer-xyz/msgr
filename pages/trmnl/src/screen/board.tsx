@@ -28,15 +28,29 @@ export default async function screen(device, env) {
 
   let dayOfWeek = new Date(dateTime[0]).getDay() || 7; // Sun is 7 not 0
 
-  let messages = [
-    ...(await env.MESSAGES.list({ prefix: `M.D${dayOfWeek}` })),
-    ...(await env.MESSAGES.list({ prefix: `M.${dateTime[0]}` })),
-  ];
+  let messageKeys = [
+    ...(await env.MESSAGES.list({ prefix: `M.D${dayOfWeek}` })).keys,
+    ...(await env.MESSAGES.list({ prefix: `M.${dateTime[0]}` })).keys,
+  ].map((key) => key.name);
 
-  let events = [
-    ...(await env.MESSAGES.list({ prefix: `C.D${dayOfWeek}` })),
-    ...(await env.MESSAGES.list({ prefix: `C.${dateTime[0]}` })),
-  ];
+  let eventKeys = [
+    ...(await env.MESSAGES.list({ prefix: `C.D${dayOfWeek}` })).keys,
+    ...(await env.MESSAGES.list({ prefix: `C.${dateTime[0]}` })).keys,
+  ].map((key) => key.name);
+
+  let messages = messageKeys.length
+    ? (await Promise.all(await env.MESSAGES.get(messageKeys, "json"))).reduce(
+        (list, i) => (i[1] ? list.push(i[1]) && list : list),
+        [],
+      )
+    : [];
+
+  let events = eventKeys.length
+    ? (await Promise.all(await env.MESSAGES.get(eventKeys, "json"))).reduce(
+        (list, i) => (i[1] ? list.push(i[1]) && list : list),
+        [],
+      )
+    : [];
 
   if (device.sleep) {
     dateTime[1] = "--:--";
@@ -52,18 +66,16 @@ export default async function screen(device, env) {
       </div>
       <div tw="flex">
         <div tw="flex-1 flex flex-col">
-          {events.map(event => (
+          {events.map((event) => (
             <div tw="bg-gray-200 p-1 rounded-lg">
               <span tw="text-gray-700">{event.time} </span>
               <span tw="">{event.subject}</span>
-              <div tw="text-xs font-bold pl-1">
-                {event.content}
-              </div>
+              <div tw="text-xs font-bold pl-1">{event.content}</div>
             </div>
           ))}
         </div>
         <div tw="flex-1 flex flex-col text-xs font-bold pr-2">
-          {messages.map(message => (
+          {messages.map((message) => (
             <div tw="flex flex-col pl-4">
               <span tw="border-3 border-black px-2 py-1 rounded-lg">
                 {message.message}
