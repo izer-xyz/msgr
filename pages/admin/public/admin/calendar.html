@@ -152,7 +152,7 @@
 
 					async fetch(method, event) {
 						let response = await (
-							await fetch(`/api/calendar?${this.now()[0]}`, {
+							await fetch(`/api/admin/calendar?${this.now()[0]}`, {
 								method: method,
 								body: event ? JSON.stringify(event) : null,
 							})

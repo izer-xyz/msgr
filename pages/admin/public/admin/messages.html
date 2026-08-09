@@ -135,7 +135,7 @@
 
 					async fetch(method, msg) {
 						let response = await (
-							await fetch(`/api/messages?${this.now()[0]}`, {
+							await fetch(`/api/admin/messages?${this.now()[0]}`, {
 								method: method,
 								body: msg ? JSON.stringify(msg) : null,
 							})
