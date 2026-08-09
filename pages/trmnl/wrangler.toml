@@ -8,12 +8,8 @@ binding = "TRMNL_DEVICES"
 id = "trmnl_devices"
 
 [[kv_namespaces]]
-binding = "MSG_BOARD"
-id = "msg_board"
-
-[[kv_namespaces]]
-binding = "MESSAGES"
-id = "trmnl_messages"
+binding = "TRMNL_BOARD"
+id = "trmnl_board"
 
 
 # [[analytics_engine_datasets]]

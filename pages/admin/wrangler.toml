@@ -4,12 +4,8 @@ compatibility_date = "2026-07-23"
 send_metrics = false
 
 [[kv_namespaces]]
-binding = "MESSAGES"
-id = "trmnl_messages"
-
-[[kv_namespaces]]
-binding = "CALENDAR"
-id = "trmnl_calendar"
+binding = "TRMNL_BOARD"
+id = "trmnl_board"
 
 # [[analytics_engine_datasets]]
 # binding = "TRMNL_ANALYTICS"

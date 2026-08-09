@@ -39,14 +39,13 @@ export default async function screen(device, env) {
   ].map((key) => key.name);
 
   let messages = messageKeys.length
-    ? (await Promise.all(await env.MESSAGES.get(messageKeys, "json"))).reduce(
-        (list, i) => (i[1] ? list.push(i[1]) && list : list),
-        [],
-      )
+    ? (
+        await Promise.all(await env.TRMNL_BOARD.get(messageKeys, "json"))
+      ).reduce((list, i) => (i[1] ? list.push(i[1]) && list : list), [])
     : [];
 
   let events = eventKeys.length
-    ? (await Promise.all(await env.MESSAGES.get(eventKeys, "json"))).reduce(
+    ? (await Promise.all(await env.TRMNL_BOARD.get(eventKeys, "json"))).reduce(
         (list, i) => (i[1] ? list.push(i[1]) && list : list),
         [],
       )
