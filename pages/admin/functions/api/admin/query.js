@@ -21,7 +21,7 @@ export default class Query {
 			? this.store.list({ prefix })
 			: { keys: [] });
 
-		prefix = [this.type, "D" + this.item.day].join(".");
+		prefix = [this.type, "D"].join("."); // return every day
 		console.log(`list ${prefix}`);
 		let dayList = await this.store.list({ prefix });
 
@@ -57,7 +57,7 @@ export default class Query {
 		await this.store.put(
 			id,
 			JSON.stringify(this.item),
-			expiration && { expiration } || {},
+			(expiration && { expiration }) || {},
 		);
 
 		return this;
