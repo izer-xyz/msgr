@@ -19,7 +19,11 @@ export async function onRequestGet({ request, env }) {
 	let messages = await new Query(PREFIX, { date, day }, env.TRMNL_BOARD).list();
 
 	let email = request.headers.get("cf-access-authenticated-user-email");
-	let profile = await env.TRMNL_BOARD.get(["P", email].join("."), "json");
+	let profile = {
+		name: email,
+		...(await env.TRMNL_BOARD.get(["P", email].join("."), "json")),
+		email,
+	};
 
 	console.log(`[INFO /api/admin/messages] ${JSON.stringify({ profile })}`);
 	return new Response(JSON.stringify({ date, messages, profile }), {
