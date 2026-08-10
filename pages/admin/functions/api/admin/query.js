@@ -10,7 +10,6 @@ export default class Query {
 		};
 		this.type = type;
 		this.store = store;
-		console.log(`request ${JSON.stringify(this.item)}`);
 	}
 
 	// date: YYYY-MM-dd
@@ -53,14 +52,14 @@ export default class Query {
 		// expire after ~1 month
 		let expiration =
 			this.item.date &&
-			new Date(this.item.date).getTime() + 31 * 24 * 60 * 60 * 1000;
+			!this.item.flag &&
+			new Date(this.item.date).getTime() / 1000 + 31 * 24 * 60 * 60;
 		await this.store.put(id, JSON.stringify(this.item), { expiration });
 
 		return this;
 	}
 
 	async delete() {
-		console.log(`delete ${this.item.id}`);
 		await this.store.delete(this.item.id);
 		return this;
 	}
