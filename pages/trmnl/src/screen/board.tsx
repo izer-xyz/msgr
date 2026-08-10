@@ -77,7 +77,7 @@ export default async function screen(device, env) {
           {messages.map((message) => (
             <div tw="flex flex-col pl-4">
               <span tw="border-3 border-black px-2 py-1 rounded-lg">
-                {message.message}
+                {message.content}
               </span>
               <span tw="self-end">{message.from} </span>
             </div>
