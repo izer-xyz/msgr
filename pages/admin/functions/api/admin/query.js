@@ -57,7 +57,7 @@ export default class Query {
 		await this.store.put(
 			id,
 			JSON.stringify(this.item),
-			expiration && { expiration },
+			expiration && { expiration } || {},
 		);
 
 		return this;
