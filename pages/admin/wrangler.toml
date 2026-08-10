@@ -7,6 +7,10 @@ send_metrics = false
 binding = "TRMNL_BOARD"
 id = "trmnl_board"
 
+[[kv_namespaces]]
+binding = "TRMNL_DEVICES"
+id = "trmnl_devices"
+
 # [[analytics_engine_datasets]]
 # binding = "TRMNL_ANALYTICS"
 # id = "trmnl_analytics

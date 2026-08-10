@@ -28,7 +28,8 @@
 	<body style="font-size: 24px; font-family: 'Noto Sans', sans-serif; width: 20em; margin: auto;">
 		<main class="font-bold">
 			<div>
-				<p> Messagerie | <a href="calendar">Calandrier</a> | <a href="">Aperçu</a> </p>
+				<a href="messages">Messagerie</a> |
+				<a href="calendar">Calandrier</a> | <a href="">Aperçu</a> | <a href="profile">P</a>
 			</div>
 
 			<div x-data="context" x-init="list">
@@ -75,7 +76,7 @@
 				<div id="preview" class="flex-1 flex flex-col p-4">
 					<template x-for="item in msgs">
 						<div class="flex flex-col" x-show="item.day === selected || selected ==='' && item.day === now()[2]"
-							@click.prevent="(msg === item ? msg = { ...DEFAULT } : msg = item)">
+							@click.prevent="(msg === item ? msg = { ...DEFAULT } : msg = { ...item, from: profile.name })">
 							<span :class="{'border-4': item.day, 'bg-white': item.id == msg.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.content">
 							</span>
 							<span class="self-end" x-text="item.from"></span>
@@ -102,6 +103,7 @@
 					msg: {
 						...DEFAULT,
 					},
+					profile: {}, 
 					selected: "",
 
 					now() {
@@ -141,6 +143,8 @@
 							})
 						).json();
 						this.msgs = response.messages;
+						this.profile = response.profile; 
+						DEFAULT.from = this.profile.name; 
 						return response;
 					},
 				};

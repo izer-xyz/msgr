@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>Profil</title>
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+		></script>
+		<style></style>
+	</head>
+	<body
+		style="
+			font-size: 24px;
+			font-family: &quot;Noto Sans&quot;, sans-serif;
+			width: 20em;
+			margin: auto;
+		"
+	>
+		<main>
+			<div>
+				<p>
+					<a href="messages">Messagerie</a> |
+					<a href="calendar">Calandrier</a> | <a href="">Aperçu</a> | <a href="profile">P</a>
+				</p>
+			</div>
+
+			<div x-data="context" x-init="get">
+				<form @submit.prevent="save(profile)">
+					<div>email <input name="email" type="text" readonly x-model="profile.email" /></div>
+					<div>nom <input name="name" type="text" x-model="profile.name" /></div>
+					<button type="submit">
+						Enregsitrer
+					</button>
+					</div>
+				</form>
+			</div>
+		</main>
+		<script>
+			const DEFAULT = {
+				email: "",
+				name: "",
+			};
+
+			function context() {
+				return {
+					DEFAULT,
+					profile: {
+						...DEFAULT,
+					},
+
+					async get() {
+						await this.fetch("GET");
+					},
+
+					async save(profile) {
+						let response = await this.fetch("POST", profile);
+						// todo check for errors.
+					},
+
+					async fetch(method, profile) {
+						let response = await (
+							await fetch("/api/admin/profile", {
+								method: method,
+								body: profile ? JSON.stringify(profile) : null,
+							})
+						).json();
+						this.profile = response.profile;
+						return response;
+					},
+				};
+			}
+		</script>
+	</body>
+</html>
