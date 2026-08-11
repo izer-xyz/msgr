@@ -14,18 +14,11 @@ export async function onRequest({ request, env }) {
 
   const filename = Date.now() + ".png"; //await process(device, env);
 
-  return new Response(
-    JSON.stringify({
-      api_key: device.api_key,
-      friendly_id: device.friendly_id,
-      image_url: `${request.url}/../img/${filename}`,
-      message: "Welcome",
-      status: 200,
-    }),
-    {
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-    },
-  );
+  return Response.json({
+    api_key: device.api_key,
+    friendly_id: device.friendly_id,
+    image_url: `${request.url}/../img/${filename}`,
+    message: "Welcome",
+    status: 200,
+  });
 }

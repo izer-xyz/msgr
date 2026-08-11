@@ -28,11 +28,7 @@ export async function onRequest({ request, env }) {
     update_firmware: false,
   });
 
-  return new Response(response, {
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-  });
+  return Response.json(response);
 }
 
 function saveMetrics(analytics, device) {
