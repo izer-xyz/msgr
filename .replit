@@ -7,17 +7,17 @@ packages = ["vim"]
 [workflows]
 
 [[workflows.workflow]]
-name = "Admin"
+name = "TRMNL"
 mode = "sequential"
 author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd pages/admin && npm install"
+args = "cd pages/trmnl && npm install"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd pages/admin && npm start"
+args = "cd pages/trmnl && npm start"
 
 [[ports]]
 localPort = 8080

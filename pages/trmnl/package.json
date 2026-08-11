@@ -2,7 +2,7 @@
   "name": "msgr-trmnl",
   "private": true,
   "scripts": {
-    "start": "wrangler pages dev public"
+    "start": "wrangler pages dev public --port 8080 --ip 0.0.0.0"
   },
   "dependencies": {
     "react": "^19.2.7",
