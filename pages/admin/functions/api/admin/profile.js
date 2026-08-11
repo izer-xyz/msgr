@@ -6,6 +6,7 @@ export async function onRequestGet({ request, env }) {
 	let profile = {
 		...DEFAULT_PROFILE,
 		...(await env.TRMNL_BOARD.get([PREFIX, email].join("."), "json")),
+		email,
 	};
 
 	console.log(`[INFO /api/admin/profile] ${JSON.stringify(profile)}`);
