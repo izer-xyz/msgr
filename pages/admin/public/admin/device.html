@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf8" />
+		<title>Aperçu</title>
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+		></script>
+		<style></style>
+	</head>
+	<body
+		style="
+			font-size: 24px;
+			font-family: &quot;Noto Sans&quot;, sans-serif;
+			width: 20em;
+			margin: auto;
+		"
+	>
+		<main>
+			<div>
+				<p>
+					<a href="messages">Messagerie</a> |
+					<a href="calendar">Calandrier</a> | <a href="device">Aperçu</a> | <a href="profile">P</a>
+				</p>
+			</div>
+
+			<div x-data="context" x-init="list">
+				<form @submit.prevent="save(selected)">
+					<img :src="`/api/admin/preview?${selected.id}`" />
+					<div>id <select @change="selected = devices[$el.value]">
+						<template x-for="(item, index) in devices">
+							<option x-text="item.id" :value="index"></option>
+						</template>
+					</select></div>
+					<div>id <input name="time_zone" type="text" x-model="selected.id" /></div>
+					<div>time_zone <input name="time_zone" type="text" x-model="selected.time_zone" /></div>
+					<div>refresh_rate <input name="refresh_rate" type="text" x-model="selected.refresh_rate" /></div>
+					<div>battery <input name="battery-voltage" type="text" x-model="selected['battery-voltage']" /></div>
+					<button type="submit">
+						Enregsitrer
+					</button>
+					</div>
+				</form>
+			</div>
+		</main>
+		<script>
+			const DEFAULT = {
+				id: "",
+				height: "",
+				width: "",
+				screen: "",
+				refresh_rate: "",
+				friendly_id: "",
+				depth: "",
+				sleep_from: "",
+				sleep_to: "",
+				time_zone: "",
+				rssi: "",
+				updated: "",
+				"battery-voltage": "",
+				"x-real-ip": "",
+				"fw-version":"", 
+				model:"",
+				
+				};
+
+			function context() {
+				return {
+					DEFAULT,
+					devices: [],
+					selected: {
+						...DEFAULT,
+					},
+
+					async list() {
+						await this.fetch("GET");
+					},
+
+					async save(device) {
+						let response = await this.fetch("POST", device);
+						// todo check for errors.
+					},
+
+					async fetch(method, device) {
+						let response = await (
+							await fetch("/api/admin/device", {
+								method: method,
+								body: device ? JSON.stringify(device) : null,
+							})
+						).json();
+						this.devices = response.devices;
+						if (this.selected.id === "" && this.devices.length > 0) {
+							this.selected = this.devices[0]; 
+						}
+						return response;
+					},
+				};
+			}
+		</script>
+	</body>
+</html>

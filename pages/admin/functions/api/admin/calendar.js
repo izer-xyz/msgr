@@ -26,11 +26,7 @@ export async function onRequestGet({ request, env }) {
 		env.TRMNL_BOARD,
 	).list();
 
-	return new Response(JSON.stringify({ date, events }), {
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-	});
+	return Response.json({ date, events });
 }
 
 export async function onRequestPost({ request, env }) {

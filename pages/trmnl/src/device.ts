@@ -98,6 +98,7 @@ const IGNORE_HEADERS = [
   "host",
   "connection",
   "content-type",
+  "content-length",
   "user-agent",
   "api_key",
   "screen",

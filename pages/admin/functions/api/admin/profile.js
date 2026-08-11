@@ -10,11 +10,7 @@ export async function onRequestGet({ request, env }) {
 
 	console.log(`[INFO /api/admin/profile] ${JSON.stringify(profile)}`);
 
-	return new Response(JSON.stringify({ email, profile }), {
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-	});
+	return Response.json({ email, profile });
 }
 
 export async function onRequestPost({ request, env }) {

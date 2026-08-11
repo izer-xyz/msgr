@@ -26,11 +26,7 @@ export async function onRequestGet({ request, env }) {
 	};
 
 	console.log(`[INFO /api/admin/messages] ${JSON.stringify({ profile })}`);
-	return new Response(JSON.stringify({ date, messages, profile }), {
-		headers: {
-			"Content-Type": "application/json;charset=utf-8",
-		},
-	});
+	return Response.json({ date, messages, profile });
 }
 
 export async function onRequestPost({ request, env }) {
