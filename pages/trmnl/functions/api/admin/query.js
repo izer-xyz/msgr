@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 export default class Query {
 	constructor(type, { id, date, day, time, reference, ...data }, store) {
 		this.item = {
@@ -67,4 +69,16 @@ export default class Query {
 		await this.store.delete(this.item.id);
 		return this;
 	}
+}
+
+export async function getProfile(request, store) {
+	let jwt = request.headers.get("cf-access-jwt-assertion");
+	let email = jwt ? jwtDecode(jwt).email : "";
+	let profile = {
+		...(await store.get(["P", email].join("."), "json")),
+		email,
+	};
+	// default name to email
+	profile.name = profile.name || profile.email;
+	return profile;
 }

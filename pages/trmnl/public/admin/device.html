@@ -36,7 +36,7 @@
 
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(selected)">
-					<img :src="`/api/admin/preview?${selected.id}`" />
+					<img x-init="$watch('selected', v => preview($el, v))" style="max-width: 100%;height: auto;"/>
 					<div>id <select @change="selected = devices[$el.value]">
 						<template x-for="(item, index) in devices">
 							<option x-text="item.id" :value="index"></option>
@@ -103,6 +103,16 @@
 							this.selected = this.devices[0]; 
 						}
 						return response;
+					},
+					async preview(el, device) {
+						if (!device.id) return; 
+						let url = `/api/img/${device.id}.png`; 
+						let options = {
+							headers: {
+								ID: device,
+							}
+						}
+						el.src = URL.createObjectURL(await (await fetch(url, options)).blob()); 
 					},
 				};
 			}

@@ -5,6 +5,7 @@ channel = "stable-25_05"
 packages = ["vim"]
 
 [workflows]
+runButton = "TRMNL"
 
 [[workflows.workflow]]
 name = "TRMNL"

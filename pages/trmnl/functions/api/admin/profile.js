@@ -1,25 +1,15 @@
-import { jwtDecode } from "jwt-decode";
+import { getProfile } from "./query.js";
 
 const PREFIX = "P";
-const DEFAULT_PROFILE = {};
 
 export async function onRequestGet({ request, env }) {
-	let jwt = request.headers.get("cf-access-jwt-assertion");
-	let email = jwt ? jwtDecode(jwt).email : "";
-	let profile = {
-		...DEFAULT_PROFILE,
-		...(await env.TRMNL_BOARD.get([PREFIX, email].join("."), "json")),
-		email,
-	};
-
-	console.log(`[INFO /api/admin/profile] ${JSON.stringify(profile)}`);
-
-	return Response.json({ email, profile });
+	let profile = await getProfile(request, env.TRMNL_BOARD);
+	return Response.json({ profile });
 }
 
 export async function onRequestPost({ request, env }) {
 	let email = request.headers.get("cf-access-authenticated-user-email");
-	let profile = { ...DEFAULT_PROFILE, ...(await request.json()), email };
+	let profile = { ...(await request.json()), email };
 
 	await env.TRMNL_BOARD.put(
 		[PREFIX, email].join("."),

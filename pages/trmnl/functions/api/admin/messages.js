@@ -7,7 +7,7 @@
 // message.from: from who
 // message.content: content
 
-import Query from "./query.js";
+import { default as Query, getProfile } from "./query.js";
 
 const PREFIX = "M";
 
@@ -18,14 +18,8 @@ export async function onRequestGet({ request, env }) {
 
 	let messages = await new Query(PREFIX, { date, day }, env.TRMNL_BOARD).list();
 
-	let email = request.headers.get("cf-access-authenticated-user-email");
-	let profile = {
-		name: email,
-		...(await env.TRMNL_BOARD.get(["P", email].join("."), "json")),
-		email,
-	};
+	let profile = getProfile(request, env.TRMNL_BOARD);
 
-	console.log(`[INFO /api/admin/messages] ${JSON.stringify({ profile })}`);
 	return Response.json({ date, messages, profile });
 }
 
