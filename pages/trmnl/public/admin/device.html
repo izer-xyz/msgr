@@ -106,10 +106,10 @@
 					},
 					async preview(el, device) {
 						if (!device.id) return; 
-						let url = `/api/img/${device.id}.png`; 
+						let url = `/api/img/${Date.now()}.png`; 
 						let options = {
 							headers: {
-								ID: device,
+								"ID": device.id,
 							}
 						}
 						el.src = URL.createObjectURL(await (await fetch(url, options)).blob()); 
