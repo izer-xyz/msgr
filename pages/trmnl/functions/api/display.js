@@ -20,7 +20,7 @@ export async function onRequest({ request, env }) {
     image_url: `${request.url}/../img/${filename}`,
     //'image_url_timeout': 0,
     //'maximum_compatibility': false,
-    refresh_rate: device.refresh_rate,
+    refresh_rate: Number(device.refresh_rate),
     reset_firmware: false,
     //'special_function': 'none',
     //'temperature_profile': 'default',
