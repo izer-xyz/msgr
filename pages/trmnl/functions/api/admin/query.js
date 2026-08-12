@@ -56,7 +56,7 @@ export default class Query {
 			new Date(this.item.date).getTime() / 1000 + 31 * 24 * 60 * 60;
 		await this.store.put(
 			id,
-			JSON.stringify(this.item),
+			JSON.stringify(this.item, null, " "),
 			(expiration && { expiration }) || {},
 		);
 

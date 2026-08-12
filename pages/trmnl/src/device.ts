@@ -54,7 +54,7 @@ export default async function lookup(headers, kv, persist = false) {
 
 export async function save(device, kv) {
   device.updated = new Date().toISOString();
-  await kv.put(device.id, JSON.stringify(device));
+  await kv.put(device.id, JSON.stringify(device, null, " "));
 }
 
 function getSleepTime(device) {
@@ -110,4 +110,5 @@ const IGNORE_HEADERS = [
   "cf-connecting-ip",
   "updated",
   "fw-commit",
+  "cf-visitor",
 ];
