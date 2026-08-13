@@ -1,32 +1,10 @@
-import lookup from "../../src/device.js";
+import {default as lookup, getFilename) from "../../src/device.js";
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
   const device = await lookup(request.headers, env.TRMNL_DEVICES, true);
-  metrics(device, env.TRMNL_ANALYTICS);
 
-  let coef =
-    ([
-      /* TODO FIX TimeZone! the large groups don't work sets to 4am
-      1m   2m   5m  10m  15m   30m    1h    2h     3h     6h    12h    24h*/
-      60, 120, 300, 600, 900, 1800, 3600, 7200, 10800, 21600, 43200, 86400,
-    ].find((c) => c > Number(device.refresh_rate)) || device.refresh_rate) *
-    1000;
-  let now = new Date(Math.ceil(new Date().getTime() / coef) * coef);
-
-  let dateTime = now
-    .toLocaleString("lt-LT", {
-      // lituania uses the ISO 8601 format
-      timeZone: device.time_zone,
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    })
-    .split(" ");
-
-  let filename = dateTime.join("_") + ".png";
+  let filename = getFilename(device);
 
   // blackout screen during sleep time
   let response = {
@@ -44,6 +22,7 @@ export async function onRequest({ request, env }) {
     update_firmware: false,
   };
 
+  metrics(device, env.TRMNL_ANALYTICS);
   return Response.json(response);
 }
 
