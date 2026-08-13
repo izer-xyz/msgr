@@ -4,12 +4,17 @@ export function createAuditor(request, store) {
   let email = getEmail(request);
   let ip = getIp(request);
   return (id, action, data) => {
-    store &&
+    if (store) {
       store.writeDataPoint({
         blobs: [email, ip, action, JSON.stringify(data)],
         doubles: [],
         indexes: [id],
       });
+    } else {
+      console.log(
+        `[INFO /${ip}/audit/${id}/${action}] ${JSON.stringify(data)}`,
+      );
+    }
   };
 }
 
