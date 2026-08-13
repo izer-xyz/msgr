@@ -12,6 +12,7 @@
 // Special case: override day of week YYYY-MM-dd.DOF-X[.HH:mm]
 
 import Query from "./query.js";
+import { createAuditor } from "./audit.js";
 
 const PREFIX = "C";
 
@@ -30,11 +31,21 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequestPost({ request, env }) {
-	await new Query(PREFIX, await request.json(), env.TRMNL_BOARD).save();
+	await new Query(
+		PREFIX,
+		await request.json(),
+		env.TRMNL_BOARD,
+		createAuditor(request, env.TRMNL_AUDIT),
+	).save();
 	return onRequestGet({ request, env });
 }
 
 export async function onRequestDelete({ request, env }) {
-	await new Query(PREFIX, await request.json(), env.TRMNL_BOARD).delete();
+	await new Query(
+		PREFIX,
+		await request.json(),
+		env.TRMNL_BOARD,
+		createAuditor(request, env.TRMNL_AUDIT),
+	).delete();
 	return onRequestGet({ request, env });
 }

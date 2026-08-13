@@ -1,4 +1,4 @@
-import { getProfile } from "./query.js";
+import { createAuditor, getProfile } from "./audit.js";
 
 const PREFIX = "P";
 
@@ -10,12 +10,11 @@ export async function onRequestGet({ request, env }) {
 export async function onRequestPost({ request, env }) {
 	let email = request.headers.get("cf-access-authenticated-user-email");
 	let profile = { ...(await request.json()), email };
+	let id = [PREFIX, email].join(".");
 
-	await env.TRMNL_BOARD.put(
-		[PREFIX, email].join("."),
-		JSON.stringify(profile, null, " "),
-	);
+	await env.TRMNL_BOARD.put(id, JSON.stringify(profile, null, " "));
 
-	console.log(`[INFO /api/admin/profile] SAVE ${JSON.stringify(profile)}`);
+	createAuditor(request, env.TRMNL_AUDIT)(id, "update", profile);
+
 	return onRequestGet({ request, env });
 }

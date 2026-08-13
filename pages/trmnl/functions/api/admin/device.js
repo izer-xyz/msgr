@@ -1,4 +1,6 @@
-export async function onRequestGet({ request, env }) {
+import { createAuditor } from "./audit.js";
+
+export async function onRequestGet({ env }) {
 	let devices = [];
 	let keys = (await env.TRMNL_DEVICES.list()).keys.map((key) => key.name);
 	console.log(keys);
@@ -26,6 +28,7 @@ export async function onRequestPost({ request, env }) {
 	};
 
 	await env.TRMNL_DEVICES.put(id, JSON.stringify(device));
+	createAuditor(request, env.TRMNL_AUDIT)(`D.${id}`, "update", device);
 
 	return onRequestGet({ request, env });
 }

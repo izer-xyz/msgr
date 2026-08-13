@@ -7,7 +7,8 @@
 // message.from: from who
 // message.content: content
 
-import { default as Query, getProfile } from "./query.js";
+import { default as Query } from "./query.js";
+import { createAuditor, getProfile } from "./audit.js";
 
 const PREFIX = "M";
 
@@ -24,11 +25,21 @@ export async function onRequestGet({ request, env }) {
 }
 
 export async function onRequestPost({ request, env }) {
-	await new Query(PREFIX, await request.json(), env.TRMNL_BOARD).save();
+	await new Query(
+		PREFIX,
+		await request.json(),
+		env.TRMNL_BOARD,
+		createAuditor(request, env.TRMNL_AUDIT),
+	).save();
 	return onRequestGet({ request, env });
 }
 
 export async function onRequestDelete({ request, env }) {
-	await new Query(PREFIX, await request.json(), env.TRMNL_BOARD).delete();
+	await new Query(
+		PREFIX,
+		await request.json(),
+		env.TRMNL_BOARD,
+		createAuditor(request, env.TRMNL_AUDIT),
+	).delete();
 	return onRequestGet({ request, env });
 }
