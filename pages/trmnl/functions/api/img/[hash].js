@@ -1,5 +1,5 @@
-import lookup from "../../../src/device.ts";
-import process from "../../../src/image.ts";
+import lookup from "../../../src/device.js";
+import process from "../../../src/image.js";
 
 export async function onRequest({ request, env }) {
   const device = await lookup(request.headers, env.TRMNL_DEVICES);

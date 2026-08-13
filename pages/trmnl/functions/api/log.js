@@ -1,4 +1,4 @@
-import lookup from "../../src/device.ts";
+import lookup from "../../src/device.js";
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#log
 export async function onRequest({ request, env }) {

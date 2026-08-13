@@ -1,8 +1,7 @@
-import { encode, decode } from "fast-png";
-//import { Jimp } from "jimp";
-import error from "./screen/error.tsx";
-import welcome from "./screen/welcome.tsx";
-import board from "./screen/board.tsx";
+import { encode } from "fast-png";
+import error from "./screen/error.jsx";
+import welcome from "./screen/welcome.jsx";
+import board from "./screen/board.jsx";
 
 const SCREENS = {
   error,
@@ -11,7 +10,7 @@ const SCREENS = {
 };
 
 export default async function process(device, env) {
-  let render = SCREENS[device.screen] || error;
+  let render = SCREENS[device?.screen] || error;
   let raw = await render(device, env);
   const png = encode(greyscale(device, raw));
   return png;
@@ -33,9 +32,9 @@ function greyscale(device, data) {
 
   for (let i = 0; i < out.width * out.height; i++) {
     let grey =
-      0.2126 * data[i * channels]! +
-      0.7152 * data[i * channels + 1]! +
-      0.0722 * data[i * channels + 2]!;
+      0.2126 * data[i * channels] +
+      0.7152 * data[i * channels + 1] +
+      0.0722 * data[i * channels + 2];
 
     out.data[Math.floor((i * out.depth) / 8)] |=
       (grey >> (8 - out.depth)) <<

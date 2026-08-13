@@ -44,16 +44,18 @@ export default async function lookup(headers, kv, persist = false) {
       newDevice.sleep = refresh_rate;
     } else {
       newDevice.sleep = "";
+
+      await save(newDevice, kv);
+      // don't save the refresh rate when asleep
+      newDevice.refresh_rate = refresh_rate;
     }
-    await save(newDevice, kv);
-    // don't save the refresh rate when asleep
-    newDevice.refresh_rate = refresh_rate;
   }
   return newDevice;
 }
 
 export async function save(device, kv) {
   device.updated = new Date().toISOString();
+  console.log(`[INFO /device/${device.id}] ${JSON.stringify(device)}`);
   await kv.put(device.id, JSON.stringify(device, null, " "));
 }
 

@@ -1,5 +1,4 @@
-import process from "../../src/image.ts";
-import { default as lookup, save } from "../../src/device.ts";
+import { default as lookup, save } from "../../src/device.js";
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#setup
 // https://oetiker.github.io/byonk/dev/api/http-api.html#get-apisetup
