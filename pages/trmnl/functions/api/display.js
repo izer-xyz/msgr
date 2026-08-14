@@ -1,4 +1,4 @@
-import {default as lookup, getFilename) from "../../src/device.js";
+import {default as lookup, getFilename} from "../../src/device.js";
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
