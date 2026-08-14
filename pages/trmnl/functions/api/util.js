@@ -80,7 +80,7 @@ export function getFilename(device) {
       minute: "numeric",
     })
     .split(" ");
-  return dateTime.join("_") + ".png";
+  return `${device.screen}/${dateTime.join("/")}/0.png`;
 }
 
 function getSleepTime(device) {

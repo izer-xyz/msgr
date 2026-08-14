@@ -1,17 +1,23 @@
-import { render } from "takumi-js";
+import { process, render } from "./screen.js";
 
-export default async function screen(device, env) {
-  let date = new Date().toLocaleDateString("fr-FR", {
+export let onRequest = process(screen);
+
+export async function screen(device) {
+  let dateTime = new Date();
+  let date = dateTime.toLocaleDateString("fr-FR", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: "Indian/Reunion",
+    timeZone: device.time_zone,
   });
-  let time = new Date().toLocaleTimeString("fr-FR", {
+  let time = dateTime.toLocaleTimeString("fr-FR", {
     timeStyle: "short",
-    timeZone: "Indian/Reunion",
+    timeZone: device.time_zone,
   });
+
+  console.log(`[INFO /api/screen/${device.id}] ${date} ${time}`);
+
   return render(
     <div tw="flex h-full w-full flex-col justify-center bg-white p-20">
       <div tw="flex flex-col">
@@ -24,7 +30,7 @@ export default async function screen(device, env) {
     {
       width: Number(device.width),
       height: Number(device.height),
-      format: "raw"
+      format: "raw",
     },
   );
 }

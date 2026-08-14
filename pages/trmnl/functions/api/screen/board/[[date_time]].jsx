@@ -1,41 +1,31 @@
-import { render } from "takumi-js";
-import { googleFonts } from "takumi-js/helpers";
+import { process, render } from "../screen.js";
+//import { googleFonts } from "takumi-js/helpers";
 
-export default async function screen(device, env) {
-  // celing to the nearest 5 minutes
-  const coef = 1000 * 60 * 5;
-  let now = new Date(Math.ceil(new Date().getTime() / coef) * coef);
-  let date = now.toLocaleDateString("fr-FR", {
+export let onRequest = process(screen, "board");
+
+async function screen(device, { env, params }) {
+  let dateFilter = params.date_time[0];
+  let time = params.date_time[1];
+  let dateTime = new Date(dateFilter + " " + time);
+  let date = dateTime.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
     day: "numeric",
-    timeZone: device.time_zone,
   });
-  let day = now.toLocaleDateString("fr-FR", {
+  let day = dateTime.toLocaleDateString("fr-FR", {
     weekday: "long",
-    timeZone: device.time_zone,
   });
-  let dateTime = now
-    .toLocaleString("lt-LT", {
-      timeZone: device.time_zone,
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    })
-    .split(" ");
 
-  let dayOfWeek = new Date(dateTime[0]).getDay() || 7; // Sun is 7 not 0
+  let dayOfWeek = dateTime.getDay() || 7; // Sun is 7 not 0
 
   let messageKeys = [
     ...(await env.TRMNL_BOARD.list({ prefix: `M.D${dayOfWeek}` })).keys,
-    ...(await env.TRMNL_BOARD.list({ prefix: `M.${dateTime[0]}` })).keys,
+    ...(await env.TRMNL_BOARD.list({ prefix: `M.${dateFilter}` })).keys,
   ].map((key) => key.name);
 
   let eventKeys = [
     ...(await env.TRMNL_BOARD.list({ prefix: `C.D${dayOfWeek}` })).keys,
-    ...(await env.TRMNL_BOARD.list({ prefix: `C.${dateTime[0]}` })).keys,
+    ...(await env.TRMNL_BOARD.list({ prefix: `C.${dateFilter}` })).keys,
   ].map((key) => key.name);
 
   let messages = messageKeys.length
@@ -52,8 +42,10 @@ export default async function screen(device, env) {
     : [];
 
   if (device.sleep) {
-    dateTime[1] = "--:--";
+    time = "--:--";
   }
+
+  console.log(`[INFO /api/screen/board/${device.id}] ${dateTime}`);
 
   return render(
     <div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] font-black text-black text-6xl px-1 leading-5">
@@ -61,7 +53,7 @@ export default async function screen(device, env) {
         <div tw="grow capitalize self-end ">
           {day}, {date}
         </div>
-        <div tw="text-3xl pr-2">{dateTime[1]}</div>
+        <div tw="text-3xl pr-2">{time}</div>
       </div>
       <div tw="flex">
         <div tw="flex-1 flex flex-col">
@@ -89,7 +81,7 @@ export default async function screen(device, env) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
-      fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
+      //fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }

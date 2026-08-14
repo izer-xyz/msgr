@@ -1,4 +1,4 @@
-import { default as lookup, save } from "../../src/device.js";
+import { default as lookup, save } from "./util.js";
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#setup
 // https://oetiker.github.io/byonk/dev/api/http-api.html#get-apisetup

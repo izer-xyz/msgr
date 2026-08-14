@@ -1,4 +1,4 @@
-import {default as lookup, getFilename} from "../../src/device.js";
+import { default as lookup, getFilename } from "./util.js";
 
 // https://github.com/usetrmnl/terminus/blob/main/doc/api.adoc#display
 export async function onRequest({ request, env }) {
@@ -11,7 +11,7 @@ export async function onRequest({ request, env }) {
     filename: filename,
     //'firmware_url': null,
     //'firmware_version': null,
-    image_url: new URL(`/api/img/${filename}`, request.url), // TODO add screen name
+    image_url: new URL(`/api/screen/${filename}`, request.url), // TODO add screen name
     //'image_url_timeout': 0,
     //'maximum_compatibility': false,
     refresh_rate: device.refresh_rate,

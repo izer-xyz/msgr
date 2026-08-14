@@ -1,19 +1,19 @@
+import lookup from "../util.js";
 import { encode } from "fast-png";
-import error from "./screen/error.jsx";
-import welcome from "./screen/welcome.jsx";
-import board from "./screen/board.jsx";
+import { screen as error } from "./[[default]].jsx";
 
-const SCREENS = {
-  error,
-  welcome,
-  board,
-};
+export { render } from "takumi-js";
 
-export default async function process(device, env) {
-  let render = SCREENS[device?.screen] || error;
-  let raw = await render(device, env);
-  const png = encode(greyscale(device, raw));
-  return png;
+export function process(render, screen = "welcome") {
+  return async (ctx) => {
+    let device = await lookup(ctx.request.headers, ctx.env.TRMNL_DEVICES);
+    let raw =
+      device.screen === screen
+        ? await render(device, ctx)
+        : await error(device, ctx);
+    let png = encode(greyscale(device, raw));
+    return new Response(png, { headers: { "Content-Type": "image/png" } });
+  };
 }
 
 function greyscale(device, data) {
