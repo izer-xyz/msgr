@@ -44,11 +44,11 @@ export default async function lookup(headers, kv, persist = false) {
       newDevice.sleep = refresh_rate;
     } else {
       newDevice.sleep = "";
-
-      await save(newDevice, kv);
-      // don't save the refresh rate when asleep
-      newDevice.refresh_rate = refresh_rate;
     }
+
+    await save(newDevice, kv);
+    // don't save the refresh rate when asleep
+    newDevice.refresh_rate = refresh_rate;
   }
   return newDevice;
 }
