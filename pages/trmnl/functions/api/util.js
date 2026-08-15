@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export const DEFAULTS = {
   id: "undefined",
   height: "1404",
@@ -13,7 +15,7 @@ export const DEFAULTS = {
   sleep: "",
 };
 
-export default async function lookup(headers, kv, persist = false) {
+export default async function lookup(headers, kv) {
   const device = await kv.get(headers.get("id") || DEFAULTS.id, "json");
 
   // All headers are lowercase
@@ -30,26 +32,8 @@ export default async function lookup(headers, kv, persist = false) {
     `[INFO /headers/${newDevice.id}] ${JSON.stringify(trmnlHeaders)}`,
   );
 
-  let refresh_rate = getSleepTime(newDevice);
+  newDevice.sleep = getSleepTime(newDevice);
 
-  // only save twice/3 a day KV limits apply
-  if (
-    (persist &&
-      new Date(newDevice?.updated || 0).toDateString() !==
-        new Date().toDateString()) ||
-    refresh_rate !== newDevice.refresh_rate ||
-    newDevice.sleep !== ""
-  ) {
-    if (refresh_rate !== newDevice.refresh_rate) {
-      newDevice.sleep = refresh_rate;
-    } else {
-      newDevice.sleep = "";
-    }
-
-    await save(newDevice, kv);
-    // don't save the refresh rate when asleep
-    newDevice.refresh_rate = refresh_rate;
-  }
   return newDevice;
 }
 
@@ -60,27 +44,38 @@ export async function save(device, kv) {
 }
 
 export function getFilename(device) {
+  const M = 60 * 1000,
+    H = 60 * M,
+    D = 24 * H,
+    W = 7 * D;
   let coef =
-    ([
-      /* TODO FIX TimeZone! the large groups don't work sets to 4am
-      1m   2m   5m  10m  15m   30m    1h    2h     3h     6h    12h    24h*/
-      60, 120, 300, 600, 900, 1800, 3600, 7200, 10800, 21600, 43200, 86400,
-    ].find((c) => c > Number(device.refresh_rate)) || device.refresh_rate) *
-    1000;
-  let now = new Date(Math.ceil(new Date().getTime() / coef) * coef);
+    [
+      M,
+      2 * M,
+      5 * M,
+      10 * M,
+      15 * M,
+      30 * M,
+      H,
+      2 * H,
+      3 * H,
+      6 * H,
+      12 * H,
+      D,
+      2 * D,
+      W,
+    ].find((c) => c >= Number(device.refresh_rate) * 1000) || W;
 
-  let dateTime = now
-    .toLocaleString("lt-LT", {
-      // lituania uses the ISO 8601 format
-      timeZone: device.time_zone,
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    })
-    .split(" ");
-  return `${device.screen}/${dateTime.join("/")}/0.png`;
+  let dateTime = DateTime.fromMillis(
+    Math.ceil(
+      DateTime.now()
+        .setZone(device.time_zone)
+        .setZone("utc", { keepLocalTime: true })
+        .toMillis() / coef,
+    ) * coef,
+  );
+
+  return `${device.screen}/${dateTime.toFormat("yyyy-MM-dd/HH:mm")}/0.png`;
 }
 
 function getSleepTime(device) {
@@ -114,8 +109,7 @@ function getSleepTime(device) {
     }
   }
 
-  refresh_rate =
-    refresh_rate > device.refresh_rate ? refresh_rate : device.refresh_rate;
+  refresh_rate = refresh_rate > device.refresh_rate ? refresh_rate : "";
 
   return refresh_rate;
 }

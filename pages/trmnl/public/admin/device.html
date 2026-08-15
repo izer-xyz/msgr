@@ -16,6 +16,8 @@
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
+		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
+
 		<style></style>
 	</head>
 	<body
@@ -47,7 +49,10 @@
 					<div>refresh_rate <input name="refresh_rate" type="text" x-model="selected.refresh_rate" /></div>
 					<div>battery <input name="battery-voltage" type="text" x-model="selected['battery-voltage']" /></div>
 					<div>screen <input name="screen" type="text" x-model="selected.screen" /></div>
-					<button type="submit">
+					<div>sleep <input name="sleep" type="text" x-model="selected.sleep" /></div>
+					<div>sleep_from <input name="sleep_from" type="text" x-model="selected.sleep_from" /></div>
+					<div>sleep_to <input name="sleep_to" type="text" x-model="selected.sleep_to" /></div>
+<button type="submit">
 						Enregsitrer
 					</button>
 					</div>
@@ -107,7 +112,7 @@
 					},
 					async preview(el, device) {
 						if (!device.id) return; 
-						let url = `/api/img/${Date.now()}.png`; 
+						let url = `/api/screen/${getFilename(device)}`; 
 						let options = {
 							headers: {
 								"ID": device.id,
@@ -117,6 +122,42 @@
 					},
 				};
 			}
+
+			function getFilename(device) {
+				const M = 60 * 1000,
+					H = 60 * M,
+					D = 24 * H,
+					W = 7 * D;
+				let coef =
+					[
+						M,
+						2 * M,
+						5 * M,
+						10 * M,
+						15 * M,
+						30 * M,
+						H,
+						2 * H,
+						3 * H,
+						6 * H,
+						12 * H,
+						D,
+						2 * D,
+						W,
+					].find((c) => c >= Number(device.refresh_rate) * 1000) || W;
+
+				let dateTime = luxon.DateTime.fromMillis(
+					Math.ceil(
+						luxon.DateTime.now()
+							.setZone(device.time_zone)
+							.setZone("utc", { keepLocalTime: true })
+							.toMillis() / coef,
+					) * coef,
+				);
+
+				return `${device.screen}/${dateTime.toFormat("yyyy-MM-dd/HH:mm")}/0.png`;
+			}
+
 		</script>
 	</body>
 </html>
