@@ -38,7 +38,7 @@
 
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(selected)">
-					<img x-init="$watch('selected', v => preview($el, v))" style="max-width: 100%;height: auto;"/>
+					<img x-init="$watch('selected', v => preview($el, v))" style="max-width: 100%;height: auto; border: 1px solid gray"/>
 					<div>id <select @change="selected = devices[$el.value]">
 						<template x-for="(item, index) in devices">
 							<option x-text="item.id" :value="index"></option>

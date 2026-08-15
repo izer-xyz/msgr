@@ -31,14 +31,14 @@ export async function onRequest({ request, env }) {
     update_firmware: false,
   };
 
-  metrics(device, env.TRMNL_ANALYTICS, filename);
+  await metrics(device, env, filename);
 
   return Response.json(response);
 }
 
-function metrics(device, analytics, filename) {
-  if (analytics) {
-    analytics.writeDataPoint({
+async function metrics(device, env, filename) {
+  if (env.TRMNL_ANALYTICS) {
+    env.TRMNL_ANALYTICS.writeDataPoint({
       blobs: [
         device["x-real-ip"],
         device.model,
@@ -54,6 +54,8 @@ function metrics(device, analytics, filename) {
       indexes: [device.id],
     });
   } else {
+    // no analytics just save to KV
     console.log(`[INFO /api/display/${device.id}] ${JSON.stringify(device)}`);
+    await save(device, env.TRMNL_DEVICES);
   }
 }

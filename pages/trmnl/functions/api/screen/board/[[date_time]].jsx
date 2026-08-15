@@ -48,12 +48,12 @@ async function screen(device, { env, params }) {
   console.log(`[INFO /api/screen/board/${device.id}] ${dateTime}`);
 
   return render(
-    <div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] font-black text-black text-6xl px-1 leading-5">
-      <div tw="flex text-2xl pb-8">
+    <div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] font-black text-black text-6xl px-1 leading-loose">
+      <div tw="flex text-8xl pb-8">
         <div tw="grow capitalize self-end ">
           {day}, {date}
         </div>
-        <div tw="text-3xl pr-2">{time}</div>
+        <div tw="text-8xl pr-2">{time}</div>
       </div>
       <div tw="flex">
         <div tw="flex-1 flex flex-col">
@@ -61,11 +61,11 @@ async function screen(device, { env, params }) {
             <div tw="bg-gray-200 p-1 rounded-lg">
               <span tw="text-gray-700">{event.time} </span>
               <span tw="">{event.subject}</span>
-              <div tw="text-xs font-bold pl-1">{event.content}</div>
+              <div tw="text-5xl font-bold pl-1">{event.content}</div>
             </div>
           ))}
         </div>
-        <div tw="flex-1 flex flex-col text-xs font-bold pr-2">
+        <div tw="flex-1 flex flex-col text-5xl font-bold pr-2">
           {messages.map((message) => (
             <div tw="flex flex-col pl-4">
               <span tw="border-3 border-black px-2 py-1 rounded-lg">
