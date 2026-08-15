@@ -20,7 +20,7 @@ export function createAuditor(request, store) {
 
 export function getEmail(request) {
   let jwt = request.headers.get("cf-access-jwt-assertion");
-  return jwt ? jwtDecode(jwt).email : "";
+  return jwt ? jwtDecode(jwt).email : "anonymous";
 }
 
 export function getIp(request) {

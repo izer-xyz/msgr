@@ -19,7 +19,7 @@ export async function onRequestGet({ request, env }) {
 
 	let messages = await new Query(PREFIX, { date, day }, env.TRMNL_BOARD).list();
 
-	let profile = getProfile(request, env.TRMNL_BOARD);
+	let profile = await getProfile(request, env.TRMNL_BOARD);
 
 	return Response.json({ date, messages, profile });
 }

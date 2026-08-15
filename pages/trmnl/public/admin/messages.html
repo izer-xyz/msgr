@@ -1,83 +1,113 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="font-size: 22px">
 	<head>
 		<meta charset="utf8" />
 		<title>Messagerie</title>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-			rel="stylesheet"
-		/>
-		<link href="https://unpkg.com/tailwindcss@1.0.6/dist/tailwind.min.css" rel="stylesheet"></link>
 		<script
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
 		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
-		<style>
-			#preview {
-				background: #a0a0a0; 
-				height: 24em;
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<style type="text/tailwindcss">
+			@theme {
+				--font-noto: "Noto Sans", sans-serif;
 			}
 		</style>
 	</head>
-	<body style="font-size: 24px; font-family: 'Noto Sans', sans-serif; width: 20em; margin: auto;">
-		<main class="font-bold">
-			<div>
-				<a href="messages">Messagerie</a> |
-				<a href="calendar">Calandrier</a> | <a href="device">Aperçu</a> | <a href="profile">P</a>
-			</div>
-
+	<body class="">
+		<header
+			x-data
+			class="w-96 m-auto my-4 flex text-center font-bold bg-gray-200 border-4 border-b-0 border-gray-200"
+		>
+			<a
+				href="/admin/messages"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+				>Messagerie</a
+			>
+			<a
+				href="/admin/calendar"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+				>Calandrier</a
+			>
+			<a
+				href="/admin/device"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+				>Aperçu</a
+			>
+			<a
+				href="/admin/profile"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+				>Profil</a
+			>
+		</header>
+		<main class="w-96 m-auto text-xs border-4 border-white">
 			<div x-data="context" x-init="list">
-				<form @submit.prevent="save(msg)" class="flex flex-col py-4">
-					<input name="id" type="hidden" x-model="msg.id" />
-					<input name="date" type="hidden" x-model="msg.date" />
-					<input name="time" type="hidden" x-model="msg.time" />
-					<input name="refrence" type="hidden" x-model="msg.reference" />
-					<input name="day" type="hidden" x-model="msg.day" />
-					<div class="w-full my-4">
-						<select
-							@change="msg = (selected === '' ? { ...DEFAULT } : { ...DEFAULT, day: selected} ) "
-							x-model="selected"
-						>
-							<option value="" x-text="now()[0]"></option>
-							<option value="1">Lu</option>
-							<option value="2">Ma</option>
-							<option value="3">Me</option>
-							<option value="4">Je</option>
-							<option value="5">Ve</option>
-							<option value="6">Sa</option>
-							<option value="7">Di</option>
-						</select>
+				<form @submit.prevent="save(msg)" class="flex flex-col gap-4">
+					<div class="w-full flex gap-x-4">
+						<a
+							class="flex-auto"
+							href=""
+							:class="{'font-bold': selected === ''}"
+							@click.prevent="select('')"
+							x-text="now()[0]"
+						></a>
+						<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
+							<a
+								href=""
+								:class="{'font-bold': selected === (i + 1).toString() || selected === '' && now()[2] === (i + 1).toString()}"
+								@click.prevent="select((i+1).toString())"
+								x-text="d"
+							></a>
+						</template>
 					</div>
-					<textarea 
-						id="content"
-						name="content"
-						autofocus
-						x-model="msg.content"
-						class="font-bold border border-black p-2 mx-4"
-						rows="3"
-						placeholder="Tapez votre message ici et appuyez sur Entrée pour envoyer."
-						x-init="$watch('msg.content', () => $el.focus())"
-						@keydown.enter.prevent="$el.form.requestSubmit()"
-					></textarea>
-					<input id="from" name="from" x-model="msg.from" placeholder="De" class="w-1/4 mx-4 my-2 p-2 self-end border border-black"/>
-					<div class="justify-end flex font-normal">
-						<a href="" x-show="msg.id" @click.prevent="remove(msg)" class="text-lg place-self-center">Supprimer</a> 
-						<button type="submit" class="mx-4 px-2 rounded-lg bg-black text-white font-bold">Envoyer</button>
+					<div class="flex flex-col ml-2">
+						<textarea
+							id="content"
+							name="content"
+							autofocus
+							x-model="msg.content"
+							class="font-bold rounded-md border-1 p-1"
+							rows="2"
+							placeholder="Tapez votre message ici et appuyez sur Entrée pour envoyer."
+							x-init="$watch('msg.content', () => $el.focus())"
+							@keydown.enter.prevent="$el.form.requestSubmit()"
+						></textarea>
+						<div class="self-end p-1" x-text="msg.from"></div>
+					</div>
+					<div class="flex items-center justify-end gap-x-2">
+						<a href="" x-show="msg.id" @click.prevent="remove(msg)" class="">
+							Supprimer
+						</a>
+						<button
+							type="submit"
+							class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1"
+						>
+							Envoyer
+						</button>
 					</div>
 				</form>
 
-				<h1 class="py-4">Aperçu</h1>
-				<div id="preview" class="flex-1 flex flex-col p-4">
+				<div class="my-4 text-base font-bold">Aperçu</div>
+				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[10em]">
 					<template x-for="item in msgs">
-						<div class="flex flex-col" x-show="item.day === selected || selected ==='' && item.day === now()[2]"
-							@click.prevent="(msg === item ? msg = { ...DEFAULT } : msg = { ...item, from: profile.name })">
-							<span :class="{'border-4': item.day, 'bg-white': item.id == msg.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.content">
+						<div
+							class="flex flex-col w-[20em] self-end"
+							x-show="item.day === selected || selected ==='' && item.day === now()[2]"
+							@click.prevent="(msg.id === item.id ? msg = { ...DEFAULT } : msg = { ...item, from: profile.name })"
+						>
+							<span
+								class="border-1 px-2 py-1 rounded-lg"
+								:class="{'border-white': !item.day, 'border-black': item.day, 'bg-white': item.id == msg.id}"
+								x-text="item.content"
+							>
 							</span>
 							<span class="self-end" x-text="item.from"></span>
 						</div>
@@ -103,7 +133,7 @@
 					msg: {
 						...DEFAULT,
 					},
-					profile: {}, 
+					profile: {},
 					selected: "",
 
 					now() {
@@ -111,6 +141,11 @@
 							.setZone("Indian/Reunion")
 							.toFormat("yyyy-LL-dd TT c")
 							.split(" ");
+					},
+
+					select(day) {
+						this.selected = day;
+						this.msg = { ...DEFAULT, day: day };
 					},
 
 					async list() {
@@ -143,8 +178,8 @@
 							})
 						).json();
 						this.msgs = response.messages;
-						this.profile = response.profile; 
-						DEFAULT.from = this.profile.name; 
+						this.profile = response.profile;
+						DEFAULT.from = this.profile.name;
 						return response;
 					},
 				};

@@ -1,61 +1,89 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="font-size:22px">
 	<head>
 		<meta charset="utf8" />
 		<title>Aperçu</title>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-			rel="stylesheet"
-		/>
-		<script
-			defer
-			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-		></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
-
-		<style></style>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<style type="text/tailwindcss">
+			@theme {
+			  --font-noto: "Noto Sans", sans-serif; 
+			}
+		</style>
 	</head>
-	<body
-		style="
-			font-size: 24px;
-			font-family: &quot;Noto Sans&quot;, sans-serif;
-			width: 20em;
-			margin: auto;
-		"
-	>
-		<main>
-			<div>
-				<p>
-					<a href="messages">Messagerie</a> |
-					<a href="calendar">Calandrier</a> | <a href="device">Aperçu</a> | <a href="profile">P</a>
-				</p>
-			</div>
-
-			<div x-data="context" x-init="list">
-				<form @submit.prevent="save(selected)">
-					<img x-init="$watch('selected', v => preview($el, v))" style="max-width: 100%;height: auto; border: 1px solid gray"/>
-					<div>id <select @change="selected = devices[$el.value]">
+	<body class="">
+		<header x-data class="w-96 m-auto my-4 flex text-center font-bold bg-gray-200 border-4 border-b-0 border-gray-200">
+			<a href="/admin/messages" class="flex-1" :class="{ 'bg-white': location.href === $el.href }">Messagerie</a> 
+			<a href="/admin/calendar" class="flex-1" :class="{ 'bg-white': location.href === $el.href }">Calandrier</a> 
+			<a href="/admin/device"   class="flex-1" :class="{ 'bg-white': location.href === $el.href }">Aperçu</a> 
+			<a href="/admin/profile"  class="flex-1" :class="{ 'bg-white': location.href === $el.href }">Profil</a>
+		</header>
+		<main class="w-96 m-auto text-xs border-4 border-white">
+			<div x-data="context" x-init="list" class="flex flex-col gap-4">
+				<div class="border-2 border-gray-200 p-2 pb-6">
+					<div class="bg-black">
+						<img x-init="$watch('selected', v => preview($el, v))" class="w-full h-auto opacity-85" />
+					</div>
+				</div>
+				<form @submit.prevent="save(selected, $el)" class="flex flex-col gap-2">
+					<div class="flex flex-col">
+						<label for="id">Id</label>
+						<input id="id" type="text" readonly x-model="selected.id" class="rounded-md border-1 p-1 ml-2 text-right" />
+					</div>
+					<div class="flex flex-col">
+						<label for="time_zone">Fuseau Horaire</label>
+						<input id="time_zone" type="text" x-model="selected.time_zone" class="rounded-md border-1 p-1 ml-2 text-right"/>
+					</div>
+					<div class="flex flex-col">
+						<label for="refresh_rate">Mise a jour (sec)</label>
+						<input id="refresh_rate" type="text" x-model="selected.refresh_rate" class="rounded-md border-1 p-1 ml-2 text-right"/>
+					</div>
+					<div class="flex flex-col">
+						<label for="battery-voltage">Batterie</label>
+						<input id="battery-voltage" type="text" x-model="selected['battery-voltage']" class="rounded-md border-1 p-1 ml-2 text-right"/>
+					</div>
+					<div class="flex flex-col">
+						<label for="screen">Affiche</label>
+						<input id="screen" type="text" x-model="selected.screen" class="rounded-md border-1 p-1 ml-2 text-right"/>
+					</div>
+					<div class="flex flex-col">
+						<label for="sleep_from">En Veille <span x-text="selected.sleep ? '(actif)' : ''"></span></label> 
+						<div class="flex justify-end">
+							<select id="sleep_from" x-model="selected.sleep_from" @change="selected.sleep_to = $el.value === '' ? $el.value : selected.sleep_to">
+								<option value="">--:--</option>
+									<template x-for="h in 23">
+										<div>
+											<option x-text="`${h<10?'0':''}${h}:00`"></option>
+											<option x-text="`${h<10?'0':''}${h}:30`"></option>
+										</div>
+									</template>
+							</select> - 
+							<select id="sleep_to" x-model="selected.sleep_to" @change="selected.sleep_from = $el.value === '' ? $el.value : selected.sleep_from">
+								<option value="">--:--</option>
+								<template x-for="h in 23">
+									<div>
+										<option x-text="`${h<10?'0':''}${h}:00`"></option>
+										<option x-text="`${h<10?'0':''}${h}:30`"></option>
+									</div>
+								</template>
+								</select>
+						</div>
+					</div>
+				  <div class="flex items-center justify-end gap-x-2 mt-4">
+						<button type="submit" class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1">
+							Enregsitrer
+						</button>
+				  </div>
+					<div class="mt-8"><select @change="selected = devices[$el.value]">
 						<template x-for="(item, index) in devices">
 							<option x-text="item.id" :value="index"></option>
 						</template>
 					</select></div>
-					<div>id <input name="time_zone" type="text" x-model="selected.id" /></div>
-					<div>time_zone <input name="time_zone" type="text" x-model="selected.time_zone" /></div>
-					<div>refresh_rate <input name="refresh_rate" type="text" x-model="selected.refresh_rate" /></div>
-					<div>battery <input name="battery-voltage" type="text" x-model="selected['battery-voltage']" /></div>
-					<div>screen <input name="screen" type="text" x-model="selected.screen" /></div>
-					<div>sleep <input name="sleep" type="text" x-model="selected.sleep" /></div>
-					<div>sleep_from <input name="sleep_from" type="text" x-model="selected.sleep_from" /></div>
-					<div>sleep_to <input name="sleep_to" type="text" x-model="selected.sleep_to" /></div>
-<button type="submit">
-						Enregsitrer
-					</button>
-					</div>
+				</div>
 				</form>
 			</div>
 		</main>

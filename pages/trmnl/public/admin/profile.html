@@ -1,46 +1,86 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="font-size: 22px">
 	<head>
 		<meta charset="utf8" />
 		<title>Profil</title>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-			rel="stylesheet"
-		/>
 		<script
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
-		<style></style>
+		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<style type="text/tailwindcss">
+			@theme {
+				--font-noto: "Noto Sans", sans-serif;
+			}
+		</style>
 	</head>
-	<body
-		style="
-			font-size: 24px;
-			font-family: &quot;Noto Sans&quot;, sans-serif;
-			width: 20em;
-			margin: auto;
-		"
-	>
-		<main>
-			<div>
-				<p>
-					<a href="messages">Messagerie</a> |
-					<a href="calendar">Calandrier</a> | <a href="device">Aperçu</a> | <a href="profile">P</a>
-				</p>
-			</div>
-
+	<body class="">
+		<header
+			x-data
+			class="w-96 m-auto my-4 flex text-center font-bold bg-gray-200 border-4 border-b-0 border-gray-200"
+		>
+			<a
+				href="/admin/messages"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Messagerie
+			</a>
+			<a
+				href="/admin/calendar"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Calandrier
+			</a>
+			<a
+				href="/admin/device"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Aperçu
+			</a>
+			<a
+				href="/admin/profile"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Profil
+			</a>
+		</header>
+		<main class="w-96 m-auto text-xs border-4 border-white">
 			<div x-data="context" x-init="get">
-				<form @submit.prevent="save(profile)">
-					<div>email <input name="email" type="text" readonly x-model="profile.email" /></div>
-					<div>nom <input name="name" type="text" x-model="profile.name" /></div>
-					<button type="submit">
-						Enregsitrer
-					</button>
+				<form @submit.prevent="save(profile)" class="flex flex-col gap-2">
+					<div class="flex flex-col">
+						<label for="email">E-mail</label>
+						<input
+							id="email"
+							type="text"
+							readonly
+							x-model="profile.email"
+							class="rounded-md p-1 ml-2 text-right"
+						/>
+					</div>
+					<div class="flex flex-col">
+						<label for="name">Nom</label>
+						<input
+							id="name"
+							type="text"
+							x-model="profile.name"
+							class="rounded-md border-1 p-1 ml-2 text-right"
+						/>
+					</div>
+					<div class="flex items-center justify-end gap-x-2 mt-4">
+						<button
+							type="submit"
+							class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1"
+						>
+							Enregsitrer
+						</button>
 					</div>
 				</form>
 			</div>

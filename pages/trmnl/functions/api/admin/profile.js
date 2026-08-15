@@ -9,7 +9,7 @@ export async function onRequestGet({ request, env }) {
 
 export async function onRequestPost({ request, env }) {
 	let profile = await getProfile(request, env.TRMNL_BOARD);
-	let id = [PREFIX, email].join(".");
+	let id = [PREFIX, profile.email].join(".");
 
 	await env.TRMNL_BOARD.put(id, JSON.stringify(profile, null, " "));
 
