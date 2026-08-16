@@ -21,7 +21,7 @@
 	<body class="">
 		<header
 			x-data
-			class="w-96 m-auto my-4 flex text-center font-bold bg-gray-200 border-4 border-b-0 border-gray-200"
+			class="w-96 m-auto my-4 flex text-center bg-gray-200 border-4 border-b-0 border-gray-200"
 		>
 			<a
 				href="/admin/messages"
@@ -51,22 +51,36 @@
 		<main class="w-96 m-auto text-xs border-4 border-white">
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(msg)" class="flex flex-col gap-4">
-					<div class="w-full flex gap-x-4">
-						<a
-							class="flex-auto"
-							href=""
-							:class="{'font-bold': selected === ''}"
-							@click.prevent="select('')"
-							x-text="now()[0]"
-						></a>
-						<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
-							<a
-								href=""
-								:class="{'font-bold': selected === (i + 1).toString() || selected === '' && now()[2] === (i + 1).toString()}"
-								@click.prevent="select((i+1).toString())"
-								x-text="d"
-							></a>
-						</template>
+					<div class="flex flex-col justify-center">
+						<div class="flex justify-center">
+							<div class="flex flex-col border-x-2 border-gray-200">
+								<a
+									class="text-center bg-gray-200 py-1"
+									href=""
+									:class="{'font-bold': selected_date !== ''}"
+									@click.prevent="select('')"
+									x-text="last_date[0]"
+								></a>
+								<div class="flex gap-x-1 justify-center bg-gray-200">
+									<template
+										x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']"
+									>
+										<a
+											href=""
+											class="px-1 border-x-2 border-b-2 border-gray-200"
+											:class="{
+												'bg-white': selected_day === i + 1, 
+												'font-bold': selected_day === i + 1,
+											  'underline': week[i+1],
+												'text-red-800': i > 4
+											}"
+											@click.prevent="select(i+1)"
+											x-text="d"
+										></a>
+									</template>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="flex flex-col ml-2">
 						<textarea
@@ -82,7 +96,9 @@
 						></textarea>
 						<div class="self-end p-1" x-text="msg.from"></div>
 					</div>
-					<div class="flex items-center justify-end gap-x-2">
+					<div
+						class="flex items-center justify-end gap-x-2 font-semibold text-red-800"
+					>
 						<a href="" x-show="msg.id" @click.prevent="remove(msg)" class="">
 							Supprimer
 						</a>
@@ -97,10 +113,24 @@
 
 				<div class="my-4 text-base font-bold">Aperçu</div>
 				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[10em]">
+					<template x-if="week[selected_day]">
+						<div
+							class="flex flex-col w-[20em] self-end"
+							@click.prevent="(msg.id === week[selected_day].id ? msg = { ...DEFAULT } : msg = { ...week[selected_day], from: profile.name })"
+						>
+							<span
+								class="border-1 px-2 py-1 rounded-lg"
+								:class="{'border-white': !week[selected_day].day, 'border-black': week[selected_day].day, 'bg-white': week[selected_day].id == msg.id}"
+								x-text="week[selected_day].content"
+							>
+							</span>
+							<span class="self-end" x-text="week[selected_day].from"></span>
+						</div>
+					</template>
 					<template x-for="item in msgs">
 						<div
 							class="flex flex-col w-[20em] self-end"
-							x-show="item.day === selected || selected ==='' && item.day === now()[2]"
+							x-show="item.day === selected_day.toString() || item.date && selected_date"
 							@click.prevent="(msg.id === item.id ? msg = { ...DEFAULT } : msg = { ...item, from: profile.name })"
 						>
 							<span
@@ -127,25 +157,33 @@
 			};
 
 			function context() {
+				let now = () =>
+					luxon.DateTime.now()
+						.setZone("Indian/Reunion")
+						.toFormat("yyyy-LL-dd TT c")
+						.split(" ");
 				return {
 					DEFAULT,
+					week: [],
 					msgs: [],
 					msg: {
 						...DEFAULT,
 					},
-					profile: {},
-					selected: "",
 
-					now() {
-						return luxon.DateTime.now()
-							.setZone("Indian/Reunion")
-							.toFormat("yyyy-LL-dd TT c")
-							.split(" ");
-					},
+					profile: {},
+					last_date: [now()[0], Number(now()[2])],
+					selected_date: now()[0],
+					selected_day: Number(now()[2]),
 
 					select(day) {
-						this.selected = day;
-						this.msg = { ...DEFAULT, day: day };
+						if (day === "") {
+							this.selected_date = this.last_date[0];
+							this.selected_day = this.last_date[1];
+						} else {
+							this.selected_date = "";
+							this.selected_day = day;
+						}
+						this.msg = this.week[day] || { ...DEFAULT, day: day };
 					},
 
 					async list() {
@@ -153,9 +191,10 @@
 					},
 
 					async save(msg) {
+						msg.from = this.profile.name;
 						if (msg.day === "") {
-							msg.date = this.now()[0];
-							msg.time = this.now()[1];
+							msg.date = this.last_date[0];
+							msg.time = now()[1];
 						} else {
 							msg.date = "";
 							msg.time = "";
@@ -172,14 +211,15 @@
 
 					async fetch(method, msg) {
 						let response = await (
-							await fetch(`/api/admin/messages?${this.now()[0]}`, {
+							await fetch(`/api/admin/messages?${this.last_date[0]}`, {
 								method: method,
 								body: msg ? JSON.stringify(msg) : null,
 							})
 						).json();
-						this.msgs = response.messages;
+						this.week = response.week;
+						this.msgs = response.msgs;
 						this.profile = response.profile;
-						DEFAULT.from = this.profile.name;
+						DEFAULT.from = this.msg.from = this.profile.name;
 						return response;
 					},
 				};

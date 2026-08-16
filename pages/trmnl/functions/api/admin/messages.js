@@ -15,13 +15,21 @@ const PREFIX = "M";
 export async function onRequestGet({ request, env }) {
 	const { search } = new URL(request.url);
 	let date = search.substring(1);
-	let day = new Date(date).getDay();
 
-	let messages = await new Query(PREFIX, { date, day }, env.TRMNL_BOARD).list();
+	let messages = await new Query(PREFIX, { date }, env.TRMNL_BOARD).list();
 
 	let profile = await getProfile(request, env.TRMNL_BOARD);
+	let response = { date, msgs: [], week: new Array(8), profile };
+	for (const m of messages) {
+		if (m.day) {
+			response.week[m.day] = m;
+		} else {
+			response.msgs.push(m);
+		}
+	}
+	response.msgs.reverse();
 
-	return Response.json({ date, messages, profile });
+	return Response.json(response);
 }
 
 export async function onRequestPost({ request, env }) {

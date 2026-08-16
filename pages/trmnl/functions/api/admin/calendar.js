@@ -27,7 +27,25 @@ export async function onRequestGet({ request, env }) {
 		env.TRMNL_BOARD,
 	).list();
 
-	return Response.json({ date, events });
+	let response = { date, day: [], week: new Array(8), month: new Array(31) };
+
+	for (const e of events) {
+		if (e.day) {
+			response.week[e.day] = e;
+			response.day.push(e);
+		} else {
+			response.month[new Date(e.date).getDate()] = e;
+			if (date === e.date) {
+				response.day.push(e);
+			}
+		}
+	}
+
+	response.day.sort(
+		(a, b) => a.time.localeCompare(b.time) * 100 + a.day.localeCompare(b.day),
+	);
+
+	return Response.json(response);
 }
 
 export async function onRequestPost({ request, env }) {

@@ -1,97 +1,186 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="font-size: 22px">
 	<head>
 		<meta charset="utf8" />
-		<title>Calandrier</title>
+		<title>Messagerie</title>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-			rel="stylesheet"
-		/>
-		<link href="https://unpkg.com/tailwindcss@1.0.6/dist/tailwind.min.css" rel="stylesheet"></link>
 		<script
 			defer
 			src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
 		></script>
 		<script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
-		<style>
-			#preview {
-				background: #a0a0a0; 
-				height: 24em;
+		<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+		<style type="text/tailwindcss">
+			@theme {
+				--font-noto: "Noto Sans", sans-serif;
 			}
 		</style>
 	</head>
-	<body style="font-size: 24px; font-family: 'Noto Sans', sans-serif; width: 20em; margin: auto;">
-		<main class="font-bold">
-			<div>
-				<a href="messages">Messagerie</a> |
-				<a href="calendar">Calandrier</a> | <a href="device">Aperçu</a> | <a href="profile">P</a>
-			</div>
-
+	<body class="">
+		<header
+			x-data
+			class="w-96 m-auto my-4 flex text-center bg-gray-200 border-4 border-b-0 border-gray-200"
+		>
+			<a
+				href="/admin/messages"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Messagerie
+			</a>
+			<a
+				href="/admin/calendar"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Calandrier
+			</a>
+			<a
+				href="/admin/device"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Aperçu
+			</a>
+			<a
+				href="/admin/profile"
+				class="flex-1"
+				:class="{ 'bg-white': location.href === $el.href }"
+			>
+				Profil
+			</a>
+		</header>
+		<main class="w-96 m-auto text-xs border-4 border-white">
 			<div x-data="context" x-init="list">
-				<form @submit.prevent="save(event)" class="flex flex-col py-4">
-					
-					<input name="id" type="hidden" x-model="event.id" />
-					<input name="date" type="text" x-model="event.date" />
-					<input name="refrence" type="hidden" x-model="event.reference" />
-					<input name="day" type="text" x-model="event.day" />
-					<input name="from" type="hidden"x-model="event.from" />
-					
-					<div class="w-full my-4">
-						<select
-							x-model="selected"
+				<form @submit.prevent="save(event)" class="flex flex-col gap-4">
+					<div class="flex flex-col justify-center">
+						<div class="flex justify-center">
+							<div class="flex flex-col border-x-2 border-gray-200">
+								<a
+									class="text-center bg-gray-200 py-1"
+									href=""
+									:class="{'font-bold': selected_date !== ''}"
+									@click.prevent="select('')"
+									x-text="last_date[0]"
+								></a>
+								<div class="flex gap-x-1 justify-center bg-gray-200">
+									<template
+										x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']"
+									>
+										<a
+											href=""
+											class="px-1 border-x-2 border-b-2 border-gray-200"
+											:class="{
+											'bg-white': selected_day === i + 1, 
+											'font-bold': selected_day === i + 1,
+											'underline': week[i+1],
+											'text-red-800': i > 4
+										}"
+											@click.prevent="select(i+1)"
+											x-text="d"
+										></a>
+									</template>
+								</div>
+							</div>
+						</div>
+						<div
+							class="flex felx-col text-center"
+							x-show="selected_date !== ''"
 						>
-							<option x-text="now()[0]"></option>
-							<option value="1">Lu</option>
-							<option value="2">Ma</option>
-							<option value="3">Me</option>
-							<option value="4">Je</option>
-							<option value="5">Ve</option>
-							<option value="6">Sa</option>
-							<option value="7">Di</option>
+							<a href="" class="flex-auto" @click.prevent="select_month(-1)">
+								&lt;
+							</a>
+							<div
+								class="flex-initial grid grid-cols-7 gap-1 border-x-3 border-b-3 border-gray-200"
+							>
+								<template
+									x-for="(d) in (luxon.DateTime.fromISO(selected_date).startOf('month').weekday - 1)"
+								>
+									<a></a>
+								</template>
+								<template
+									x-for="(d) in luxon.DateTime.fromISO(selected_date).endOf('month').day"
+								>
+									<a
+										href=""
+										class="px-1 rounded-xl"
+										:class="{
+											'border-2': d.toString().padStart(2, '0') === selected_date.slice(-2),
+											'underline': month[d]
+										}"
+										@click.prevent="select_date(d)"
+										x-text="d"
+									></a>
+								</template>
+							</div>
+							<a href="" class="flex-auto" @click.prevent="select_month(+1)">
+								&gt;
+							</a>
+						</div>
+					</div>
+					<div class="flex">
+						<select name="time" x-model="event.time" class="">
+							<option value="">--:--</option>
+							<template x-for="h in 23">
+								<div>
+									<option x-text="`${h<10?'0':''}${h}:00`"></option>
+									<option x-text="`${h<10?'0':''}${h}:30`"></option>
+								</div>
+							</template>
 						</select>
+						<input
+							name="subject"
+							type="text"
+							autofocus
+							x-model="event.subject"
+							x-init="$watch('event.subject', () => $el.focus())"
+							placeholder="Titre"
+							class="flex-auto rounded-md border-1 p-1 ml-2 font-bold"
+						/>
 					</div>
-					<div>
-						<div></div>
-					</div>
-					<select name="time" x-model="event.time" class="font-bold border border-black p-2 mx-4">
-						<option value="">--:--</option>
-						<option>08:00</option>
-						<option>08:30</option>
-						<option>09:00</option>
-						<option>09:30</option>
-						<option>10:00</option>
-						<option>10:30</option>
-					</select>
-
-					<input name="subject" type="text" x-model="event.subject" x-init="$watch('event.subject', () => $el.focus())" placeholder="Titre" class="font-bold border border-black p-2 mx-4"/>
-					<textarea 
+					<textarea
 						id="content"
 						name="content"
-						autofocus
 						x-model="event.content"
-						class="font-bold border border-black p-2 mx-4"
-						rows="3"
+						class="rounded-md border-1 p-1"
+						rows="2"
 						placeholder="Tapez votre message ici et appuyez sur Entrée pour valider."
 						@keydown.enter.prevent="$el.form.requestSubmit()"
 					></textarea>
-					<div class="justify-end flex font-normal">
-						<a href="" x-show="event.id" @click.prevent="remove(event)" class="text-lg place-self-center">Supprimer</a> 
-						<button type="submit" class="mx-4 px-2 rounded-lg bg-black text-white font-bold">Valider</button>
+					<div class="flex items-center justify-end gap-x-2">
+						<a
+							href=""
+							x-show="event.id"
+							@click.prevent="remove(event)"
+							class=""
+						>
+							Supprimer
+						</a>
+						<button
+							type="submit"
+							class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1"
+						>
+							Valider
+						</button>
 					</div>
 				</form>
 
-				<h1 class="py-4">Aperçu</h1>
-				<div id="preview" class="flex-1 flex flex-col p-4">
+				<div class="my-4 text-base font-bold">Aperçu</div>
+				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[10em]">
 					<template x-for="item in events">
-						<div class="flex flex-col" x-show="item.day === selected || item.date === selected || selected === now()[0] && item.day === now()[2]"
-							@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)">
+						<div
+							class="flex flex-col"
+							x-show="item.day === selected_day.toString() || item.date && selected_date"
+							@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)"
+						>
 							<span class="" x-text="item.time"></span>
-							<span :class="{'border-4': item.day, 'bg-white': item.id == event.id}" class="border-2 border-black px-2 py-1 rounded-lg" x-text="item.subject"></span>
+							<span
+								:class="{'border-4': item.day, 'bg-white': item.id == event.id}"
+								class="border-2 border-black px-2 py-1 rounded-lg"
+								x-text="item.subject"
+							></span>
 							<span x-text="item.content"></span>
 						</div>
 					</template>
@@ -108,25 +197,61 @@
 				id: "",
 				reference: "",
 				day: "",
-				flag: "", 
+				flag: "",
 			};
 
-			function now() {
-					return luxon.DateTime.now()
+			function context() {
+				let now = () =>
+					luxon.DateTime.now()
 						.setZone("Indian/Reunion")
 						.toFormat("yyyy-LL-dd TT c")
 						.split(" ");
-				}
 
-			function context() {
 				return {
 					DEFAULT,
+					month: [],
+					week: [],
 					events: [],
-						event: {
-						...DEFAULT
+					event: {
+						...DEFAULT,
 					},
-					selected: now()[0],
-					now() { return now() },
+					last_date: [now()[0], Number(now()[2])],
+					selected_date: now()[0],
+					selected_day: Number(now()[2]),
+
+					//now,
+
+					select(day) {
+						if (day === "") {
+							this.selected_date = this.last_date[0];
+							this.selected_day = this.last_date[1];
+						} else {
+							this.selected_date = "";
+							this.selected_day = day;
+						}
+						this.msg = this.week[day] || { ...DEFAULT, day: day };
+					},
+
+					select_date(date) {
+						let dateTime = luxon.DateTime.fromISO(this.selected_date).set({
+							day: date,
+						});
+						this.selected_date = dateTime.toFormat("yyyy-LL-dd");
+						this.selected_day = dateTime.toFormat("c");
+						this.last_date = [this.selected_date, this.selected_day];
+						this.list();
+					},
+					select_month(month) {
+						let dateTime = luxon.DateTime.fromISO(this.selected_date)
+							.set({
+								day: 1,
+							})
+							.plus({ month: month });
+						this.selected_date = dateTime.toFormat("yyyy-LL-dd");
+						this.selected_day = dateTime.toFormat("c");
+						this.last_date = [this.selected_date, this.selected_day];
+						this.list();
+					},
 
 					async list() {
 						await this.fetch("GET");
@@ -135,15 +260,15 @@
 					async save(event) {
 						if (event.day === "" && event.date === "") {
 							if (this.selected.length === 1) {
-								event.day = this.selected; 
+								event.day = this.selected;
 							} else {
-								event.date = this.selected; 
+								event.date = this.selected;
 							}
 						}
 						let response = await this.fetch("POST", event);
 						// todo check for errors.
 						this.event = { ...DEFAULT };
-						//this.selected = ""; 
+						//this.selected = "";
 					},
 
 					async remove(event) {
@@ -153,12 +278,14 @@
 
 					async fetch(method, event) {
 						let response = await (
-							await fetch(`/api/admin/calendar?${this.now()[0]}`, {
+							await fetch(`/api/admin/calendar?${this.last_date[0]}`, {
 								method: method,
 								body: event ? JSON.stringify(event) : null,
 							})
 						).json();
-						this.events = response.events;
+						this.events = response.day;
+						this.month = response.month;
+						this.week = response.week;
 						return response;
 					},
 				};

@@ -23,15 +23,15 @@ export default class Query {
 	async list() {
 		let prefix = [this.type, this.item.date].join(".");
 		console.log(`list ${prefix}`);
-		let dateList = await (this.item.date
-			? this.store.list({ prefix })
-			: { keys: [] });
+		let dateList = (
+			await (this.item.date ? this.store.list({ prefix }) : { keys: [] })
+		).keys;
 
 		prefix = [this.type, "D"].join("."); // return every day
 		console.log(`list ${prefix}`);
-		let dayList = await this.store.list({ prefix });
+		let dayList = (await this.store.list({ prefix })).keys;
 
-		let keys = [...dayList?.keys, ...dateList?.keys].map((key) => key.name);
+		let keys = [...dayList, ...dateList].map((key) => key.name);
 		console.log(`list ${JSON.stringify(keys)}`);
 
 		if (keys.length === 0) return [];
