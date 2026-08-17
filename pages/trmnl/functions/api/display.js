@@ -13,14 +13,14 @@ export async function onRequest({ request, env }) {
     await save(device, env.TRMNL_DEVICES);
   }
 
-  let filename = `/api/screen/${getFilename(device)}`;
+  let filename = getFilename(device);
 
   // blackout screen during sleep time
   let response = {
     filename: filename,
     //'firmware_url': null,
     //'firmware_version': null,
-    image_url: new URL(filename, request.url),
+    image_url: new URL(`/api/screen/${filename}`, request.url),
     //'image_url_timeout': 0,
     //'maximum_compatibility': false,
     refresh_rate: device.sleep || device.refresh_rate,
@@ -31,7 +31,7 @@ export async function onRequest({ request, env }) {
     update_firmware: false,
   };
 
-  await metrics(device, env, filename);
+  await metrics(device, env, `/api/screen/${filename}`);
 
   return Response.json(response);
 }
