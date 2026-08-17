@@ -55,20 +55,18 @@
 						<div class="flex justify-end">
 							<select id="sleep_from" x-model="selected.sleep_from" @change="selected.sleep_to = $el.value === '' ? $el.value : selected.sleep_to">
 								<option value="">--:--</option>
-									<template x-for="h in 23">
-										<div>
-											<option x-text="`${h<10?'0':''}${h}:00`"></option>
-											<option x-text="`${h<10?'0':''}${h}:30`"></option>
-										</div>
+								<template x-for="h in 23">
+									<template x-for="m in ['00', '30']">
+										<option x-text="`${h<10?'0':''}${h}:${m}`"></option>
 									</template>
-							</select> - 
+								</template>
+								</select> - 
 							<select id="sleep_to" x-model="selected.sleep_to" @change="selected.sleep_from = $el.value === '' ? $el.value : selected.sleep_from">
 								<option value="">--:--</option>
 								<template x-for="h in 23">
-									<div>
-										<option x-text="`${h<10?'0':''}${h}:00`"></option>
-										<option x-text="`${h<10?'0':''}${h}:30`"></option>
-									</div>
+									<template x-for="m in ['00', '30']">
+										<option x-text="`${h<10?'0':''}${h}:${m}`"></option>
+									</template>
 								</template>
 								</select>
 						</div>
