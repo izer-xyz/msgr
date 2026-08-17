@@ -17,7 +17,7 @@ export async function onRequest({ request, env }) {
 
   // blackout screen during sleep time
   let response = {
-    filename: filename.replace("/", "_"),
+    filename: filename.replaceAll("/", "_"),
     //'firmware_url': null,
     //'firmware_version': null,
     image_url: new URL(`/api/screen/${filename}`, request.url),
