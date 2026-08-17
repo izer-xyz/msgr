@@ -179,6 +179,7 @@
 							.setZone("utc", { keepLocalTime: true })
 							.toMillis() / coef,
 					) * coef,
+					{zone: "utc"}
 				);
 
 				return `${device.screen}/${dateTime.toFormat("yyyy-MM-dd/HH:mm")}/0.png`;
