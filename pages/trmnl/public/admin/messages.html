@@ -17,76 +17,100 @@
 				--font-noto: "Noto Sans", sans-serif;
 			}
 		</style>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=chat,calendar_clock,aod_tablet,settings,close,instant_mix,delete"
+			rel="stylesheet"
+		/>
 	</head>
 	<body class="">
 		<header
 			x-data
-			class="w-96 m-auto my-4 flex text-center bg-gray-200 border-4 border-b-0 border-gray-200"
+			class="max-w-96 m-auto my-4 font-bold text-sm flex justify-evenly text-center bg-gray-200 border-4 border-b-0 border-gray-200"
 		>
 			<a
 				href="/admin/messages"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
-				>Messagerie</a
 			>
+				<span class="align-middle material-symbols-outlined">chat</span>
+				Message
+			</a>
 			<a
 				href="/admin/calendar"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
-				>Calandrier</a
 			>
+				<span class="align-middle material-symbols-outlined"
+					>calendar_clock</span
+				>
+				Programme
+			</a>
 			<a
 				href="/admin/device"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
-				>Aperçu</a
 			>
+				<span class="align-middle material-symbols-outlined">aod_tablet</span>
+				Tablette
+			</a>
 			<a
 				href="/admin/profile"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
-				>Profil</a
 			>
+				<span class="align-middle material-symbols-outlined">settings</span>
+				Profil
+			</a>
 		</header>
-		<main class="w-96 m-auto text-xs border-4 border-white">
+		<main class="max-w-96 m-auto text-xs border-4 border-white">
+			<p class="mx-4 mb-4 p-2 text-white bg-green-800 rounded-lg">
+				? Send a message to the board (type and send), setup a daily message (by
+				select the day of the week), or delete a message from the list at the
+				bottom.
+			</p>
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(msg)" class="flex flex-col gap-4">
-					<div class="flex flex-col justify-center">
-						La jour du message
-						<div class="flex justify-center">
-							<div class="flex border-2 border-gray-200">
-								<a
-									class="text-center px-1 border-2 border-gray-200 bg-gray-200"
-									href=""
-									:class="{
+					<div class="flex flex-col">
+						<div class="flex justify-end">
+							<a
+								xclass="text-center px-1 border-2 border-gray-200 bg-gray-200"
+								href=""
+								xxclass="{
 										'bg-white': selected_date !== ''
 						      }"
-									@click.prevent="select('')"
+								@click.prevent="select('')"
+							>
+							</a>
+							<a href="" class="flex-auto font-bold" x-show="!selected_date">
+								Message du Jour
+								<span class="align-middle material-symbols-outlined"
+									>close</span
 								>
-									Aujourd'hui
-								</a>
-								<div class="flex gap-x-1 justify-center bg-gray-200">
-									<template
-										x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']"
-									>
-										<a
-											href=""
-											class="px-1 border-x-2 border-gray-200"
-											:class="{
-												'bg-white': selected_day === i + 1, 
+							</a>
+							<div class="flex gap-x-1 bg-gray-200">
+								<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
+									<a
+										href=""
+										class="px-1 border-2 border-gray-200"
+										:class="{
+												'bg-white': selected_day === i + 1 && selected_date === '', 
 												'font-bold': selected_day === i + 1,
 											  'underline': week[i+1],
 												'text-red-800': i > 4
 											}"
-											@click.prevent="select(i+1)"
-											x-text="d"
-										></a>
-									</template>
-								</div>
+										@click.prevent="select(i+1)"
+										x-text="d"
+									></a>
+								</template>
+								<a
+									href=""
+									class="align-middle material-symbols-outlined bg-white"
+									@click.prevent="select(1)"
+									>instant_mix</a
+								>
 							</div>
 						</div>
 					</div>
-					Votre message
 					<div class="flex flex-col ml-2">
 						<textarea
 							id="content"
@@ -99,14 +123,10 @@
 							x-init="$watch('msg.content', () => $el.focus())"
 							@keydown.enter.prevent="$el.form.requestSubmit()"
 						></textarea>
-						<div class="self-end p-1" x-text="msg.from"></div>
 					</div>
 					<div
 						class="flex items-center justify-end gap-x-2 font-semibold text-red-800"
 					>
-						<a href="" x-show="msg.id" @click.prevent="remove(msg)" class="">
-							Supprimer
-						</a>
 						<button
 							type="submit"
 							class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1"
@@ -134,17 +154,24 @@
 					</template>
 					<template x-for="item in msgs">
 						<div
-							class="flex flex-col w-[20em] self-end"
+							class="flex self-end"
 							x-show="item.day === selected_day.toString() || item.date && selected_date"
-							@click.prevent="(msg.id === item.id ? msg = { ...DEFAULT } : msg = { ...item, from: profile.name })"
 						>
-							<span
-								class="border-1 px-2 py-1 rounded-lg"
-								:class="{'border-white': !item.day, 'border-black': item.day, 'bg-white': item.id == msg.id}"
-								x-text="item.content"
+							<div class="flex flex-col w-[20em]">
+								<span
+									class="border-1 px-2 py-1 rounded-lg"
+									:class="{'border-white': !item.day, 'border-black': item.day, 'bg-white': item.id == msg.id}"
+									x-text="item.content"
+								>
+								</span>
+								<span class="self-end" x-text="item.from"></span>
+							</div>
+							<a
+								href=""
+								class="p-1 material-symbols-outlined"
+								@click.prevent="remove(item)"
+								>delete</a
 							>
-							</span>
-							<span class="self-end" x-text="item.from"></span>
 						</div>
 					</template>
 				</div>
@@ -210,8 +237,10 @@
 					},
 
 					async remove(msg) {
-						this.msg = { ...msg, id: "", reference: "" };
-						await this.fetch("DELETE", msg);
+						// this.msg = { ...msg, id: "", reference: "" };
+						if (confirm("Supprimer le message?")) {
+							await this.fetch("DELETE", msg);
+						}
 					},
 
 					async fetch(method, msg) {

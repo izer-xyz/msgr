@@ -27,7 +27,10 @@ export async function onRequestGet({ request, env }) {
 			response.msgs.push(m);
 		}
 	}
-	response.msgs.reverse();
+
+	response.msgs.sort(
+		(a, b) => -a.time.localeCompare(b.time) - 100 * a.day.localeCompare(b.day),
+	);
 
 	return Response.json(response);
 }
