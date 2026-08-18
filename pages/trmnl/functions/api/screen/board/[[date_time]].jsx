@@ -86,7 +86,7 @@ async function screen(device, { env, params }) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
-      emoji: "twemoji",
+      emoji: "noto",
       fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
