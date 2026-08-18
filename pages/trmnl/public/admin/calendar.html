@@ -17,42 +17,52 @@
 				--font-noto: "Noto Sans", sans-serif;
 			}
 		</style>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=chat,calendar_clock,aod_tablet,settings,close,instant_mix,delete"
+			rel="stylesheet"
+		/>
 	</head>
 	<body class="">
 		<header
 			x-data
-			class="w-96 m-auto my-4 flex text-center bg-gray-200 border-4 border-b-0 border-gray-200"
+			class="max-w-96 m-auto my-4 font-bold text-sm flex justify-evenly text-center bg-gray-200 border-4 border-b-0 border-gray-200"
 		>
 			<a
 				href="/admin/messages"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				Messagerie
+				<span class="align-middle material-symbols-outlined">chat</span>
+				Message
 			</a>
 			<a
 				href="/admin/calendar"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				Calandrier
+				<span class="align-middle material-symbols-outlined"
+					>calendar_clock</span
+				>
+				Programme
 			</a>
 			<a
 				href="/admin/device"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				Aperçu
+				<span class="align-middle material-symbols-outlined">aod_tablet</span>
+				Tablette
 			</a>
 			<a
 				href="/admin/profile"
-				class="flex-1"
+				class="px-1"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
+				<span class="align-middle material-symbols-outlined">settings</span>
 				Profil
 			</a>
 		</header>
-		<main class="w-96 m-auto text-xs border-4 border-white">
+		<main class="max-w-96 m-auto text-xs border-4 border-white">
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(event)" class="flex flex-col gap-4">
 					<div class="flex flex-col justify-center">
@@ -121,11 +131,16 @@
 						</div>
 					</div>
 					<div class="flex">
-						<select name="time" x-model="event.time" class="">
+						<select
+							name="time"
+							x-model="event.time"
+							class=""
+							@change.prevent="select_time($el.value)"
+						>
 							<option value="">--:--</option>
-							<template x-for="h in 23">
+							<template x-for="h in 13">
 								<template x-for="m in ['00', '30']">
-									<option x-text="`${h<10?'0':''}${h}:${m}`"></option>
+									<option x-text="`${h+7<10?'0':''}${h+7}:${m}`"></option>
 								</template>
 							</template>
 						</select>
@@ -166,7 +181,7 @@
 					</div>
 				</form>
 
-				<div class="my-4 text-base font-bold">Aperçu</div>
+				<div class="my-4 text-base font-bold">Programme du Jour</div>
 				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[10em]">
 					<template x-for="item in events">
 						<div
@@ -228,8 +243,11 @@
 							this.selected_date = "";
 							this.selected_day = day;
 						}
+						console.log(this.week[day]);
 						this.msg = this.week[day] || { ...DEFAULT, day: day };
 					},
+
+					select_time(time) {},
 
 					select_date(date) {
 						let dateTime = luxon.DateTime.fromISO(this.selected_date).set({
@@ -258,10 +276,10 @@
 
 					async save(event) {
 						if (event.day === "" && event.date === "") {
-							if (this.selected.length === 1) {
+							if (this.selected_date.length === "") {
 								event.day = this.selected;
 							} else {
-								event.date = this.selected;
+								event.date = this.selected_date;
 							}
 						}
 						let response = await this.fetch("POST", event);
