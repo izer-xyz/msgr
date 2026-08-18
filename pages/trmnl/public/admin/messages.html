@@ -18,7 +18,7 @@
 			}
 		</style>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=chat,calendar_clock,aod_tablet,settings,close,instant_mix,delete"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,instant_mix,settings"
 			rel="stylesheet"
 		/>
 	</head>
@@ -137,7 +137,7 @@
 				</form>
 
 				<div class="my-4 text-base font-bold">Les Messages</div>
-				<div id="preview" class="flex-1 flex flex-col p-2 border h-[10em]">
+				<div id="preview" class="flex-1 flex flex-col p-2 h-[25em] bg-gray-200">
 					<template x-if="week[selected_day]">
 						<div
 							class="flex flex-col w-[20em] self-end"
@@ -154,35 +154,31 @@
 					</template>
 					<template x-for="item in msgs">
 						<div
-							class="flex self-end"
+							class="flex self-center mb-1"
 							x-show="item.day === selected_day.toString() || item.date && selected_date"
 						>
-							<div class="flex flex-col w-[20em]">
-								<span
-									class="border-1 px-2 py-1 rounded-lg"
-									:class="{'border-white': !item.day, 'border-black': item.day, 'bg-white': item.id == msg.id}"
-									x-text="item.content"
-								>
-								</span>
-								<span class="self-end" x-text="item.from"></span>
+							<div class="w-[18em] flex flex-col font-bold">
+								<div class="mb-[8px] flex flex-col">
+									<span class="px-1" x-text="item.content"> </span>
+									<span class="self-end" x-text="item.from"
+										>{message.from}
+									</span>
+								</div>
 							</div>
 							<a
 								href=""
-								class="p-1 material-symbols-outlined"
+								class="px-1 material-symbols-outlined"
 								@click.prevent="remove(item)"
 								>delete</a
 							>
 						</div>
 					</template>
 				</div>
-				<div
-					class="flex p-1 text-center"
-					x-show="msgs && document.getElementById('preview').scrollHeight > 5"
-				>
-					Limit d'ecran (<span
-						x-text="msgs && document.getElementById('preview').scrollHeight"
-					></span
-					>)
+				<div class="flex p-1 text-center bg-red-800 text-white">
+					<span
+						x-show="msgs && document.getElementById('preview').scrollHeight > document.getElementById('preview').clientHeight"
+						>Limit d'ecran</span
+					>
 				</div>
 			</div>
 		</main>

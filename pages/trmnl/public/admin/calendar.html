@@ -18,7 +18,7 @@
 			}
 		</style>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=chat,calendar_clock,aod_tablet,settings,close,instant_mix,delete"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,instant_mix,settings"
 			rel="stylesheet"
 		/>
 	</head>
@@ -63,9 +63,15 @@
 			</a>
 		</header>
 		<main class="max-w-96 m-auto text-xs border-4 border-white">
+			<p class="mx-4 mb-4 p-2 text-white bg-green-800 rounded-lg">
+				? To create a new event select a date or day of the week (for reoccuring
+				events), pick a time or leave blank (for an all day event), set a title
+				and a description. To manage an existing event select the date (or the
+				day of the week for reoccuring) and select from the list in the bottom.
+			</p>
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(event)" class="flex flex-col gap-4">
-					<div class="flex flex-col justify-center">
+					<div class="hidden flex flex-col justify-center">
 						<div class="flex justify-center">
 							<div class="flex flex-col border-x-2 border-gray-200">
 								<a
@@ -130,6 +136,34 @@
 							</a>
 						</div>
 					</div>
+					<div class="flex gap-x-1 justify-between">
+						<input
+							type="date"
+							x-model="selected_date"
+							class="px-1 border-2 border-gray-200"
+						/>
+						<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
+							<a
+								href=""
+								class="px-1 border-2 border-gray-200 bg-gray-200"
+								:class="{
+										'bg-white': selected_day === i + 1 && selected_date === '', 
+										'font-bold': selected_day === i + 1,
+										'underline': week[i+1],
+										'text-red-800': i > 4
+									}"
+								@click.prevent="select(i+1)"
+								x-text="d"
+							></a>
+						</template>
+						<a
+							href=""
+							class="align-middle material-symbols-outlined bg-white"
+							@click.prevent="select(1)"
+							>instant_mix</a
+						>
+					</div>
+
 					<div class="flex">
 						<select
 							name="time"
@@ -150,7 +184,7 @@
 							autofocus
 							x-model="event.subject"
 							x-init="$watch('event.subject', () => $el.focus())"
-							placeholder="Titre"
+							placeholder="Activite"
 							class="flex-auto rounded-md border-1 p-1 ml-2 font-bold"
 						/>
 					</div>
@@ -160,7 +194,7 @@
 						x-model="event.content"
 						class="rounded-md border-1 p-1"
 						rows="2"
-						placeholder="Tapez votre message ici et appuyez sur Entrée pour valider."
+						placeholder="Tapez la description d'activitee et appuyez sur Entrée pour valider."
 						@keydown.enter.prevent="$el.form.requestSubmit()"
 					></textarea>
 					<div class="flex items-center justify-end gap-x-2">
@@ -182,22 +216,29 @@
 				</form>
 
 				<div class="my-4 text-base font-bold">Programme du Jour</div>
-				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[10em]">
+				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[25em]">
 					<template x-for="item in events">
 						<div
 							class="flex flex-col"
 							x-show="item.day === selected_day.toString() || item.date && selected_date"
 							@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)"
 						>
-							<span class="" x-text="item.time"></span>
-							<span
-								:class="{'border-4': item.day, 'bg-white': item.id == event.id}"
-								class="border-2 border-black px-2 py-1 rounded-lg"
-								x-text="item.subject"
-							></span>
-							<span x-text="item.content"></span>
+							<div class="mb-[12px] w-[19em] font-bold">
+								<span class="text-gray-700" x-text="item.time"></span>
+								<span class="" x-text="item.subject"></span>
+								<div
+									class="font-normal mt-[4px] ml-[1px]"
+									x-text="item.content"
+								></div>
+							</div>
 						</div>
 					</template>
+				</div>
+				<div class="flex p-1 text-center bg-red-800 text-white">
+					<span
+						x-show="msgs && document.getElementById('preview').scrollHeight > document.getElementById('preview').clientHeight"
+						>Limit d'ecran</span
+					>
 				</div>
 			</div>
 		</main>

@@ -31,25 +31,10 @@
 				</div>
 				<form @submit.prevent="save(selected, $el)" class="flex flex-col gap-2">
 					<div class="flex flex-col">
-						<label for="id">Id</label>
-						<input id="id" type="text" readonly x-model="selected.id" class="rounded-md border-1 p-1 ml-2 text-right" />
+						<label for="battery-voltage">Batterie (V)</label>
+						<input id="battery-voltage" type="text" readonly x-model="selected['battery-voltage']" class="rounded-md p-1 ml-2 text-right"/>
 					</div>
-					<div class="flex flex-col">
-						<label for="time_zone">Fuseau Horaire</label>
-						<input id="time_zone" type="text" x-model="selected.time_zone" class="rounded-md border-1 p-1 ml-2 text-right"/>
-					</div>
-					<div class="flex flex-col">
-						<label for="refresh_rate">Mise a jour (sec)</label>
-						<input id="refresh_rate" type="text" x-model="selected.refresh_rate" class="rounded-md border-1 p-1 ml-2 text-right"/>
-					</div>
-					<div class="flex flex-col">
-						<label for="battery-voltage">Batterie</label>
-						<input id="battery-voltage" type="text" x-model="selected['battery-voltage']" class="rounded-md border-1 p-1 ml-2 text-right"/>
-					</div>
-					<div class="flex flex-col">
-						<label for="screen">Affiche</label>
-						<input id="screen" type="text" x-model="selected.screen" class="rounded-md border-1 p-1 ml-2 text-right"/>
-					</div>
+
 					<div class="flex flex-col">
 						<label for="sleep_from">En Veille <span x-text="selected.sleep ? '(actif)' : ''"></span></label> 
 						<div class="flex justify-end">
