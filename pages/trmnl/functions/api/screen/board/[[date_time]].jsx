@@ -1,5 +1,5 @@
 import { process, render } from "../screen.js";
-//import { googleFonts } from "takumi-js/helpers";
+import { googleFonts } from "takumi-js/helpers";
 
 export let onRequest = process(screen, "board");
 
@@ -48,27 +48,27 @@ async function screen(device, { env, params }) {
   console.log(`[INFO /api/screen/board/${device.id}] ${dateTime}`);
 
   return render(
-    <div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] font-black text-black text-6xl px-1 leading-loose">
-      <div tw="flex text-8xl pb-8">
-        <div tw="grow capitalize self-end ">
+    <div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] text-black text-6xl px-4 font-bold leading-loose">
+      <div tw="flex text-8xl pb-16">
+        <div tw="grow capitalize self-center">
           {day}, {date}
         </div>
-        <div tw="text-8xl pr-2">{time}</div>
+        <div tw="text-9xl">{time}</div>
       </div>
-      <div tw="flex">
-        <div tw="flex-1 flex flex-col">
+      <div tw="flex justify-between m-4 text-5xl">
+        <div tw="w-[18em] flex flex-col">
           {events.map((event) => (
-            <div tw="bg-gray-200 p-1 rounded-lg">
-              <span tw="text-gray-700">{event.time} </span>
-              <span tw="">{event.subject}</span>
-              <div tw="text-5xl font-bold pl-1">{event.content}</div>
+            <div tw="mb-12">
+              <span tw="text-gray-700 text-6xl">{event.time} </span>
+              <span tw="text-6xl">{event.subject}</span>
+              <div tw="font-normal mt-4 ml-1">{event.content}</div>
             </div>
           ))}
         </div>
-        <div tw="flex-1 flex flex-col text-5xl font-bold pr-2">
+        <div tw="w-[18em] flex flex-col font-bold">
           {messages.map((message) => (
-            <div tw="flex flex-col pl-4">
-              <span tw="border-3 border-black px-2 py-1 rounded-lg">
+            <div tw="mb-8 flex flex-col">
+              <span tw="border-3 border-black px-6 py-4 rounded-4xl">
                 {message.content}
               </span>
               <span tw="self-end">{message.from} </span>
@@ -81,7 +81,8 @@ async function screen(device, { env, params }) {
       width: Number(device.width),
       height: Number(device.height),
       format: "raw",
-      //fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
+      emoji: "twemoji",
+      fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }
