@@ -66,13 +66,15 @@ async function screen(device, { env, params }) {
             <div tw="mb-[44px]">
               <span tw="text-gray-700 text-6xl">{event.time} </span>
               <span tw="text-6xl">{event.subject}</span>
-              <div tw="font-normal mt-[8px]">{event.content}</div>
+              <div tw="font-normal mt-[16px]" x-show="event.content">
+                {event.content}
+              </div>
             </div>
           ))}
         </div>
         <div tw="w-[880px] flex flex-col font-semibold">
           {messages.map((message) => (
-            <div tw="mb-[24px] flex flex-col">
+            <div tw="mb-[44px] flex flex-col">
               <span tw="border-b-[4px] border-black px-[16px] py-[8px]">
                 {message.content}
               </span>
@@ -87,7 +89,7 @@ async function screen(device, { env, params }) {
       height: Number(device.height),
       format: "raw",
       emoji: "fluentFlat",
-      //fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
+      fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }

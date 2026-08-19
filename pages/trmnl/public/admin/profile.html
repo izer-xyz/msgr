@@ -17,51 +17,55 @@
 				--font-noto: "Noto Sans", sans-serif;
 			}
 		</style>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,edit,instant_mix,logout,settings&display=block"
+			rel="stylesheet"
+		/>
 	</head>
 	<body class="">
 		<header
 			x-data
-			class="w-96 m-auto my-4 flex text-center bg-gray-200 border-4 border-b-0 border-gray-200"
+			class="max-w-96 m-auto text-2xl text-center font-[Material_Symbols_Outlined] my-2 flex bg-gray-200 border-4 border-b-0 border-gray-200"
 		>
 			<a
 				href="/admin/messages"
-				class="flex-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
+				>chat</a
 			>
-				Messagerie
-			</a>
 			<a
 				href="/admin/calendar"
-				class="flex-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				Calandrier
+				calendar_clock
 			</a>
 			<a
 				href="/admin/device"
-				class="flex-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				Aperçu
+				aod_tablet
 			</a>
 			<a
 				href="/admin/profile"
-				class="flex-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				Profil
+				settings
 			</a>
 		</header>
-		<main class="w-96 m-auto text-xs border-4 border-white">
+		<main class="max-w-96 flex flex-col m-auto text-xs border-4 border-white">
+			<div class="flex justify-between text-lg pb-2">
+				<span class="font-bold">Profil</span>
+				<a
+					href="http://w1n.cloudflareaccess.com/cdn-cgi/access/logout"
+					class="font-[Material_Symbols_Outlined]"
+				>
+					logout
+				</a>
+			</div>
 			<div x-data="context" x-init="get">
-				<div class="flex items-center justify-end gap-x-2 mt-4">
-					<a
-						href="http://w1n.cloudflareaccess.com/cdn-cgi/access/logout"
-						class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1"
-					>
-						Logout
-					</a>
-				</div>
 				<form @submit.prevent="save(profile)" class="flex flex-col gap-2">
 					<div class="flex flex-col">
 						<label for="email">E-mail</label>

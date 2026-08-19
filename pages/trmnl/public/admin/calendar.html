@@ -18,51 +18,45 @@
 			}
 		</style>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,instant_mix,settings"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,edit,instant_mix,settings"
 			rel="stylesheet"
 		/>
 	</head>
 	<body class="">
 		<header
 			x-data
-			class="max-w-96 m-auto my-4 font-bold text-sm flex justify-evenly text-center bg-gray-200 border-4 border-b-0 border-gray-200"
+			class="max-w-96 m-auto text-2xl text-center font-[Material_Symbols_Outlined] my-2 flex bg-gray-200 border-4 border-b-0 border-gray-200"
 		>
 			<a
 				href="/admin/messages"
-				class="px-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
+				>chat</a
 			>
-				<span class="align-middle material-symbols-outlined">chat</span>
-				Message
-			</a>
 			<a
 				href="/admin/calendar"
-				class="px-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				<span class="align-middle material-symbols-outlined"
-					>calendar_clock</span
-				>
-				Programme
+				calendar_clock
 			</a>
 			<a
 				href="/admin/device"
-				class="px-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				<span class="align-middle material-symbols-outlined">aod_tablet</span>
-				Tablette
+				aod_tablet
 			</a>
 			<a
 				href="/admin/profile"
-				class="px-1"
+				class="px-1 grow"
 				:class="{ 'bg-white': location.href === $el.href }"
 			>
-				<span class="align-middle material-symbols-outlined">settings</span>
-				Profil
+				settings
 			</a>
 		</header>
-		<main class="max-w-96 m-auto text-xs border-4 border-white">
+		<main class="max-w-96 flex flex-col m-auto text-xs border-4 border-white">
+			<span class="text-lg font-bold pb-2">Programme</span>
 			<p class="mx-4 mb-4 p-2 text-white bg-green-800 rounded-lg">
 				? To create a new event select a date or day of the week (for reoccuring
 				events), pick a time or leave blank (for an all day event), set a title
@@ -219,24 +213,26 @@
 				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[25em]">
 					<template x-for="item in events">
 						<div
-							class="flex flex-col"
+							class="flex justify-between items-center hover:bg-white pl-2"
+							:class="{'bg-white': event === item}"
 							x-show="item.day === selected_day.toString() || item.date && selected_date"
 							@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)"
 						>
-							<div class="mb-[12px] w-[19em] font-bold">
-								<span class="text-gray-700" x-text="item.time"></span>
-								<span class="" x-text="item.subject"></span>
+							<div class="mb-[8px] w-[19em] text-md font-bold">
+								<span class="text-gray-700 text-lg" x-text="item.time"></span>
+								<span class="text-lg" x-text="item.subject"></span>
 								<div
-									class="font-normal mt-[4px] ml-[1px]"
+									class="font-normal text-xs ml-[1px]"
 									x-text="item.content"
 								></div>
 							</div>
+							<span href="" class="px-1 material-symbols-outlined">edit</span>
 						</div>
 					</template>
 				</div>
 				<div class="flex p-1 text-center bg-red-800 text-white">
 					<span
-						x-show="msgs && document.getElementById('preview').scrollHeight > document.getElementById('preview').clientHeight"
+						x-show="events && document.getElementById('preview').scrollHeight > document.getElementById('preview').clientHeight"
 						>Limit d'ecran</span
 					>
 				</div>
