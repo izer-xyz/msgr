@@ -61,22 +61,22 @@ async function screen(device, { env, params }) {
         <div tw="text-9xl">{time}</div>
       </div>
       <div tw="flex justify-between m-4 text-5xl">
-        <div tw="w-[18em] flex flex-col">
+        <div tw="w-[880px] flex flex-col">
           {events.map((event) => (
-            <div tw="mb-12">
+            <div tw="mb-[44px]">
               <span tw="text-gray-700 text-6xl">{event.time} </span>
               <span tw="text-6xl">{event.subject}</span>
-              <div tw="font-normal mt-4 ml-1">{event.content}</div>
+              <div tw="font-normal mt-[8px]">{event.content}</div>
             </div>
           ))}
         </div>
-        <div tw="w-[18em] flex flex-col font-bold">
+        <div tw="w-[880px] flex flex-col font-semibold">
           {messages.map((message) => (
-            <div tw="mb-8 flex flex-col">
-              <span tw="border-3 border-black px-6 py-4 rounded-4xl">
+            <div tw="mb-[24px] flex flex-col">
+              <span tw="border-b-[4px] border-black px-[16px] py-[8px]">
                 {message.content}
               </span>
-              <span tw="self-end">{message.from} </span>
+              <span tw="self-end text-4xl">{message.from} </span>
             </div>
           ))}
         </div>
@@ -87,7 +87,7 @@ async function screen(device, { env, params }) {
       height: Number(device.height),
       format: "raw",
       emoji: "fluentFlat",
-      fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
+      //fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }
