@@ -97,7 +97,7 @@ async function screen(device, { env, params }) {
       height: Number(device.height),
       format: "raw",
       emoji: "fluentFlat",
-      //fonts: [font], //googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
+      fonts: [font], //googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }
