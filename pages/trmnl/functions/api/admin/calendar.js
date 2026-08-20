@@ -42,7 +42,10 @@ export async function onRequestGet({ request, env }) {
 	}
 
 	response.day.sort(
-		(a, b) => a.time.localeCompare(b.time) * 100 + a.day.localeCompare(b.day),
+		(a, b) =>
+			a.time.localeCompare(b.time) * 1000 +
+			(Number(a.day) - Number(b.day)) * 100 +
+			a.subject.localeCompare(b.subject),
 	);
 
 	return Response.json(response);

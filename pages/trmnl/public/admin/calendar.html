@@ -18,7 +18,7 @@
 			}
 		</style>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,edit,instant_mix,settings"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=aod_tablet,calendar_clock,chat,close,delete,edit,instant_mix,settings,visibility,visibility_off&display=block"
 			rel="stylesheet"
 		/>
 	</head>
@@ -161,7 +161,7 @@
 					<div class="flex">
 						<select
 							name="time"
-							x-model="event.time"
+							:value="event.time"
 							class=""
 							@change.prevent="select_time($el.value)"
 						>
@@ -209,14 +209,31 @@
 					</div>
 				</form>
 
-				<div class="my-4 text-base font-bold">Programme du Jour</div>
+				<div
+					class="my-2 text-lg font-bold capitalize flex items-center justify-between"
+				>
+					<span x-text="dateOrDay"></span>
+					<a
+						href=""
+						class="mx-3 material-symbols-outlined"
+						x-show="selected_date && !events[0]?.hide"
+						@click.prevent="hide()"
+						>visibility_off</a
+					>
+					<a
+						href=""
+						class="mx-3 material-symbols-outlined"
+						x-show="events[0]?.hide"
+						@click.prevent="remove(events[0])"
+						>visibility</a
+					>
+				</div>
 				<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[25em]">
-					<template x-for="item in events">
+					<template x-for="(item,index) in events">
 						<div
 							class="flex justify-between items-center hover:bg-white pl-2"
 							:class="{'bg-white': event === item}"
-							x-show="item.day === selected_day.toString() || item.date && selected_date"
-							@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)"
+							x-show="(item.day === selected_day.toString() && !events[0].hide) || item.date && selected_date && !item.hide"
 						>
 							<div class="mb-[8px] w-[19em] text-md font-bold">
 								<span class="text-gray-700 text-lg" x-text="item.time"></span>
@@ -226,7 +243,20 @@
 									x-text="item.content"
 								></div>
 							</div>
-							<span href="" class="px-1 material-symbols-outlined">edit</span>
+							<a
+								href=""
+								class="px-1 material-symbols-outlined"
+								x-show="item.date || !selected_date"
+								@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)"
+								>edit</a
+							>
+							<a
+								href=""
+								class="px-1 material-symbols-outlined"
+								x-show="!item.date && selected_date"
+								@click.prevent="hide()"
+								>visibility_off</a
+							>
 						</div>
 					</template>
 				</div>
@@ -280,11 +310,21 @@
 							this.selected_date = "";
 							this.selected_day = day;
 						}
-						console.log(this.week[day]);
-						this.msg = this.week[day] || { ...DEFAULT, day: day };
+						this.event = { ...DEFAULT };
 					},
 
-					select_time(time) {},
+					select_time(time) {
+						this.event = this.events.find(
+							(item) =>
+								item.time === time &&
+								((!this.selected_date &&
+									item.day === this.selected_day.toString()) ||
+									item.date === this.selected_date),
+						) || {
+							...DEFAULT,
+							time: time,
+						};
+					},
 
 					select_date(date) {
 						let dateTime = luxon.DateTime.fromISO(this.selected_date).set({
@@ -314,7 +354,7 @@
 					async save(event) {
 						if (event.day === "" && event.date === "") {
 							if (this.selected_date.length === "") {
-								event.day = this.selected;
+								event.day = this.selected_day;
 							} else {
 								event.date = this.selected_date;
 							}
@@ -323,6 +363,15 @@
 						// todo check for errors.
 						this.event = { ...DEFAULT };
 						//this.selected = "";
+					},
+
+					async hide() {
+						this.save({
+							...DEFAULT,
+							date: this.selected_date,
+							reference: "-",
+							hide: this.selected_day.toString(),
+						});
 					},
 
 					async remove(event) {
@@ -341,6 +390,15 @@
 						this.month = response.month;
 						this.week = response.week;
 						return response;
+					},
+					dateOrDay() {
+						return this.selected_date
+							? luxon.DateTime.fromISO(this.selected_date)
+									.setLocale("fr")
+									.toLocaleString(luxon.DateTime.DATE_HUGE)
+							: luxon.DateTime.fromObject({ weekday: this.selected_day })
+									.setLocale("fr")
+									.toFormat("cccc") + " (récurrents)";
 					},
 				};
 			}

@@ -37,12 +37,20 @@ async function screen(device, { env, params }) {
         )
     : [];
 
+  let hide = eventKeys.find((key) => key.endsWith("..-"));
   let events = eventKeys.length
     ? (await Promise.all(await env.TRMNL_BOARD.get(eventKeys, "json")))
-        .reduce((list, i) => (i[1] ? list.push(i[1]) && list : list), [])
+        .reduce((list, i) => {
+          if (i[1] && !i[1].hide && (i[1].date || !hide)) {
+            list.push(i[1]);
+          }
+          return list;
+        }, [])
         .sort(
           (a, b) =>
-            a.time.localeCompare(b.time) * 100 + a.day.localeCompare(b.day),
+            a.time.localeCompare(b.time) * 1000 +
+            (Number(a.day) - Number(b.day)) * 100 +
+            a.subject.localeCompare(b.subject),
         )
     : [];
 
@@ -89,7 +97,7 @@ async function screen(device, { env, params }) {
       height: Number(device.height),
       format: "raw",
       emoji: "fluentFlat",
-      fonts: googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
+      //fonts: [font], //googleFonts([{ name: "Noto Sans", weight: "800..900" }]),
     },
   );
 }
