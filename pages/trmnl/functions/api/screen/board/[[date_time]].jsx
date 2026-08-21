@@ -83,7 +83,7 @@ async function screen(device, { env, params }) {
         <div tw="w-[880px] flex flex-col font-semibold">
           {messages.map((message) => (
             <div tw="mb-[44px] flex flex-col">
-              <span tw="border-b-[4px] border-black px-[16px] py-[8px]">
+              <span tw="border-[1px] border-black rounded-4xl px-[20px] py-[12px]">
                 {message.content}
               </span>
               <span tw="self-end text-4xl">{message.from} </span>
