@@ -353,8 +353,8 @@
 
 					async save(event) {
 						if (event.day === "" && event.date === "") {
-							if (this.selected_date.length === "") {
-								event.day = this.selected_day;
+							if (this.selected_date === "") {
+								event.day = this.selected_day.toString();
 							} else {
 								event.date = this.selected_date;
 							}
