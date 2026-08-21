@@ -57,105 +57,39 @@
 		</header>
 		<main class="max-w-96 flex flex-col m-auto text-xs border-4 border-white">
 			<span class="text-lg font-bold pb-2">Programme</span>
-			<p class="mx-4 mb-4 p-2 text-white bg-green-800 rounded-lg">
-				? To create a new event select a date or day of the week (for reoccuring
-				events), pick a time or leave blank (for an all day event), set a title
-				and a description. To manage an existing event select the date (or the
-				day of the week for reoccuring) and select from the list in the bottom.
-			</p>
 			<div x-data="context" x-init="list">
 				<form @submit.prevent="save(event)" class="flex flex-col gap-4">
-					<div class="hidden flex flex-col justify-center">
-						<div class="flex justify-center">
-							<div class="flex flex-col border-x-2 border-gray-200">
-								<a
-									class="text-center bg-gray-200 py-1"
-									href=""
-									:class="{'font-bold': selected_date !== ''}"
-									@click.prevent="select('')"
-									x-text="last_date[0]"
-								></a>
-								<div class="flex gap-x-1 justify-center bg-gray-200">
-									<template
-										x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']"
-									>
-										<a
-											href=""
-											class="px-1 border-x-2 border-b-2 border-gray-200"
-											:class="{
-											'bg-white': selected_day === i + 1, 
-											'font-bold': selected_day === i + 1,
-											'underline': week[i+1],
-											'text-red-800': i > 4
-										}"
-											@click.prevent="select(i+1)"
-											x-text="d"
-										></a>
-									</template>
-								</div>
-							</div>
-						</div>
-						<div
-							class="flex felx-col text-center"
-							x-show="selected_date !== ''"
-						>
-							<a href="" class="flex-auto" @click.prevent="select_month(-1)">
-								&lt;
-							</a>
-							<div
-								class="flex-initial grid grid-cols-7 gap-1 border-x-3 border-b-3 border-gray-200"
-							>
-								<template
-									x-for="(d) in (luxon.DateTime.fromISO(selected_date).startOf('month').weekday - 1)"
-								>
-									<a></a>
-								</template>
-								<template
-									x-for="(d) in luxon.DateTime.fromISO(selected_date).endOf('month').day"
-								>
-									<a
-										href=""
-										class="px-1 rounded-xl"
-										:class="{
-											'border-2': d.toString().padStart(2, '0') === selected_date.slice(-2),
-											'underline': month[d]
-										}"
-										@click.prevent="select_date(d)"
-										x-text="d"
-									></a>
-								</template>
-							</div>
-							<a href="" class="flex-auto" @click.prevent="select_month(+1)">
-								&gt;
-							</a>
-						</div>
-					</div>
 					<div class="flex gap-x-1 justify-between">
 						<input
 							type="date"
 							x-model="selected_date"
-							class="px-1 border-2 border-gray-200"
+							x-show="selected_date"
+							class="w-24 text-center px-1 border-2 border-gray-200"
+							@change.prevent="select_date"
 						/>
-						<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
-							<a
-								href=""
-								class="px-1 border-2 border-gray-200 bg-gray-200"
-								:class="{
+						<span></span>
+						<div class="flex gap-x-1 justify-end">
+							<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
+								<a
+									href=""
+									class="px-1 border-2 border-gray-200 bg-gray-200"
+									:class="{
 										'bg-white': selected_day === i + 1 && selected_date === '', 
+										'border-gray-800': selected_day === i + 1 && selected_date === '', 
 										'font-bold': selected_day === i + 1,
 										'underline': week[i+1],
 										'text-red-800': i > 4
 									}"
-								@click.prevent="select(i+1)"
-								x-text="d"
-							></a>
-						</template>
-						<a
-							href=""
-							class="align-middle material-symbols-outlined bg-white"
-							@click.prevent="select(1)"
-							>instant_mix</a
-						>
+									@click.prevent="select((i+1).toString())"
+									><span x-text="d"></span
+									><span
+										class="align-middle ml-1 material-symbols-outlined"
+										x-show="selected_day === i + 1 && selected_date === ''"
+										>close</span
+									></a
+								>
+							</template>
+						</div>
 					</div>
 
 					<div class="flex">
@@ -303,14 +237,15 @@
 					//now,
 
 					select(day) {
-						if (day === "") {
+						if (day === this.selected_day.toString() && !this.selected_date) {
 							this.selected_date = this.last_date[0];
 							this.selected_day = this.last_date[1];
+							this.event = { ...DEFAULT, day: day };
 						} else {
+							this.event = this.week[day] || { ...DEFAULT, day: day };
 							this.selected_date = "";
-							this.selected_day = day;
+							this.selected_day = Number(day);
 						}
-						this.event = { ...DEFAULT };
 					},
 
 					select_time(time) {
@@ -319,18 +254,15 @@
 								item.time === time &&
 								((!this.selected_date &&
 									item.day === this.selected_day.toString()) ||
-									item.date === this.selected_date),
+									(this.selected_date && item.date === this.selected_date)),
 						) || {
 							...DEFAULT,
 							time: time,
 						};
 					},
 
-					select_date(date) {
-						let dateTime = luxon.DateTime.fromISO(this.selected_date).set({
-							day: date,
-						});
-						this.selected_date = dateTime.toFormat("yyyy-LL-dd");
+					select_date() {
+						let dateTime = luxon.DateTime.fromISO(this.selected_date);
 						this.selected_day = dateTime.toFormat("c");
 						this.last_date = [this.selected_date, this.selected_day];
 						this.list();
@@ -381,10 +313,13 @@
 
 					async fetch(method, event) {
 						let response = await (
-							await fetch(`/api/admin/calendar?${this.last_date[0]}`, {
-								method: method,
-								body: event ? JSON.stringify(event) : null,
-							})
+							await fetch(
+								`/api/admin/calendar?${this.selected_date || this.last_date[0]}`,
+								{
+									method: method,
+									body: event ? JSON.stringify(event) : null,
+								},
+							)
 						).json();
 						this.events = response.day;
 						this.month = response.month;

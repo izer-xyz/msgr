@@ -57,48 +57,33 @@
 		</header>
 		<main class="max-w-96 flex flex-col m-auto text-xs border-4 border-white">
 			<span class="text-lg font-bold pb-2">Messages</span>
-			<p class="mx-4 mb-4 p-2 text-white bg-green-800 rounded-lg">
-				? Send a message to the board (type and send), setup a daily message (by
-				select the day of the week), or delete a message from the list at the
-				bottom.
-			</p>
 			<div x-data="context" x-init="list">
 				<form
 					@submit.prevent="msg.content && save(msg)"
 					class="flex flex-col gap-4"
 				>
 					<div class="flex flex-col">
-						<div class="flex gap-x-1 justify-between">
-							<a
-								href=""
-								class="flex-auto font-bold"
-								:class="{'text-white':selected_date}"
-							>
-								<span x-text="dateOrDay().split(' ')[0]"></span>
-								<span class="align-middle material-symbols-outlined"
-									>close</span
-								>
-							</a>
+						<div class="flex gap-x-1 justify-end">
 							<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
 								<a
 									href=""
 									class="px-1 border-2 border-gray-200 bg-gray-200"
 									:class="{
 												'bg-white': selected_day === i + 1 && selected_date === '', 
+												'border-gray-800': selected_day === i + 1 && selected_date === '', 
 												'font-bold': selected_day === i + 1,
 											  'underline': week[i+1],
 												'text-red-800': i > 4
 											}"
-									@click.prevent="select(i+1)"
-									x-text="d"
-								></a>
+									@click.prevent="select((i+1).toString())"
+									><span x-text="d"></span
+									><span
+										class="align-middle ml-1 material-symbols-outlined"
+										x-show="selected_day === i + 1 && selected_date === ''"
+										>close</span
+									></a
+								>
 							</template>
-							<a
-								href=""
-								class="align-middle material-symbols-outlined bg-white"
-								@click.prevent="select(1)"
-								>instant_mix</a
-							>
 						</div>
 					</div>
 					<div class="flex flex-col ml-2">
@@ -132,7 +117,7 @@
 						<div
 							class="flex justify-between items-center mb-1 pl-2 leading-3 hover:bg-white"
 							:class="{'bg-white': msg === item}"
-							x-show="item.day === selected_day || item.date && selected_date"
+							x-show="item.day === selected_day.toString() || item.date && selected_date"
 						>
 							<div class="w-[19em] flex flex-col font-semibold">
 								<div class="mb-[12px] flex flex-col">
@@ -207,14 +192,15 @@
 					selected_day: Number(now()[2]),
 
 					select(day) {
-						if (day === "") {
+						if (day === this.selected_day.toString() && !this.selected_date) {
 							this.selected_date = this.last_date[0];
 							this.selected_day = this.last_date[1];
+							this.msg = { ...DEFAULT, day: day };
 						} else {
+							this.msg = this.week[day] || { ...DEFAULT, day: day };
 							this.selected_date = "";
-							this.selected_day = day;
+							this.selected_day = Number(day);
 						}
-						this.msg = this.week[day] || { ...DEFAULT, day: day };
 					},
 
 					async list() {
@@ -233,6 +219,8 @@
 						let response = await this.fetch("POST", msg);
 						// todo check for errors.
 						this.msg = { ...DEFAULT };
+						this.selected_date = this.last_date[0];
+						this.selected_day = this.last_date[1];
 					},
 
 					async remove(msg) {
