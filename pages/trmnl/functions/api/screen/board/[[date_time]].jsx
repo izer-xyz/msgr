@@ -33,7 +33,7 @@ async function screen(device, { env, params }) {
         .reduce((list, i) => (i[1] ? list.push(i[1]) && list : list), [])
         .sort(
           (a, b) =>
-            -a.time.localeCompare(b.time) - 100 * a.day.localeCompare(b.day),
+            -a.time.localeCompare(b.time) - 100 * (Number(a.day) - Number(b.day)),
         )
     : [];
 
