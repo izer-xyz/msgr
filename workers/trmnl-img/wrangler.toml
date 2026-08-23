@@ -1,0 +1,14 @@
+"$schema" = "node_modules/wrangler/config-schema.json"
+name = "durable-object-starter"
+main = "src/index.js"
+compatibility_date = "2026-08-20"
+upload_source_maps = true
+send_metrics = false
+
+[observability]
+enabled = true
+
+[[rules]]
+type = "Data"
+globs = ["**/*.woff", "**/*.woff2"]
+fallthrough = true 
