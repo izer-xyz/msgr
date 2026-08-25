@@ -1,24 +1,29 @@
-import { render } from "takumi-js";
+import { from } from "../../../src/device.js";
 import { encode } from "fast-png";
+import welcome from "./welcome.js";
+import board from "./board.js";
 
-import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2"; 
-import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2"; 
-import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2";
-
-export default {
-	async fetch(request, env, ctx) {
-		return process(screen)(ctx); 
-	},
+const SCREENS = {
+  welcome,
+  board,
 };
 
-export function process(render) {
-  return async (ctx) => {
-    let device = {time_zone : "Australia/Sydney", width: 1872, height:1404, depth:4}; 
-    let raw = await render(device, ctx); 
-    let png = encode(greyscale(device, raw));
+export default {
+  // /api/screen/{screen}/[{date}/{time}/]{version}.png
+  async fetch(request, env, ctx) {
+    let path = new URL(request.url).pathname.split("/").filter((a) => a !== "");
+    let device = (await from(env.TRMNL_DEVICES, request.headers)).device;
+
+    if (path.length < 4 || device.screen !== path[2]) {
+      return new Response("Not found", { status: 404 });
+    }
+
+    let screen = SCREENS[device.screen] || SCREENS.welcome;
+    let png = encode(greyscale(device, await screen(device, path, env)));
+
     return new Response(png, { headers: { "Content-Type": "image/png" } });
-  };
-}
+  },
+};
 
 function greyscale(device, data) {
   let out = {
@@ -47,40 +52,3 @@ function greyscale(device, data) {
 
   return out;
 }
-
-function screen(device) {
-  let dateTime = new Date();
-  let date = dateTime.toLocaleDateString("fr-FR", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: device.time_zone,
-  });
-  let time = dateTime.toLocaleTimeString("fr-FR", {
-    timeStyle: "short",
-    timeZone: device.time_zone,
-  });
-
-  console.log(`[INFO /api/screen/${device.id}] ${date} ${time}`);
-
-  return render(
-    `<div tw="flex h-full w-full flex-col justify-center bg-white p-20">
-      <div tw="flex flex-col">
-        <h1 tw="m-0 text-9xl font-normal leading-none text-black"> ${time} </h1>
-        <h1 tw="m-0 text-9xl font-bold leading-none text-black capitalize">
-          ${date} 🍜
-        </h1>
-      </div>
-    </div>`,
-    {
-      width: Number(device.width),
-      height: Number(device.height),
-      format: "raw",
-      emoji: "from-font",
-      fonts: [font1,font2,emoji],
-    },
-  );
-}
-
-

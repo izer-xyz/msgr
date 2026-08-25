@@ -1,11 +1,11 @@
 {
-  "name": "durable-object-starter",
-  "version": "0.0.0",
+  "name": "trmnl-img",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
+    "dev": "wrangler dev --port 8080 --ip 0.0.0.0",
+    "start": "wrangler dev --port 8080 --ip 0.0.0.0",
     "test": "vitest"
   },
   "devDependencies": {

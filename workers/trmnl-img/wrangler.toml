@@ -1,5 +1,5 @@
 "$schema" = "node_modules/wrangler/config-schema.json"
-name = "durable-object-starter"
+name = "trmnl-img"
 main = "src/index.js"
 compatibility_date = "2026-08-20"
 upload_source_maps = true
@@ -12,3 +12,11 @@ enabled = true
 type = "Data"
 globs = ["**/*.woff", "**/*.woff2"]
 fallthrough = true 
+
+[[kv_namespaces]]
+binding = "TRMNL_DEVICES"
+id = "93fbad6022314b8995a3c5d952a0d7cf"
+
+[[kv_namespaces]]
+binding = "TRMNL_BOARD"
+id = "5fd6e1078bfd4781bc1b0e379618e45e"

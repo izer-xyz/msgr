@@ -20,6 +20,19 @@ args = "cd pages/trmnl && npm install"
 task = "shell.exec"
 args = "cd pages/trmnl && npm start"
 
+[[workflows.workflow]]
+name = "trmnl_img"
+mode = "sequential"
+author = 3410761
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd workers/trmnl-img && npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd workers/trmnl-img && npm run dev"
+
 [[ports]]
 localPort = 8080
 externalPort = 8080
