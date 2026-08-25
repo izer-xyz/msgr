@@ -205,7 +205,7 @@
 					},
 					async preview(el, device) {
 						if (!device.id) return;
-						let url = `/api/screen/${getFilename(device)}`;
+						let url = `/api/screen-v2/${getFilename(device)}`;
 						let options = {
 							headers: {
 								ID: device.id,
