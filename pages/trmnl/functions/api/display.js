@@ -20,7 +20,7 @@ export async function onRequest({ request, env }) {
     filename: filename.replaceAll("/", "_"),
     //'firmware_url': null,
     //'firmware_version': null,
-    image_url: new URL(`/api/screen/${filename}`, request.url),
+    image_url: new URL(`/api/screen-v2/${filename}`, request.url),
     //'image_url_timeout': 0,
     //'maximum_compatibility': false,
     refresh_rate: device.sleep || device.refresh_rate,
