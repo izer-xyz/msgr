@@ -34,9 +34,7 @@ export default async function screen(device, path, env) {
   return render(
     `<div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] text-black text-6xl px-4 font-bold leading-loose">
       <div tw="flex text-8xl pb-16">
-        <div tw="grow capitalize self-center">
-          ${dayText}, ${dateText}
-        </div>
+        <div tw="grow capitalize self-center">${dayText}, ${dateText}</div>
         <div tw="text-9xl">${time}</div>
       </div>
       <div tw="flex justify-between m-4 text-5xl">
@@ -64,9 +62,7 @@ function render_events(events) {
             <div tw="mb-[44px]">
               <span tw="text-gray-700 text-6xl">${event.time} </span>
               <span tw="text-6xl">${event.subject}</span>
-              <div tw="font-normal mt-[16px]" x-show="event.content">
-                ${event.content}
-              </div>
+              <div tw="font-normal mt-[16px]" x-show="event.content">${event.content}</div>
             </div>`,
     "",
   );
@@ -76,9 +72,7 @@ function render_messages(messages) {
   return messages.reduce(
     (html, message) => `${html}
             <div tw="mb-[44px] flex flex-col">
-              <span tw="border-[2px] border-gray-700 rounded-4xl px-[24px] py-[16px]">
-                ${message.content}
-              </span>
+              <span tw="border-[2px] border-gray-700 rounded-4xl px-[24px] py-[16px]">${message.content}</span>
               <span tw="self-end text-4xl">${message.from} </span>
             </div>`,
     "",
