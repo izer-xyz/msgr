@@ -43,8 +43,8 @@ export default class Device {
         ) / coef,
       ) * coef,
     )
-      .toLocalString("lt-LT")
-      .relpaceAll(" ", "/");
+      .toLocaleString("lt-LT")
+      .replaceAll(" ", "/");
 
     return `${this.device.screen}/${dateTime}/0.png`;
   }

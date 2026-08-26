@@ -21,17 +21,17 @@ task = "shell.exec"
 args = "cd pages/trmnl && npm start"
 
 [[workflows.workflow]]
-name = "trmnl_img"
+name = "trmnl_api"
 mode = "sequential"
 author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/trmnl-img && npm install"
+args = "cd workers/trmnl-img && npm install && cd ../trmnl-api && npm install "
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/trmnl-img && npm run dev"
+args = "cd workers/trmnl-api && npx wrangler dev --port 8080 --ip 0.0.0.0 -c wrangler.toml -c ../trmnl-img/wrangler.toml"
 
 [[ports]]
 localPort = 8080

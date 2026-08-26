@@ -1,0 +1,17 @@
+{
+  "name": "trmnl-api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev --port 8080 --ip 0.0.0.0",
+    "start": "wrangler dev --port 8080 --ip 0.0.0.0",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.125.0"
+  },
+  "dependencies": {}
+}

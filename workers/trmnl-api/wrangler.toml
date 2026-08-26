@@ -1,0 +1,13 @@
+"$schema" = "node_modules/wrangler/config-schema.json"
+name = "trmnl-api"
+main = "src/index.js"
+compatibility_date = "2026-08-20"
+upload_source_maps = true
+send_metrics = false
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "TRMNL_DEVICES"
+id = "93fbad6022314b8995a3c5d952a0d7cf"
