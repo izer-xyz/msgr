@@ -44,6 +44,7 @@ export default class Device {
       ) * coef,
     )
       .toLocaleString("lt-LT")
+      .slice(0, -3)
       .replaceAll(" ", "/");
 
     return `${this.device.screen}/${dateTime}/0.png`;

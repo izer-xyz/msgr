@@ -5,12 +5,11 @@ send_metrics = false
 
 [[kv_namespaces]]
 binding = "TRMNL_DEVICES"
-id = "trmnl_devices"
+id = "93fbad6022314b8995a3c5d952a0d7cf"
 
 [[kv_namespaces]]
 binding = "TRMNL_BOARD"
-id = "trmnl_board"
-
+id = "5fd6e1078bfd4781bc1b0e379618e45e"
 
 # [[analytics_engine_datasets]]
 # binding = "TRMNL_ANALYTICS"

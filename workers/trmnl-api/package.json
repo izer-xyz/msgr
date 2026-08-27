@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev --port 8080 --ip 0.0.0.0",
-    "start": "wrangler dev --port 8080 --ip 0.0.0.0",
+    "dev": "wrangler dev --persist-to ../../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0",
+    "start": "wrangler dev --persist-to ../../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0",
     "test": "vitest"
   },
   "devDependencies": {

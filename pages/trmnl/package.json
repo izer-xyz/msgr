@@ -2,7 +2,7 @@
   "name": "msgr-trmnl",
   "private": true,
   "scripts": {
-    "start": "X_LOCAL_OBSERVABILITY=true wrangler pages dev public --port 8080 --ip 0.0.0.0"
+    "start": "X_LOCAL_OBSERVABILITY=true wrangler pages dev --persist-to ../../.wrangler public --port 8080 --inspector-port 9220 --ip 0.0.0.0"
   },
   "dependencies": {
     "fast-png": "^8.0.0",

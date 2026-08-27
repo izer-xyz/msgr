@@ -5,34 +5,46 @@ channel = "stable-25_05"
 packages = ["vim"]
 
 [workflows]
-runButton = "TRMNL"
+runButton = "trmnl_ADM"
 
 [[workflows.workflow]]
-name = "TRMNL"
-mode = "sequential"
+name = "trmnl_ADM"
+mode = "parallel"
 author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd pages/trmnl && npm install"
+args = "cd pages/trmnl && npm install && npm start"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd pages/trmnl && npm start"
+args = "cd workers/trmnl-img && npm install && npm run dev "
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd workers/trmnl-api && npm install && npm run dev "
 
 [[workflows.workflow]]
-name = "trmnl_api"
-mode = "sequential"
+name = "trmnl_APIS"
+mode = "parallel"
 author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/trmnl-img && npm install && cd ../trmnl-api && npm install "
+args = "cd workers/trmnl-api && npm install && npm run dev "
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/trmnl-api && npx wrangler dev --port 8080 --ip 0.0.0.0 -c wrangler.toml -c ../trmnl-img/wrangler.toml"
+args = "cd workers/trmnl-img && npm install && npm run dev "
+
+[[ports]]
+localPort = 8000
+externalPort = 8000
 
 [[ports]]
 localPort = 8080
 externalPort = 8080
+
+[[ports]]
+localPort = 8099
+externalPort = 8099
