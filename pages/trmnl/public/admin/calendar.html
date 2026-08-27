@@ -98,6 +98,7 @@
 							:value="event.time"
 							class=""
 							@change.prevent="select_time($el.value)"
+							autofocus
 						>
 							<option value="">--:--</option>
 							<template x-for="h in 13">
@@ -109,11 +110,10 @@
 						<input
 							name="subject"
 							type="text"
-							autofocus
 							x-model="event.subject"
-							x-init="$watch('event.subject', () => $el.focus())"
 							placeholder="Activite"
 							class="flex-auto rounded-md border-1 p-1 ml-2 font-bold"
+							x-init="$watch('event.subject', v => v && $el.focus())"
 						/>
 					</div>
 					<textarea
@@ -249,16 +249,14 @@
 					},
 
 					select_time(time) {
-						this.event = this.events.find(
-							(item) =>
-								item.time === time &&
-								((!this.selected_date &&
-									item.day === this.selected_day.toString()) ||
-									(this.selected_date && item.date === this.selected_date)),
-						) || {
-							...DEFAULT,
-							time: time,
-						};
+						this.event =
+							this.events.find(
+								(item) =>
+									item.time === time &&
+									((!this.selected_date &&
+										item.day === this.selected_day.toString()) ||
+										(this.selected_date && item.date === this.selected_date)),
+							) || this.event;
 					},
 
 					select_date() {
