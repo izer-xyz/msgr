@@ -12,21 +12,32 @@ const SCREENS = {
 export default {
   // /api/screen/{screen}/[{date}/{time}/]{version}.png
   async fetch(request, env, ctx) {
-    let path = new URL(request.url).pathname.split("/").filter((a) => a !== "");
-    let device = (await from(env.TRMNL_DEVICES, request.headers)).device;
+    let png = null;
+    if (request.method !== "OPTIONS") {
+      let path = new URL(request.url).pathname
+        .split("/")
+        .filter((a) => a !== "");
+      let device = (await from(env.TRMNL_DEVICES, request.headers)).device;
 
-    if (path.length < 4 || device.screen !== path[2]) {
-      return new Response("Not found", { status: 404 });
+      if (path.length < 4 || device.screen !== path[2]) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      let screen = SCREENS[device.screen] || SCREENS.welcome;
+      let raw = greyscale(device, await screen(device, path, env));
+      png = encode(raw, device.width, device.height, {
+        color: ColorType.Grayscale,
+        depth: Number(device.depth),
+      });
     }
-
-    let screen = SCREENS[device.screen] || SCREENS.welcome;
-    let raw = greyscale(device, await screen(device, path, env));
-    let png = encode(raw, device.width, device.height, {
-      color: ColorType.Grayscale,
-      depth: Number(device.depth),
+    // Access-Control-Allow-* is needed to run locally and fetch cross origin image in admin
+    return new Response(png, {
+      headers: {
+        "Content-Type": "image/png",
+        "Access-Control-Allow-Origin": request.headers.get("origin"),
+        "Access-Control-Allow-Headers": "id",
+      },
     });
-
-    return new Response(png, { headers: { "Content-Type": "image/png" } });
   },
 };
 

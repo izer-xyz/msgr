@@ -10,44 +10,7 @@ export default class Device {
   }
 
   getFilename() {
-    const M = 60 * 1000,
-      H = 60 * M,
-      D = 24 * H,
-      W = 7 * D;
-    let coef =
-      [
-        M,
-        2 * M,
-        5 * M,
-        10 * M,
-        15 * M,
-        30 * M,
-        H,
-        2 * H,
-        3 * H,
-        6 * H,
-        12 * H,
-        D,
-        2 * D,
-        W,
-      ].find((c) => c >= Number(this.device.refresh_rate) * 1000) || W;
-
-    let dateTime = new Date(
-      Math.ceil(
-        new Date(
-          Date.parse(
-            new Date().toLocaleString("lt-LT", {
-              timeZone: this.device.time_zone,
-            }),
-          ),
-        ) / coef,
-      ) * coef,
-    )
-      .toLocaleString("lt-LT")
-      .slice(0, -3)
-      .replaceAll(" ", "/");
-
-    return `${this.device.screen}/${dateTime}/0.png`;
+    return getFilename(this.device);
   }
 }
 
@@ -153,4 +116,45 @@ function getSleepTime(device) {
   refresh_rate = refresh_rate > device.refresh_rate ? refresh_rate : "";
 
   return refresh_rate;
+}
+
+export function getFilename(device) {
+  const M = 60 * 1000,
+    H = 60 * M,
+    D = 24 * H,
+    W = 7 * D;
+  let coef =
+    [
+      M,
+      2 * M,
+      5 * M,
+      10 * M,
+      15 * M,
+      30 * M,
+      H,
+      2 * H,
+      3 * H,
+      6 * H,
+      12 * H,
+      D,
+      2 * D,
+      W,
+    ].find((c) => c >= Number(device.refresh_rate) * 1000) || W;
+
+  let dateTime = new Date(
+    Math.ceil(
+      new Date(
+        Date.parse(
+          new Date().toLocaleString("lt-LT", {
+            timeZone: device.time_zone,
+          }),
+        ),
+      ) / coef,
+    ) * coef,
+  )
+    .toLocaleString("lt-LT")
+    .slice(0, -3)
+    .replaceAll(" ", "/");
+
+  return `${device.screen}/${dateTime}/0.png`;
 }

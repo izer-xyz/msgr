@@ -8,7 +8,7 @@ export default {
     let response = null;
 
     if (path[1] === "display") {
-      response = await display(data, request);
+      response = await display(data, request, env);
     } else if (path[1] === "log") {
       log(data, request);
       return new Response(null, { status: 204 });
@@ -21,7 +21,7 @@ export default {
   },
 };
 
-async function display(data, request) {
+async function display(data, request, env) {
   // only save twice/3 a day KV limits apply
   if (
     new Date(data.device.updated || 0).toDateString() !==
@@ -31,6 +31,9 @@ async function display(data, request) {
     await data.save();
   }
   let filename = data.getFilename();
+
+  metrics(data, env);
+
   return {
     filename: filename.replaceAll("/", "_"),
     //'firmware_url': null,
@@ -41,8 +44,6 @@ async function display(data, request) {
     refresh_rate: data.device.sleep || data.device.refresh_rate,
     reset_firmware: false,
     //'special_function': 'none',
-    //'temperature_profile': 'default',
-    //'touchbar_mode': 'tap',
     update_firmware: false,
   };
 }
@@ -68,4 +69,30 @@ async function setup(data, request) {
     message: "Welcome",
     status: 200,
   };
+}
+
+async function metrics(data, env) {
+  if (env.TRMNL_ANALYTICS) {
+    env.TRMNL_ANALYTICS.writeDataPoint({
+      blobs: [
+        data.device["x-real-ip"],
+        data.device.model,
+        data.device["fw-version"],
+        data.device.friendly_id,
+        data.getFilename(),
+      ],
+      doubles: [
+        Number(data.device["wake-time"]),
+        Number(data.device["battery-voltage"]),
+        Number(data.device.refresh_rate),
+      ],
+      indexes: [data.device.id],
+    });
+  } else {
+    // no analytics just save to KV
+    console.log(
+      `[INFO /api/display/${data.device.id}] ${JSON.stringify(data.device)}`,
+    );
+    await data.save();
+  }
 }

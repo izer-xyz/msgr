@@ -1,0 +1,32 @@
+<header
+  x-data="page"
+  class="max-w-96 m-auto text-2xl text-center font-[Material_Symbols_Outlined] my-2 flex bg-gray-200 border-4 border-b-0 border-gray-200"
+>
+  <a
+    href="?messages"
+    class="px-1 grow"
+    :class="{ 'bg-white': $el.href.endsWith(name) }"
+    >chat</a
+  >
+  <a
+    href="?events"
+    class="px-1 grow"
+    :class="{ 'bg-white': $el.href.endsWith(name) }"
+  >
+    calendar_clock
+  </a>
+  <a
+    href="?device"
+    class="px-1 grow"
+    :class="{ 'bg-white': $el.href.endsWith(name) }"
+  >
+    aod_tablet
+  </a>
+  <a
+    href="?profile"
+    class="px-1 grow"
+    :class="{ 'bg-white': $el.href.endsWith(name) }"
+  >
+    settings
+  </a>
+</header>
