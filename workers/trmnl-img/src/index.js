@@ -1,45 +1,59 @@
+import { WorkerEntrypoint } from "cloudflare:workers";
+import { Router } from "@tsndr/cloudflare-worker-router";
 import { encode, ColorType } from "@cf-wasm/png";
 
 import { from } from "../../../src/device.js";
-import welcome from "./welcome.js";
-import board from "./board.js";
+import welcomeRoute from "./welcome.js";
+import boardRoute from "./board.js";
 
-const SCREENS = {
-  welcome,
-  board,
-};
+// Initialize Router
+const router = new Router();
 
-export default {
-  // /api/screen/{screen}/[{date}/{time}/]{version}.png
-  async fetch(request, env, ctx) {
-    let png = null;
-    if (request.method !== "OPTIONS") {
-      let path = new URL(request.url).pathname
-        .split("/")
-        .filter((a) => a !== "");
-      let device = (await from(env.TRMNL_DEVICES, request.headers)).device;
+// Enabling build in CORS support
+router.cors();
 
-      if (path.length < 4 || device.screen !== path[2]) {
-        return new Response("Not found", { status: 404 });
-      }
+let welcome = welcomeRoute("/api/screen-v2/welcome", router, greyPngResponse);
+let board = boardRoute("/api/screen-v2/board", router, greyPngResponse);
 
-      let screen = SCREENS[device.screen] || SCREENS.welcome;
-      let raw = greyscale(device, await screen(device, path, env));
-      png = encode(raw, device.width, device.height, {
-        color: ColorType.Grayscale,
-        depth: Number(device.depth),
-      });
-    }
-    // Access-Control-Allow-* is needed to run locally and fetch cross origin image in admin
-    return new Response(png, {
-      headers: {
-        "Content-Type": "image/png",
-        "Access-Control-Allow-Origin": request.headers.get("origin"),
-        "Access-Control-Allow-Headers": "id",
-      },
-    });
-  },
-};
+router.use(async ({ env, req }) => {
+  req.device = (await from(env.TRMNL_DEVICES, req.headers)).device;
+  // TODO improve auth
+  if (req.url.indexOf(req.device.screen) < 0) {
+    console.log(
+      `[WARN] Device screen (${req.device.screen}) doesn't match url (${req.url})`,
+    );
+    return greyPngResponse(await welcome(req.device), req.device);
+  }
+});
+
+// Listen Cloudflare Workers Fetch Event
+export default class Img extends WorkerEntrypoint {
+  async fetch(request) {
+    return router.handle(request, this.env, this.ctx, null, { device: {} });
+  }
+  async preview(device, request) {
+    return greyPngResponse(
+      await ({ welcome, board }[device.screen] || welcome)(
+        device,
+        request,
+        this.env,
+      ),
+    );
+  }
+}
+
+function greyPngResponse(img, device) {
+  let raw = greyscale(device, img);
+  let png = encode(raw, device.width, device.height, {
+    color: ColorType.Grayscale,
+    depth: Number(device.depth),
+  });
+  return new Response(png, {
+    headers: {
+      "Content-Type": "image/png",
+    },
+  });
+}
 
 function greyscale(device, data) {
   let size = Number(device.width) * Number(device.height);

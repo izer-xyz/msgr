@@ -6,10 +6,17 @@ import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2"
 import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2";
 import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2";
 
-//path : /api/screen/{screen}/[{date}/{time}/]{version}.png
-export default async function screen(device, path, env) {
-  let date = path[3];
-  let time = path[4];
+export default function (path, router, greyPngResponse) {
+  //path : /api/screen/{screen}/[{date}/{time}/]{version}.png
+  router.get(`${path}/:date/:time/:v.png`, async ({ req, env }) =>
+    greyPngResponse(await screen(req.device, req, env), req.device),
+  );
+  return screen;
+}
+
+async function screen(device, req, env) {
+  let date = req.params.date;
+  let time = req.params.time;
   let dateTime = new Date(date + " " + time);
   let dateText = dateTime.toLocaleDateString("fr-FR", {
     year: "numeric",

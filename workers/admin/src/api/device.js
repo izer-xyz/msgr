@@ -3,6 +3,8 @@ import { default as Device, from, list } from "../../../../src/device.js";
 export default function (path, router) {
   router.get(path, listDevices);
 
+  router.get(`${path}/preview`, ({ req, env }) => preview(req, env));
+
   router.post(path, async ({ env, req, ctx }) => {
     let device = new Device(
       from(env.TRMNL_DEVICES, null, await req.json()),
@@ -21,7 +23,12 @@ export default function (path, router) {
   });
 }
 
+async function preview(req, env) {
+  let device = (await list(env.TRMNL_DEVICES))[0];
+  return await env.TRMNL_IMG.preview(device, req);
+}
+
 async function listDevices({ env }) {
-  let devices = list(env.TRMNL_DEVICES);
+  let devices = await list(env.TRMNL_DEVICES);
   return Response.json({ devices });
 }

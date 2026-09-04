@@ -5,7 +5,7 @@ channel = "stable-25_05"
 packages = ["vim"]
 
 [workflows]
-runButton = "trmnl_ADM"
+runButton = "ADMIN"
 
 [[workflows.workflow]]
 name = "trmnl_ADM"
@@ -31,10 +31,6 @@ author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/trmnl-api && npm install && npm run dev "
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
 args = "cd workers/trmnl-img && npm install && npm run dev "
 
 [[workflows.workflow]]
@@ -49,6 +45,10 @@ args = "cd workers/admin && npm run dev"
 [[ports]]
 localPort = 5173
 externalPort = 5173
+
+[[ports]]
+localPort = 5174
+externalPort = 5000
 
 [[ports]]
 localPort = 8000

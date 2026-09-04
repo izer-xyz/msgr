@@ -25,6 +25,7 @@ export default {
   html,
   data: () => ({
     DEFAULT,
+    loading: true,
     devices: [],
     selected: {
       ...DEFAULT,
@@ -40,6 +41,7 @@ export default {
     },
 
     async fetch(method, device) {
+      this.loading = true;
       let response = await (
         await fetch("/api/admin/device", {
           method: method,
@@ -50,6 +52,7 @@ export default {
       if (this.selected.id === "" && this.devices.length > 0) {
         this.selected = this.devices[0];
       }
+      this.loading = false;
       return response;
     },
 

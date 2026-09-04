@@ -3,7 +3,14 @@ import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2"
 import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2";
 import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2";
 
-export default async function screen(device, path, env) {
+export default function (path, router, greyPngResponse) {
+  router.get(path, async ({ req }) =>
+    greyPngResponse(await screen(req.device), req.device),
+  );
+  return screen;
+}
+
+export async function screen(device) {
   let dateTime = new Date();
   let date = dateTime.toLocaleDateString("fr-FR", {
     weekday: "long",

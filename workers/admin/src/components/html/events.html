@@ -35,17 +35,16 @@
 			</div>
 
 			<div class="flex">
-				<select
-					name="time"
-					:value="event.time"
-					class=""
-					@change.prevent="select_time($el.value)"
-					autofocus
-				>
-					<option value="">--:--</option>
+				<select name="time" x-model="event.time" class="" autofocus>
+					<option value="" :class="{'text-red-800': slot_taken($el.value)}">
+						--:--
+					</option>
 					<template x-for="h in 13">
 						<template x-for="m in ['00', '30']">
-							<option x-text="`${h+7<10?'0':''}${h+7}:${m}`"></option>
+							<option
+								x-text="`${h+7<10?'0':''}${h+7}:${m}`"
+								:class="{'text-red-800': slot_taken($el.value)}"
+							></option>
 						</template>
 					</template>
 				</select>
@@ -119,7 +118,7 @@
 						href=""
 						class="px-1 material-symbols-outlined"
 						x-show="item.date || !selected_date"
-						@click.prevent="(event === item ? event = { ...DEFAULT } : event = item)"
+						@click.prevent="(event.id === item.id ? event = { ...DEFAULT } : event = { ...item })"
 						>edit</a
 					>
 					<a

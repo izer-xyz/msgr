@@ -32,6 +32,7 @@ const DEFAULTS = {
 export async function list(kv) {
   let devices = [];
   let keys = (await kv.list()).keys.map((key) => key.name);
+  console.log(JSON.stringify(keys));
   if (keys.length !== 0) {
     devices = (await Promise.all(await kv.get(keys, "json"))).reduce(
       (list, i) => (i[1] ? list.push(i[1]) && list : list),

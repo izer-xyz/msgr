@@ -50,18 +50,14 @@ export default {
       }
     },
 
-    select_time(time) {
-      let existing = this.events.find(
+    slot_taken(time) {
+      return this.events.find(
         (item) =>
           item.time === time &&
+          this.event.time !== time &&
           ((!this.selected_date && item.day === this.selected_day.toString()) ||
             (this.selected_date && item.date === this.selected_date)),
       );
-      if (existing) {
-        this.event = existing;
-      } else {
-        this.event.time = time;
-      }
     },
 
     select_date() {

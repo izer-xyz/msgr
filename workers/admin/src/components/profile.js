@@ -10,6 +10,7 @@ export default {
   html,
   data: () => ({
     DEFAULT_PROFILE,
+    loading: true,
     profile: {
       ...DEFAULT_PROFILE,
     },
@@ -24,6 +25,7 @@ export default {
     },
 
     async fetch(method, profile) {
+      this.loading = true;
       let response = await (
         await fetch("/api/admin/profile", {
           method: method,
@@ -31,6 +33,7 @@ export default {
         })
       ).json();
       this.profile = response.profile;
+      this.loading = false;
       return response;
     },
   }),

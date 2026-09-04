@@ -32,7 +32,8 @@
       <div class="flex items-center justify-end gap-x-2 mt-4">
         <button
           type="submit"
-          class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1"
+          x-bind:disabled="loading"
+          class="self-end text-white bg-black font-semibold rounded-lg px-2 py-1 disabled:opacity-50"
         >
           Enregsitrer
         </button>

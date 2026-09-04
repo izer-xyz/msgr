@@ -5,7 +5,10 @@ import materialSymbols from "vite-plugin-material-symbols";
 
 export default defineConfig({
   plugins: [
-    cloudflare({ persistState: { path: "../../.wrangler" } }),
+    cloudflare({
+      persistState: { path: "../../.wrangler" },
+      auxiliaryWorkers: [{ configPath: "../trmnl-img/wrangler.toml" }],
+    }),
     tailwindcss(),
     materialSymbols(),
   ],
