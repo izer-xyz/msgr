@@ -11,3 +11,8 @@ enabled = true
 [[kv_namespaces]]
 binding = "TRMNL_DEVICES"
 id = "93fbad6022314b8995a3c5d952a0d7cf"
+
+[[analytics_engine_datasets]]
+binding = "TRMNL_ANALYTICS"
+dataset = "trmnl_analytics"
+
