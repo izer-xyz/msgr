@@ -19,6 +19,10 @@ id = "93fbad6022314b8995a3c5d952a0d7cf"
 binding = "TRMNL_BOARD"
 id = "5fd6e1078bfd4781bc1b0e379618e45e"
 
+[[analytics_engine_datasets]]
+binding = "TRMNL_AUDIT"
+dataset = "trmnl_audit"
+
 [[services]]
 binding = "TRMNL_IMG"
 service = "trmnl-img"
