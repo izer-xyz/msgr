@@ -41,10 +41,12 @@ export default {
         this.selected_day = this.last_date[1];
         this.event = { ...DEFAULT };
       } else {
-        this.event = this.events.find((m) => m.day == day) || {
-          ...DEFAULT,
-          day: day,
-        };
+        this.event = this.event.id
+          ? {
+              ...DEFAULT,
+              day: day,
+            }
+          : this.event;
         this.selected_date = "";
         this.selected_day = Number(day);
       }
@@ -54,7 +56,7 @@ export default {
       return this.events.find(
         (item) =>
           item.time === time &&
-          this.event.time !== time &&
+          (!this.event.id || this.event.time !== time) &&
           ((!this.selected_date && item.day === this.selected_day.toString()) ||
             (this.selected_date && item.date === this.selected_date)),
       );

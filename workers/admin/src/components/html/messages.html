@@ -1,40 +1,61 @@
-<main class="max-w-96 flex flex-col m-auto text-xs border-4 border-white">
+<main class="max-w-96 flex flex-col m-auto text-md/6 border-4 border-white">
 	<span class="text-lg font-bold pb-2">Messages</span>
 	<div x-data="messages" x-init="list">
 		<form
 			@submit.prevent="msg.content && save(msg)"
 			class="flex flex-col gap-4"
 		>
-			<div class="flex flex-col">
-				<div class="flex gap-x-1 justify-end">
-					<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
-						<a
-							href=""
-							class="px-1 border-2 border-gray-200 bg-gray-200"
-							:class="{
+			<div class="flex flex-col border-2 border-gray-200 rounded-md p-2">
+				<div class="font-bold">Selectioner le jour</div>
+				<div class="">
+					<label
+						><input
+							type="radio"
+							:checked="selected_date"
+							@click="select(selected_day.toString())"
+						/>
+						Aujourd'hui
+					</label>
+				</div>
+				<div class="">
+					<label
+						><input
+							type="radio"
+							:checked="!selected_date"
+							@click="select(selected_day.toString())"
+						/>
+						Récurrents
+					</label>
+					<div class="flex gap-x-1 justify-end items-center">
+						<template x-for="(d,i) in ['Lu','Ma','Me','Je','Ve','Sa','Di']">
+							<a
+								href=""
+								class="px-1 border-2 border-gray-200 bg-gray-200"
+								:class="{
 										'bg-white': selected_day === i + 1 && selected_date === '', 
 										'border-gray-800': selected_day === i + 1 && selected_date === '', 
 										'font-bold': selected_day === i + 1,
 										'text-red-800': i > 4
 									}"
-							@click.prevent="select((i+1).toString())"
-							><span x-text="d"></span
-							><span
-								class="align-middle ml-1 material-symbols-outlined"
-								x-show="selected_day === i + 1 && selected_date === ''"
-								>close</span
-							></a
-						>
-					</template>
+								@click.prevent="select((i+1).toString())"
+								><span x-text="d"></span
+								><span
+									class="align-middle ml-1 material-symbols-outlined"
+									x-show="selected_day === i + 1 && selected_date === ''"
+									>close</span
+								></a
+							>
+						</template>
+					</div>
 				</div>
 			</div>
-			<div class="flex flex-col ml-2">
+			<div class="flex flex-col">
 				<textarea
 					id="content"
 					name="content"
 					autofocus
 					x-model="msg.content"
-					class="font-bold rounded-md border-1 p-1"
+					class="font-bold rounded-md border-1 p-2"
 					rows="2"
 					placeholder="Tapez votre message ici et appuyez sur Entrée pour envoyer."
 					x-init="$watch('msg.content', () => $el.focus())"

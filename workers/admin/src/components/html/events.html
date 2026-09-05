@@ -107,7 +107,10 @@
 					x-show="(item.day === selected_day.toString() && !events[0].hide) || item.date && selected_date && !item.hide"
 				>
 					<div class="mb-[8px] w-[19em] text-md font-bold">
-						<span class="text-gray-700 text-lg" x-text="item.time"></span>
+						<span
+							class="text-gray-700 text-lg tabular-nums"
+							x-text="item.time"
+						></span>
 						<span class="text-lg" x-text="item.subject"></span>
 						<div
 							class="font-normal text-xs ml-[1px]"
