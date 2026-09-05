@@ -1,9 +1,7 @@
-@import "@fontsource/nebula-sans/400.css";
-@import "@fontsource/nebula-sans/700.css";
 @import "@fontsource/noto-sans/400.css";
 @import "@fontsource/noto-sans/700.css";
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Nebula Sans", sans-serif; 
+  --font-sans: "Noto Sans", sans-serif; 
 }
