@@ -2,8 +2,8 @@ import { Message } from "../../../src/event.js";
 import { Calendar } from "../../../src/event.js";
 
 import { render } from "takumi-js";
-import font1 from "@fontsource/nebula-sans/files/nebula-sans-latin-400-normal.woff2";
-import font2 from "@fontsource/nebula-sans/files/nebula-sans-latin-400-normal.woff2";
+import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2";
+import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2";
 import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2";
 
 export default function (path, router, greyPngResponse) {
@@ -39,7 +39,7 @@ async function screen(device, req, env) {
   console.log(`[INFO /api/screen/board/${device.id}] ${dateTime}`);
 
   return render(
-    `<div tw="flex h-full w-full flex-col bg-white font-[Nebula_Sans] text-black text-6xl px-4 font-bold leading-loose">
+    `<div tw="flex h-full w-full flex-col bg-white font-[Noto_Sans] text-black text-6xl px-4 font-bold leading-loose">
       <div tw="flex text-8xl pb-16">
         <div tw="grow capitalize self-center">${dayText}, ${dateText}</div>
         <div tw="text-9xl tabular-nums">${time}</div>
