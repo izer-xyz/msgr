@@ -22,12 +22,12 @@ export default function (path, router) {
     return listDevices({ env });
   });
 }
-
+/*
 async function preview(req, env) {
   let device = (await list(env.TRMNL_DEVICES))[0];
   return await env.TRMNL_IMG.preview(device, req);
 }
-
+*/
 async function listDevices({ env }) {
   let devices = await list(env.TRMNL_DEVICES);
   return Response.json({ devices });
