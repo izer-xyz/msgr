@@ -6,12 +6,10 @@ export default function (path, router) {
   router.get(`${path}/preview`, ({ req, env }) => preview(req, env));
 
   router.post(path, async ({ env, req, ctx }) => {
-    let device = new Device(
-      from(env.TRMNL_DEVICES, null, await req.json()),
-      env.TRMNL_DEVICES,
-    );
+    let device = await from(env.TRMNL_DEVICES, null, await req.json());
 
     await device.save();
+    console.log(device);
     await ctx.exports.Audit.audit(
       req.user,
       `D.${device.device.id}`,

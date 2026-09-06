@@ -43,7 +43,7 @@ export async function list(kv) {
 }
 
 // Create a device from a request headers (with defaults and saved device)
-export async function from(kv, headers = {}, request = {}) {
+export async function from(kv, headers, request = {}) {
   const IGNORE_HEADERS = [
     "host",
     "connection",
@@ -63,12 +63,18 @@ export async function from(kv, headers = {}, request = {}) {
     "cf-visitor",
   ];
 
-  let device = await kv.get(headers.get("id") || DEFAULTS.id, "json");
+  let device = await kv.get(
+    (headers && headers.get("id")) || DEFAULTS.id,
+    "json",
+  );
 
   // All headers are lowercase
-  let trmnlHeaders = Object.fromEntries(
-    headers.entries().filter(([key]) => !IGNORE_HEADERS.includes(key)),
-  );
+  let trmnlHeaders =
+    (headers &&
+      Object.fromEntries(
+        headers.entries().filter(([key]) => !IGNORE_HEADERS.includes(key)),
+      )) ||
+    {};
 
   device = {
     ...DEFAULTS,

@@ -1,8 +1,12 @@
-<main class="max-w-96 flex flex-col m-auto text-md/6 border-4 border-white">
-	<span class="text-lg font-bold pb-2">Programme</span>
-	<div x-data="events" x-init="list">
+<main
+	x-data="events"
+	x-init="list"
+	class="md:max-w-full mx-auto max-w-96 flex flex-col md:flex-row text-md/6 border-4 border-white gap-x-8 justify-center"
+>
+	<div class="md:max-w-96 flex-1 mt-4">
+		<span class="flex text-lg font-bold mb-4">Programme</span>
 		<form @submit.prevent="save(event)" class="flex flex-col gap-4">
-			<div class="flex flex-col bg-gray-200 rounded-md p-2">
+			<div class="flex flex-col bg-gray-200 rounded-md px-2 py-1">
 				<div class="font-bold">Sélectionner le jour</div>
 				<div class="ml-4 flex flex-cols gap-x-1">
 					<input
@@ -96,24 +100,31 @@
 				</button>
 			</div>
 		</form>
+	</div>
 
-		<div class="my-2 capitalize font-bold flex items-center justify-between">
-			<span class="text-lg" x-text="dateOrDay"></span>
-			<a
-				href=""
-				title="activités récurrentes"
-				class="px-1 mr-3 border-2 border-white bg-gray-200"
-				x-show="selected_date"
-				:class="{
-					'line-through': hide_all || events[0] && events[0].hide
-				}"
-				@click.prevent="events[0].hide ? remove(events[0]) : hide()"
-				@mouseenter="hide_all = !(events[0] && events[0].hide)"
-				@mouseleave="hide_all = (events[0] && events[0].hide)"
-				><span x-text="dateOrDay().substring(0,2)"></span>
-			</a>
-		</div>
-		<div id="preview" class="flex-1 flex flex-col p-2 bg-gray-200 h-[25em]">
+	<div class="md:max-w-96 flex-1 md:order-first mt-4 flex flex-col">
+		<div
+			id="preview"
+			class="flex flex-col px-2 h-[30em] bg-gray-200 rounded-md"
+		>
+			<div
+				class="mb-4 mt-1 capitalize font-bold flex items-center justify-between"
+			>
+				<span class="text-lg" x-text="dateOrDay"></span>
+				<a
+					href=""
+					title="activités récurrentes"
+					class="px-1 mr-1 border-2 border-white bg-gray-200"
+					x-show="selected_date"
+					:class="{
+						'line-through': hide_all || events[0] && events[0].hide
+					}"
+					@click.prevent="events[0].hide ? remove(events[0]) : hide()"
+					@mouseenter="hide_all = !(events[0] && events[0].hide)"
+					@mouseleave="hide_all = (events[0] && events[0].hide)"
+					><span x-text="dateOrDay().substring(0,2)"></span>
+				</a>
+			</div>
 			<template x-for="(item,index) in events">
 				<div
 					class="flex justify-between items-center hover:bg-white pl-2"
