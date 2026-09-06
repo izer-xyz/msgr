@@ -32,7 +32,7 @@ export default {
     last_date: [now()[0], Number(now()[2])],
     selected_date: now()[0],
     selected_day: Number(now()[2]),
-
+    hide_all: false,
     //now,
 
     select(day) {
@@ -64,7 +64,7 @@ export default {
 
     select_date() {
       let dateTime = DateTime.fromISO(this.selected_date);
-      this.selected_day = dateTime.toFormat("c");
+      this.selected_day = Number(dateTime.toFormat("c"));
       this.last_date = [this.selected_date, this.selected_day];
       this.list();
     },

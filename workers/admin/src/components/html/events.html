@@ -3,12 +3,12 @@
 	<div x-data="events" x-init="list">
 		<form @submit.prevent="save(event)" class="flex flex-col gap-4">
 			<div class="flex flex-col bg-gray-200 rounded-md p-2">
-				<div class="font-bold">Selectioner le jour</div>
+				<div class="font-bold">Sélectionner le jour</div>
 				<div class="ml-4 flex flex-cols gap-x-1">
 					<input
 						type="radio"
 						:checked="selected_date"
-						@click="select(selected_day.toString())"
+						@click="!selected_date && select(selected_day.toString())"
 					/>
 					<input
 						type="date"
@@ -23,7 +23,7 @@
 						><input
 							type="radio"
 							:checked="!selected_date"
-							@click="select(selected_day.toString())"
+							@click="selected_date && select(selected_day.toString())"
 						/>
 						Récurrents
 					</label>
@@ -101,13 +101,15 @@
 			<span class="text-lg" x-text="dateOrDay"></span>
 			<a
 				href=""
+				title="activités récurrentes"
 				class="px-1 mr-3 border-2 border-white bg-gray-200"
 				x-show="selected_date"
 				:class="{
-					'line-through': events[0] && events[0].hide,
-					'text-red-800': selected_day > 4
+					'line-through': hide_all || events[0] && events[0].hide
 				}"
 				@click.prevent="events[0].hide ? remove(events[0]) : hide()"
+				@mouseenter="hide_all = !(events[0] && events[0].hide)"
+				@mouseleave="hide_all = (events[0] && events[0].hide)"
 				><span x-text="dateOrDay().substring(0,2)"></span>
 			</a>
 		</div>
@@ -116,10 +118,10 @@
 				<div
 					class="flex justify-between items-center hover:bg-white pl-2"
 					:class="{
-						'bg-white': event === item, 
+						'bg-white': event.id === item.id, 
 						'text-red-800': event.subject !=='' && !item.day && event.id !== item.id && event.time === item.time
 					}"
-					x-show="(item.day === selected_day.toString() && !events[0].hide) || item.date && selected_date && !item.hide"
+					x-show="(item.day === selected_day.toString() && (!events[0].hide || !selected_date)) || item.date && selected_date && !item.hide"
 				>
 					<div class="mb-[8px] w-[19em] text-md font-bold">
 						<span
@@ -141,13 +143,15 @@
 					>
 					<a
 						href=""
+						title="masquer les activités récurrentes"
 						class="px-1 mr-1 border-2 border-white bg-gray-200 capitalize"
 						x-show="!item.date && selected_date"
 						:class="{
-							'line-through': events[0] && events[0].hide,
-							'text-red-800': selected_day > 4
+							'line-through': hide_all || events[0] && events[0].hide
 						}"
-						@click.prevent="events[0].hide ? remove(events[0]) : hide()"
+						@click.prevent="hide()"
+						@mouseenter="hide_all = true"
+						@mouseleave="hide_all = false"
 						><span x-text="dateOrDay().substring(0,2)"></span>
 					</a>
 				</div>

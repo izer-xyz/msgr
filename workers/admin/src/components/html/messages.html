@@ -6,13 +6,13 @@
 			class="flex flex-col gap-4"
 		>
 			<div class="flex flex-col bg-gray-200 rounded-md p-2">
-				<div class="font-bold">Selectioner le jour</div>
+				<div class="font-bold">Sélectionner le jour</div>
 				<div class="ml-4">
 					<label
 						><input
 							type="radio"
 							:checked="selected_date"
-							@click="select(selected_day.toString())"
+							@click="!selected_date && select(selected_day.toString())"
 						/>
 						Aujourd'hui
 					</label>
@@ -22,7 +22,7 @@
 						><input
 							type="radio"
 							:checked="!selected_date"
-							@click="select(selected_day.toString())"
+							@click="selected_date && select(selected_day.toString())"
 						/>
 						Récurrents
 					</label>
@@ -80,7 +80,7 @@
 			<template x-for="item in msgs">
 				<div
 					class="flex justify-between items-center mb-1 pl-2 leading-3 hover:bg-white"
-					:class="{'bg-white': msg === item}"
+					:class="{'bg-white': msg.id === item.id}"
 					x-show="item.day === selected_day.toString() || item.date && selected_date"
 				>
 					<div class="w-[19em] flex flex-col font-semibold">
