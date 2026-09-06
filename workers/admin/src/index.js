@@ -7,7 +7,7 @@ import device from "./components/device.js";
 import messages from "./components/messages.js";
 import events from "./components/events.js";
 
-let page = messages; // default page
+let page = device; // default page
 let name = window.location.search.substring(1);
 page = { profile, messages, device, events }[name] || page;
 

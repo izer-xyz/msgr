@@ -3,6 +3,13 @@
   class="max-w-96 m-auto text-2xl text-center font-[Material_Symbols_Outlined] flex bg-gray-200 border-4 border-b-0 border-gray-200"
 >
   <a
+    href="?device"
+    class="px-1 grow"
+    :class="{ 'bg-white': $el.href.endsWith(name) }"
+  >
+    aod_tablet
+  </a>
+  <a
     href="?messages"
     class="px-1 grow"
     :class="{ 'bg-white': $el.href.endsWith(name) }"
@@ -16,17 +23,10 @@
     calendar_clock
   </a>
   <a
-    href="?device"
-    class="px-1 grow"
-    :class="{ 'bg-white': $el.href.endsWith(name) }"
-  >
-    aod_tablet
-  </a>
-  <a
     href="?profile"
     class="px-1 grow"
     :class="{ 'bg-white': $el.href.endsWith(name) }"
   >
-    settings
+    account_circle
   </a>
 </header>
