@@ -1,10 +1,10 @@
 <main
 	x-data="device"
 	x-init="list"
-	class="md:max-w-full mx-auto max-w-96 flex flex-col md:flex-row text-md/6 border-4 border-white gap-x-8 justify-center"
+	class="flex flex-col text-md/6 border-4 border-white gap-x-8 justify-center"
 >
 	<!-- span class="text-lg font-bold pb-2">Tablette</span -->
-	<div class="md:max-w-[40%] flex-1 mt-4">
+	<div class="md:w-[80%] md:mx-auto flex-1 mt-4 ">
 		<div class="border-2 border-gray-200 p-2 pb-6">
 			<div class="bg-black">
 				<img
@@ -16,7 +16,7 @@
 	</div>
 	<form
 		@submit.prevent="save(selected, $el)"
-		class="md:max-w-96 flex-1 mt-4 flex flex-col gap-2"
+		class="max-w-96 md:w-96 md:mx-auto flex-1 mt-4 flex flex-col gap-2"
 	>
 		<span class="flex text-lg font-bold mb-4">Tablette</span>
 
