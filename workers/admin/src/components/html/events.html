@@ -119,7 +119,7 @@
 					class="flex justify-between items-center hover:bg-white pl-2"
 					:class="{
 						'bg-white': event.id === item.id, 
-						'text-red-800': event.subject !=='' && !item.day && event.id !== item.id && event.time === item.time
+						'text-red-800': event.subject !=='' && event.id !== item.id && (!selected_date || !item.day) && event.time === item.time
 					}"
 					x-show="(item.day === selected_day.toString() && (!events[0].hide || !selected_date)) || item.date && selected_date && !item.hide"
 				>
