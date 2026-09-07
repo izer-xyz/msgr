@@ -58,7 +58,7 @@ export default {
 
     async preview(el, device) {
       if (!device.id) return;
-      let url = `https://ab8060d6-d4de-47ba-9058-c70ce8b22c7f-00-1dg3tgfs5q12d.worf.replit.dev:5000/api/screen-v2/${getFilename(device)}`;
+      let url = `/api/screen-v2/${getFilename(device)}`;
       let options = {
         headers: {
           ID: device.id,
