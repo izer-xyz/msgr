@@ -1,4 +1,4 @@
-import { default as Device, from, list } from "../../../../src/device.js";
+import { from, list } from "../../../../src/device.js";
 
 export default function (path, router) {
   router.get(path, listDevices);
@@ -9,7 +9,6 @@ export default function (path, router) {
     let device = await from(env.TRMNL_DEVICES, null, await req.json());
 
     await device.save();
-    console.log(device);
     await ctx.exports.Audit.audit(
       req.user,
       `D.${device.device.id}`,
@@ -20,12 +19,13 @@ export default function (path, router) {
     return listDevices({ env });
   });
 }
-/*
+
 async function preview(req, env) {
   let device = (await list(env.TRMNL_DEVICES))[0];
+  console.log("[INFO] /api/admin/device/preview", device);
   return await env.TRMNL_IMG.preview(device, req);
 }
-*/
+
 async function listDevices({ env }) {
   let devices = await list(env.TRMNL_DEVICES);
   return Response.json({ devices });

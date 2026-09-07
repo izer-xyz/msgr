@@ -1,7 +1,7 @@
 import { render } from "takumi-js";
-import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2";
-import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2";
-import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2";
+import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2?inline";
+import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2?inline";
+import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2?inline";
 
 export default function (path, router, greyPngResponse) {
   router.get(path, async ({ req }) =>

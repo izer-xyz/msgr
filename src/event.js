@@ -31,7 +31,8 @@ class Events {
 
     let keys = [...dayList, ...dateList].map((key) => key.name);
     console.log(
-      `List ${this.type}|${this.event.date}|${this.event.day}: ${keys}`,
+      `[INFO] Event.list ${this.type}|${this.event.date}|${this.event.day}`,
+      keys,
     );
     if (keys.length === 0) return [];
     let hide = !showAll && keys.find((key) => key.endsWith("..-")); // special case to hide all events can only be on a daand the reference is "-"

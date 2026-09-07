@@ -90,14 +90,14 @@
 			></div>
 			<template x-for="item in msgs">
 				<div
-					class="flex justify-between items-center mb-1 pl-2 leading-3 rounded-md hover:bg-white"
+					class="flex justify-between mb-1 pl-2 leading-[1.1] rounded-md hover:bg-white"
 					:class="{'bg-white': msg.id === item.id}"
 					x-show="item.day === selected_day.toString() || item.date && selected_date"
 				>
-					<div class="w-[19em] flex flex-col font-semibold">
+					<div class="w-[19em] flex flex-col font-bold">
 						<div class="mb-[12px] flex flex-col">
 							<span
-								class="border-b-[2px] border-black px-[16px] py-[8px]"
+								class="border-[1px] border-black order-gray-700 rounded-[1em] px-[12px] py-[8px]"
 								x-text="item.content"
 							>
 							</span>
