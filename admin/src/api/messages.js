@@ -1,4 +1,4 @@
-import { Message } from "../../../../src/event.js";
+import { Message } from "../../../src/event.js";
 
 export default function (path, router) {
   router.get(path, listMessages);

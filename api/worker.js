@@ -1,4 +1,4 @@
-import { from } from "../../../src/device.js";
+import { from } from "../src/device.js";
 
 export default {
   // /api/[display|log|setup]

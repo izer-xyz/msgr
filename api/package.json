@@ -5,12 +5,9 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev --persist-to ../../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0",
-    "start": "wrangler dev --persist-to ../../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0",
-    "test": "vitest"
+    "start": "wrangler dev --persist-to ../../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.22.0",
-    "vitest": "~4.1.0",
     "wrangler": "^4.125.0"
   },
   "dependencies": {}

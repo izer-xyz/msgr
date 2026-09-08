@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     cloudflare({
       persistState: { path: "../../.wrangler" },
-      auxiliaryWorkers: [{ configPath: "../trmnl-img/wrangler.toml" }],
+      auxiliaryWorkers: [{ configPath: "../img/wrangler.toml" }],
     }),
     tailwindcss(),
   ],

@@ -2,9 +2,9 @@ import { WorkerEntrypoint } from "cloudflare:workers";
 import { Router } from "@tsndr/cloudflare-worker-router";
 import { encode, ColorType } from "@cf-wasm/png";
 
-import { from } from "../../../src/device.js";
-import welcomeRoute from "./welcome.js";
-import boardRoute from "./board.js";
+import { from } from "../src/device.js";
+import welcomeRoute from "./src/welcome.js";
+import boardRoute from "./src/board.js";
 
 // Initialize Router
 const router = new Router();

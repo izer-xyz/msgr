@@ -8,30 +8,13 @@ packages = ["vim"]
 runButton = "ADMIN"
 
 [[workflows.workflow]]
-name = "trmnl_ADM"
+name = "APIS"
 mode = "parallel"
 author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd pages/trmnl && npm install && npm start"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd workers/trmnl-img && npm install && npm run dev "
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd workers/trmnl-api && npm install && npm run dev "
-
-[[workflows.workflow]]
-name = "trmnl_APIS"
-mode = "parallel"
-author = 3410761
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd workers/trmnl-api && npm install && npm run dev "
+args = "cd api && npm install && npm run dev "
 
 [[workflows.workflow]]
 name = "ADMIN"
@@ -40,7 +23,7 @@ author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/admin && npm run dev"
+args = "cd admin && npm install && npm run dev"
 
 [[ports]]
 localPort = 5173

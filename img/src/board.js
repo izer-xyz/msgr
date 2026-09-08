@@ -1,5 +1,5 @@
-import { Message } from "../../../src/event.js";
-import { Calendar } from "../../../src/event.js";
+import { Message } from "../../src/event.js";
+import { Calendar } from "../../src/event.js";
 
 import { render } from "takumi-js";
 import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2?inline";

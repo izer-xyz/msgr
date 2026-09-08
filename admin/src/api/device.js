@@ -1,4 +1,4 @@
-import { from, list, deviceDateTime } from "../../../../src/device.js";
+import { from, list, deviceDateTime } from "../../../src/device.js";
 
 export default function (path, router) {
   router.get(path, listDevices);
