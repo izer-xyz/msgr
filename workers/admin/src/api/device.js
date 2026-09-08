@@ -1,4 +1,4 @@
-import { from, list } from "../../../../src/device.js";
+import { from, list, deviceDateTime } from "../../../../src/device.js";
 
 export default function (path, router) {
   router.get(path, listDevices);
@@ -21,9 +21,18 @@ export default function (path, router) {
 }
 
 async function preview(req, env) {
-  let device = (await list(env.TRMNL_DEVICES))[0];
-  console.log("[INFO] /api/admin/device/preview", device);
-  return await env.TRMNL_IMG.preview(device, req);
+  let device = (
+    await from(env.TRMNL_DEVICES, new Map(Object.entries(req.query)))
+  ).device;
+
+  let now = deviceDateTime(device).split(" ");
+
+  console.log("[INFO] /api/admin/device/preview", device.id, now);
+
+  return await env.TRMNL_IMG.preview(device, {
+    date: now[0],
+    time: now[1],
+  });
 }
 
 async function listDevices({ env }) {

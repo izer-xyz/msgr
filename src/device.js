@@ -126,6 +126,11 @@ function getSleepTime(device) {
 }
 
 export function getFilename(device) {
+  let dateTime = deviceDateTime(device).replaceAll(" ", "/");
+  return `${device.screen}/${dateTime}/0.png`;
+}
+
+export function deviceDateTime(device) {
   const M = 60 * 1000,
     H = 60 * M,
     D = 24 * H,
@@ -148,7 +153,7 @@ export function getFilename(device) {
       W,
     ].find((c) => c >= Number(device.refresh_rate) * 1000) || W;
 
-  let dateTime = new Date(
+  return new Date(
     Math.ceil(
       new Date(
         Date.parse(
@@ -160,8 +165,5 @@ export function getFilename(device) {
     ) * coef,
   )
     .toLocaleString("lt-LT")
-    .slice(0, -3)
-    .replaceAll(" ", "/");
-
-  return `${device.screen}/${dateTime}/0.png`;
+    .slice(0, -3);
 }

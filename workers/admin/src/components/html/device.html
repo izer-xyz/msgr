@@ -4,11 +4,12 @@
 	class="flex flex-col text-md/6 border-4 border-white gap-x-8 justify-center"
 >
 	<!-- span class="text-lg font-bold pb-2">Tablette</span -->
-	<div class="md:w-[80%] md:mx-auto flex-1 mt-4 ">
+	<div class="md:w-[80%] md:mx-auto flex-1 mt-4">
 		<div class="border-2 border-gray-200 p-2 pb-6">
 			<div class="bg-black">
 				<img
-					x-init="$watch('selected', v => preview($el, v))"
+					x-show="!loading"
+					:src="`/api/admin/device/preview?id=${selected.id}`"
 					class="w-full h-auto opacity-85"
 				/>
 			</div>

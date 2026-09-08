@@ -31,7 +31,7 @@ author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd workers/trmnl-img && npm install && npm run dev "
+args = "cd workers/trmnl-api && npm install && npm run dev "
 
 [[workflows.workflow]]
 name = "ADMIN"

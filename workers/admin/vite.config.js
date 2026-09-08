@@ -6,11 +6,14 @@ export default defineConfig({
   plugins: [
     cloudflare({
       persistState: { path: "../../.wrangler" },
-      //auxiliaryWorkers: [{ configPath: "../trmnl-img/wrangler.toml" }],
+      auxiliaryWorkers: [{ configPath: "../trmnl-img/wrangler.toml" }],
     }),
     tailwindcss(),
   ],
   server: {
     allowedHosts: true,
+    fs: {
+      allow: [".."],
+    },
   },
 });

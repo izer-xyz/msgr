@@ -38,6 +38,7 @@ export default class Img extends WorkerEntrypoint {
         request,
         this.env,
       ),
+      device,
     );
   }
 }

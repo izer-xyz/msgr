@@ -1,5 +1,4 @@
 import html from "./html/device.html?raw";
-import { getFilename } from "../../../../src/device.js";
 
 const DEFAULT = {
   id: "",
@@ -54,17 +53,6 @@ export default {
       }
       this.loading = false;
       return response;
-    },
-
-    async preview(el, device) {
-      if (!device.id) return;
-      let url = `/api/screen-v2/${getFilename(device)}`;
-      let options = {
-        headers: {
-          ID: device.id,
-        },
-      };
-      el.src = URL.createObjectURL(await (await fetch(url, options)).blob());
     },
   }),
 };

@@ -9,14 +9,14 @@ import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff
 export default function (path, router, greyPngResponse) {
   //path : /api/screen/{screen}/[{date}/{time}/]{version}.png
   router.get(`${path}/:date/:time/:v.png`, async ({ req, env }) =>
-    greyPngResponse(await screen(req.device, req, env), req.device),
+    greyPngResponse(await screen(req.device, req.params, env), req.device),
   );
   return screen;
 }
 
-async function screen(device, req, env) {
-  let date = req.params.date;
-  let time = req.params.time;
+async function screen(device, params, env) {
+  let date = params.date;
+  let time = params.time;
   let dateTime = new Date(date + " " + time);
   let dateText = dateTime.toLocaleDateString("fr-FR", {
     year: "numeric",
