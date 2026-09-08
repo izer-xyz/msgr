@@ -70,8 +70,8 @@ async function screen(device, params, env) {
 function render_events(events) {
   return events.reduce(
     (html, event) => `${html}
-            <div tw="mb-[44px]">
-              <div tw="text-[60px] leading-[1em]"><span tw="text-gray-700">${event.time} </span>${event.subject}</div>
+            <div tw="mb-[44px] border-l-[16px] border-gray-500 p-[16px] h-[80vh]">
+              <div tw="text-[60px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
               <div tw="font-normal mt-[16px]" x-show="event.content">${event.content}</div>
             </div>`,
     "",
@@ -82,7 +82,7 @@ function render_messages(messages) {
   return messages.reduce(
     (html, message) => `${html}
             <div tw="mb-[44px] flex flex-col">
-              <span tw="border-[2px] border-gray-700 rounded-[44px] px-[24px] py-[16px]">${message.content}</span>
+              <span tw="border-b-[2px] border-gray-700 px-[24px] py-[16px]">${message.content}</span>
               <span tw="self-end text-[44px]">${message.from} </span>
             </div>`,
     "",

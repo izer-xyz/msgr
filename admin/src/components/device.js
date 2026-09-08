@@ -13,7 +13,7 @@ const DEFAULT = {
   time_zone: "",
   rssi: "",
   updated: "",
-  "battery-voltage": "",
+  "battery-voltage": "0",
   "x-real-ip": "",
   "fw-version": "",
   model: "",
@@ -53,6 +53,13 @@ export default {
       }
       this.loading = false;
       return response;
+    },
+
+    battery() {
+      let b = Math.round(
+        (Number(this.selected["battery-voltage"] || 0) - 3.1) * 6,
+      );
+      return b < 0 ? 0 : b > 6 ? 6 : b;
     },
   }),
 };
