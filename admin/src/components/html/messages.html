@@ -79,7 +79,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="md:max-w-96 flex-1 md:order-first mt-4 flex flex-col">
+	<div class="md:max-w-74 flex-1 md:order-first mt-4 flex flex-col">
 		<div
 			id="preview"
 			class="flex flex-col px-2 h-[30em] bg-gray-200 rounded-md"
@@ -90,14 +90,14 @@
 			></div>
 			<template x-for="item in msgs">
 				<div
-					class="flex justify-between mb-1 pl-2 leading-[1.1] rounded-md hover:bg-white"
+					class="flex justify-between mb-1 pl-2 leading-[1.2] rounded-md hover:bg-white"
 					:class="{'bg-white': msg.id === item.id}"
 					x-show="item.day === selected_day.toString() || item.date && selected_date"
 				>
-					<div class="w-[19em] flex flex-col font-bold">
+					<div class="w-[19em] flex flex-col">
 						<div class="mb-[12px] flex flex-col">
 							<span
-								class="border-[1px] border-black order-gray-700 rounded-[1em] px-[12px] py-[8px]"
+								class="border-b-[1px] border-black order-gray-700 px-[12px] py-[8px]"
 								x-text="item.content"
 							>
 							</span>
@@ -112,14 +112,14 @@
 					</div>
 					<a
 						href=""
-						class="px-1 material-symbols-outlined"
+						class="material-symbols-outlined p-[8px]"
 						x-show="!item.day"
 						@click.prevent="remove(item)"
 						>delete</a
 					>
 					<a
 						href=""
-						class="px-1 material-symbols-outlined"
+						class="material-symbols-outlined p-[8px]"
 						x-show="item.day"
 						@click.prevent="select(item.day)"
 						>edit</a

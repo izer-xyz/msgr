@@ -115,15 +115,15 @@
 				<a
 					href=""
 					title="activités récurrentes"
-					class="px-1 mr-1 border-2 border-white bg-gray-200"
+					class="px-1"
 					x-show="selected_date"
-					:class="{
-						'line-through': hide_all || events[0] && events[0].hide
-					}"
 					@click.prevent="events[0].hide ? remove(events[0]) : hide()"
 					@mouseenter="hide_all = !(events[0] && events[0].hide)"
 					@mouseleave="hide_all = (events[0] && events[0].hide)"
-					><span x-text="dateOrDay().substring(0,2)"></span>
+					><span
+						class="material-symbols-outlined"
+						x-text="hide_all || events[0].hide ? 'visibility_off' : 'visibility'"
+					></span>
 				</a>
 			</div>
 			<template x-for="(item,index) in events">
@@ -156,15 +156,15 @@
 					<a
 						href=""
 						title="masquer les activités récurrentes"
-						class="px-1 mr-1 border-2 border-white bg-gray-200 capitalize"
+						class="px-1"
 						x-show="!item.date && selected_date"
-						:class="{
-							'line-through': hide_all || events[0] && events[0].hide
-						}"
 						@click.prevent="hide()"
 						@mouseenter="hide_all = true"
 						@mouseleave="hide_all = false"
-						><span x-text="dateOrDay().substring(0,2)"></span>
+						><span
+							class="material-symbols-outlined"
+							x-text="hide_all || events[0].hide ? 'visibility_off' : 'visibility'"
+						></span>
 					</a>
 				</div>
 			</template>
