@@ -45,11 +45,11 @@ async function screen(device, params, env) {
         <div tw="text-[120px]">${time}</div>
       </div>
       <div tw="flex justify-between m-4 text-[48px] leading-[1.2] font-normal">
+        <div tw="w-[1100px] flex flex-col border-r-[2px] border-gray-700 pr-[32px] h-[80vh]">
+          ${render_events(events)}
+        </div>
         <div tw="w-[660px] flex flex-col">
           ${render_messages(messages)}
-        </div>
-        <div tw="w-[1100px] flex flex-col border-l-[2px] border-gray-700 pl-[32px] h-[80vh]">
-          ${render_events(events)}
         </div>
       </div>
     </div>`,
@@ -71,7 +71,7 @@ function render_events(events) {
   return events.reduce(
     (html, event) => `${html}
             <div tw="mb-[44px]">
-              <div tw="font-bold text-[60px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
+              <div tw="font-bold text-[54px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
               <div tw="mt-[16px]" x-show="event.content">${event.content}</div>
             </div>`,
     "",
