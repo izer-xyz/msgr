@@ -5,13 +5,26 @@ export interface Env {
   CALENDAR: KVNamespace;
 }
 
+export const MAX_CONTENT_BYTES = 25 * 1024 * 1024;
+
+export function parseDate(value: string | undefined, fallback = new Date()): Date {
+  const parsed = value ? new Date(value) : fallback;
+  return Number.isNaN(parsed.getTime()) ? fallback : parsed;
+}
+
+export function assertContentSize(content: string): void {
+  if (new TextEncoder().encode(content).byteLength > MAX_CONTENT_BYTES) {
+    throw new RangeError("Content exceeds KV size limit");
+  }
+}
+
 export default {
   async email(message: ForwardableEmailMessage, env: Env): Promise<void> {
     const raw = await new Response(message.raw).arrayBuffer();
     const parsed = await new PostalMime().parse(raw);
 
     // Key: ISO timestamp from the Date header, fallback to now
-    const emailDate = parsed.date ? new Date(parsed.date) : new Date();
+    const emailDate = parseDate(parsed.date);
     const dateKey = emailDate.toISOString();
 
     const from = message.from;
@@ -41,10 +54,9 @@ export default {
         ?.slice(4)
         ?.trim();
 
-      const calKey =
-        dtstart && uid
-          ? `${dtstart}.${uid}`
-          : `${dateKey}.${uid ?? crypto.randomUUID()}`;
+      assertContentSize(icsContent);
+
+      const calKey = uid ?? `${dateKey}.${crypto.randomUUID()}`;
 
       await env.CALENDAR.put(calKey, icsContent, {
         metadata: { from, subject, receivedAt: dateKey },
@@ -53,6 +65,8 @@ export default {
     }
 
     // No ICS — store as a plain message
-    await env.MESSAGES.put(dateKey, JSON.stringify({ time: dateKey, from, subject }));
+    const content = JSON.stringify({ time: dateKey, from, subject });
+    assertContentSize(content);
+    await env.MESSAGES.put(`${dateKey}.${crypto.randomUUID()}`, content);
   },
 };

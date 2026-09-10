@@ -2,6 +2,7 @@
   "name": "trmnl-api",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev --persist-to ../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0",

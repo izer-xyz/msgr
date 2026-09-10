@@ -35,7 +35,7 @@ class Events {
       keys,
     );
     if (keys.length === 0) return [];
-    let hide = !showAll && keys.find((key) => key.endsWith("..-")); // special case to hide all events can only be on a daand the reference is "-"
+    let hide = !showAll && keys.find((key) => key.endsWith(".-")); // special case to hide all recurring events when the reference is "-"
 
     let list = (await Promise.all(await this.kv.get(keys, "json"))).reduce(
       (list, i) =>
@@ -66,10 +66,12 @@ class Events {
 
     this.event.id = id;
     // expire after ~1 month
+    const dateValue = this.event.date && new Date(this.event.date);
+    const validDate = dateValue && !Number.isNaN(dateValue.getTime());
     let expiration =
-      this.event.date &&
+      validDate &&
       !this.event.flag &&
-      new Date(this.event.date).getTime() / 1000 + 31 * 24 * 60 * 60;
+      dateValue.getTime() / 1000 + 31 * 24 * 60 * 60;
     await this.kv.put(
       id,
       JSON.stringify(this.event, null, " "),

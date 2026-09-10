@@ -10,8 +10,13 @@ export default {
     if (path[1] === "display") {
       response = await display(data, request, env);
     } else if (path[1] === "log") {
-      log(data, request);
-      return new Response(null, { status: 204 });
+      try {
+        await log(data, request);
+        return new Response(null, { status: 204 });
+      } catch (error) {
+        console.error("[WARN] Invalid device log payload", error);
+        return new Response("Invalid log payload", { status: 400 });
+      }
     } else if (path[1] === "setup") {
       response = await setup(data, request);
     } else {

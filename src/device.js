@@ -89,7 +89,7 @@ export async function from(kv, headers, request = {}) {
 }
 
 // return seconds between now and end of sleep time (if after start of sleep time)
-function getSleepTime(device) {
+export function getSleepTime(device, now = new Date()) {
   let refresh_rate = 0;
 
   if (
@@ -97,40 +97,48 @@ function getSleepTime(device) {
     device.sleep_to &&
     device.sleep_from !== device.sleep_to
   ) {
-    let from = device.sleep_from
-      .split(":")
-      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+    let from = timeToSeconds(device.sleep_from);
+    let to = timeToSeconds(device.sleep_to);
+    let current = Number.NaN;
 
-    let to = device.sleep_to
-      .split(":")
-      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+    try {
+      current = timeToSeconds(
+        now.toLocaleTimeString("lt-LT", {
+          timeStyle: "short",
+          timeZone: device.time_zone,
+        }),
+      );
+    } catch {
+      return "";
+    }
 
-    let now = new Date()
-      .toLocaleTimeString("lt-LT", {
-        timeStyle: "short",
-        timeZone: device.time_zone,
-      })
-      .split(":")
-      .reduce((r, v) => r * 60 + Number(v) * 60, 0);
+    if (
+      from === null ||
+      to === null ||
+      !Number.isFinite(Number(device.refresh_rate))
+    ) {
+      return "";
+    }
 
-    if (now < to && ((from < to && from < now) || from > to)) {
-      refresh_rate = to - now - 2 * device.refresh_rate;
-    } else if (from > to && from < now) {
-      refresh_rate = to + 24 * 60 * 60 - now - 2 * device.refresh_rate;
+    if (current < to && ((from < to && from < current) || from > to)) {
+      refresh_rate = to - current - 2 * Number(device.refresh_rate);
+    } else if (from > to && from < current) {
+      refresh_rate = to + 24 * 60 * 60 - current - 2 * Number(device.refresh_rate);
     }
   }
 
-  refresh_rate = refresh_rate > device.refresh_rate ? refresh_rate : "";
+  refresh_rate =
+    refresh_rate > Number(device.refresh_rate) ? refresh_rate : "";
 
   return refresh_rate;
 }
 
-export function getFilename(device) {
-  let dateTime = deviceDateTime(device).replaceAll(" ", "/");
+export function getFilename(device, now = new Date()) {
+  let dateTime = deviceDateTime(device, now).replaceAll(" ", "/");
   return `${device.screen}/${dateTime}/0.png`;
 }
 
-export function deviceDateTime(device) {
+export function deviceDateTime(device, now = new Date()) {
   const M = 60 * 1000,
     H = 60 * M,
     D = 24 * H,
@@ -157,7 +165,7 @@ export function deviceDateTime(device) {
     Math.ceil(
       new Date(
         Date.parse(
-          new Date().toLocaleString("lt-LT", {
+      now.toLocaleString("lt-LT", {
             timeZone: device.time_zone,
           }),
         ),
@@ -166,4 +174,9 @@ export function deviceDateTime(device) {
   )
     .toLocaleString("lt-LT")
     .slice(0, -3);
+}
+
+function timeToSeconds(value) {
+  const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(value));
+  return match ? (Number(match[1]) * 60 + Number(match[2])) * 60 : null;
 }

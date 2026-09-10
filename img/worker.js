@@ -5,6 +5,7 @@ import { encode, ColorType } from "@cf-wasm/png";
 import { from } from "../src/device.js";
 import welcomeRoute from "./src/welcome.js";
 import boardRoute from "./src/board.js";
+import { greyscale, validateDisplay } from "./src/image.js";
 
 // Initialize Router
 const router = new Router();
@@ -42,8 +43,8 @@ export default class Img extends WorkerEntrypoint {
     );
   }
 }
-
 function greyPngResponse(img, device) {
+  validateDisplay(device);
   let raw = greyscale(device, img);
   let png = encode(raw, device.width, device.height, {
     color: ColorType.Grayscale,
@@ -54,21 +55,4 @@ function greyPngResponse(img, device) {
       "Content-Type": "image/png",
     },
   });
-}
-
-function greyscale(device, data) {
-  let size = Number(device.width) * Number(device.height);
-  let depth = Number(device.depth);
-
-  let out = new Uint8Array((size * depth) / 8);
-  let channels = data.length / size;
-
-  for (let i = 0; i < size; i++) {
-    // let grey = 0.2126 * data[i * channels] + 0.7152 * data[i * channels + 1] + 0.0722 * data[i * channels + 2];
-    let index = i * channels;
-    let grey = (data[index] + data[index + 1] + data[index + 2]) / 3;
-    out[Math.floor((i * depth) / 8)] |=
-      (grey >> (8 - depth)) << (8 - depth * (1 + (i % (8 / depth))));
-  }
-  return out;
 }
