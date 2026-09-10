@@ -11,8 +11,8 @@ let page = device; // default page
 let name = window.location.search.substring(1);
 page = { profile, messages, device, events }[name] || page;
 
-document.querySelector("#app").innerHTML += nav;
-document.querySelector("#app").innerHTML += page.html;
+document.querySelector("#nav").innerHTML = nav;
+document.querySelector("#app").innerHTML = page.html;
 
 Alpine.data("page", () => ({ name: page.name }));
 Alpine.data(page.name, page.data);

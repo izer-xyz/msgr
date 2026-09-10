@@ -7,6 +7,11 @@
 
 @theme {
   --font-sans: "Noto Sans", "Noto Emoji", sans-serif; 
+  --color-light: var(--color-gray-200);
+  --color-medium: var(--color-gray-400);
+  --color-dark: var(--color-black);
+  --color-highlight: var(--color-blue-950);
+  --color-error: var(--color-red-800);
 }
 
 .material-symbols-outlined {
@@ -21,4 +26,9 @@
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
+}
+
+#app a:hover, #app button:hover {
+  opacity: 0.5; 
+  cursor: pointer;
 }

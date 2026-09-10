@@ -1,32 +1,36 @@
-<header
-  x-data="page"
-  class="max-w-96 m-auto text-3xl text-center font-[Material_Symbols_Outlined] flex bg-gray-200 border-4 border-b-0 border-gray-200"
->
-  <a
-    href="?device"
-    class="px-1 grow"
-    :class="{ 'bg-white': $el.href.endsWith(name) }"
+<div class="flex">
+  <div class="border-b-2 border-medium flex-1"></div>
+  <header
+    x-data="page"
+    class="max-w-96 md:w-96 m-auto text-3xl text-center font-[Material_Symbols_Outlined] flex"
   >
-    aod_tablet
-  </a>
-  <a
-    href="?messages"
-    class="px-1 grow"
-    :class="{ 'bg-white': $el.href.endsWith(name) }"
-    >chat</a
-  >
-  <a
-    href="?events"
-    class="px-1 grow"
-    :class="{ 'bg-white': $el.href.endsWith(name) }"
-  >
-    calendar_clock
-  </a>
-  <a
-    href="?profile"
-    class="px-1 grow"
-    :class="{ 'bg-white': $el.href.endsWith(name) }"
-  >
-    account_circle
-  </a>
-</header>
+    <a
+      href="?device"
+      class="px-1 pt-1 grow border-2 rounded-t-md"
+      :class="$el.href.endsWith(name) ? 'border-medium border-b-transparent' : 'border-b-medium border-transparent text-medium'"
+    >
+      aod_tablet
+    </a>
+    <a
+      href="?messages"
+      class="px-1 pt-1 grow border-2 rounded-t-md"
+      :class="$el.href.endsWith(name) ? 'border-medium border-b-transparent' : 'border-transparent border-b-medium text-medium'"
+      >chat</a
+    >
+    <a
+      href="?events"
+      class="px-1 pt-1 grow border-2 rounded-t-md"
+      :class="$el.href.endsWith(name) ? 'border-medium border-b-transparent' : 'border-transparent border-b-medium text-medium'"
+    >
+      calendar_clock
+    </a>
+    <a
+      href="?profile"
+      class="px-1 pt-1 grow border-2 rounded-t-md"
+      :class="$el.href.endsWith(name) ? 'border-medium border-b-transparent' : 'border-transparent border-b-medium text-medium'"
+    >
+      account_circle
+    </a>
+  </header>
+  <div class="border-b-2 border-medium flex-1"></div>
+</div>
