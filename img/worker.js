@@ -43,6 +43,7 @@ export default class Img extends WorkerEntrypoint {
     );
   }
 }
+
 function greyPngResponse(img, device) {
   validateDisplay(device);
   let raw = greyscale(device, img);

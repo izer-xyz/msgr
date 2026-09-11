@@ -1,80 +1,29 @@
+import { Router } from "@tsndr/cloudflare-worker-router";
 import { from } from "../src/device.js";
 
-export default {
-  // /api/[display|log|setup]
-  async fetch(request, env, ctx) {
-    let path = new URL(request.url).pathname.split("/").filter((a) => a !== "");
-    let data = await from(env.TRMNL_DEVICES, request.headers);
-    let response = null;
+import display from "./src/display.js";
+import log from "./src/log.js";
+import setup from "./src/setup.js";
 
-    if (path[1] === "display") {
-      response = await display(data, request, env);
-    } else if (path[1] === "log") {
-      try {
-        await log(data, request);
-        return new Response(null, { status: 204 });
-      } catch (error) {
-        console.error("[WARN] Invalid device log payload", error);
-        return new Response("Invalid log payload", { status: 400 });
-      }
-    } else if (path[1] === "setup") {
-      response = await setup(data, request);
-    } else {
-      return new Response("Not found", { status: 404 });
-    }
-    return Response.json(response);
+// Initialize Router
+const router = new Router();
+
+// get current user profile
+router.use(async ({ env, req }) => {
+  console.log("[", req.method, new URL(req.url).pathname, "]");
+  req.device = await from(env.TRMNL_DEVICES, req.headers);
+  metrics(req.device, env);
+});
+
+router.get(`/api/setup`, async ({ req }) => setup(req));
+router.get(`/api/display`, async ({ req, env }) => display(req, env));
+router.post(`/api/log`, async ({ req }) => log(req));
+
+export default {
+  async fetch(request, env, ctx) {
+    return router.handle(request, env, ctx, null, { device: {} });
   },
 };
-
-async function display(data, request, env) {
-  // only save twice/3 a day KV limits apply
-  if (
-    new Date(data.device.updated || 0).toDateString() !==
-      new Date().toDateString() ||
-    data.device.sleep !== ""
-  ) {
-    await data.save();
-  }
-  let filename = data.getFilename();
-
-  metrics(data, env);
-
-  return {
-    filename: filename.replaceAll("/", "_"),
-    //'firmware_url': null,
-    //'firmware_version': null,
-    image_url: new URL(`/api/screen-v2/${filename}`, request.url),
-    //'image_url_timeout': 0,
-    //'maximum_compatibility': false,
-    refresh_rate: data.device.sleep || data.device.refresh_rate,
-    reset_firmware: false,
-    //'special_function': 'none',
-    update_firmware: false,
-  };
-}
-
-async function log(data, request) {
-  let body = await request.json();
-  let logs = Array.isArray(body?.logs) ? body.logs : [];
-  for (const log of logs) {
-    console.log(`[/api/log/${data.device.id}] ${JSON.stringify(log)}`);
-  }
-}
-
-async function setup(data, request) {
-  // TODO generate access token
-  data.device.api_key = data.device.id;
-  data.device.friendly_id = data.device.id.slice(-5);
-  await data.save();
-
-  return {
-    api_key: data.device.api_key,
-    friendly_id: data.device.friendly_id,
-    image_url: new URL(`/api/screen-v2/${data.getFilename()}`, request.url),
-    message: "Welcome",
-    status: 200,
-  };
-}
 
 async function metrics(data, env) {
   if (env.TRMNL_ANALYTICS) {

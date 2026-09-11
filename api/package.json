@@ -4,12 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev --persist-to ../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0",
-    "start": "wrangler dev --persist-to ../.wrangler --port 8000 --inspector-port 9221 --ip 0.0.0.0"
+    "dev": "vite dev --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "^4.125.0"
+    "wrangler": "^4.125.0",
+    "@cloudflare/vite-plugin": "^1.54.4",
+    "vite": "^8.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@tsndr/cloudflare-worker-router": "^3.3.3"
+  }
 }
