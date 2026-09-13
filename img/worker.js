@@ -33,6 +33,7 @@ router.use(async ({ env, req }) => {
     return greyPngResponse(await welcome(req), device);
   }
   console.log(`[INFO ${device.screen}/${device.id}]`, req.url);
+  console.log(`[INFO ${device.screen}/${device.id}]`, req.headers);
 });
 
 // Listen Cloudflare Workers Fetch Event
