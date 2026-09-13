@@ -8,9 +8,19 @@ import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-500-normal.woff
 
 export default function (path, router, greyPngResponse) {
   //path : /api/screen/{screen}/[{date}/{time}/]{version}.png
-  router.get(`${path}/:date/:time/:v.png`, async ({ req, env }) =>
+  router.get(`${path}/:date/:time/:filename`, async ({ req, env }) =>
     greyPngResponse(await screen(req.device, req.params, env), req.device),
   );
+
+  router.get(path, async ({ req }) => {
+    return Response.redirect(
+      new URL(
+        `${path}/../${await req.deviceStub.getFilename(req.device)}`,
+        req.url,
+      ),
+      302,
+    );
+  });
   return screen;
 }
 
@@ -36,7 +46,7 @@ async function screen(device, params, env) {
     time = "--:--";
   }
 
-  console.log(`[INFO /api/screen/board/${device.id}] ${dateTime}`);
+  console.log(`[INFO /api/screen/board/${device.id}]`, params);
 
   return render(
     `<div tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">

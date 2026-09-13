@@ -29,6 +29,15 @@ args = "cd img && npm install && npm run dev"
 task = "shell.exec"
 args = "cd admin && npm install && npm run dev"
 
+[[workflows.workflow]]
+name = "IMG"
+mode = "sequential"
+author = 3410761
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd img && npm install && npm run dev"
+
 [[ports]]
 localPort = 5173
 externalPort = 5173
@@ -61,4 +70,9 @@ exposeLocalhost = true
 [[ports]]
 localPort = 9230
 externalPort = 80
+exposeLocalhost = true
+
+[[ports]]
+localPort = 9231
+externalPort = 3001
 exposeLocalhost = true

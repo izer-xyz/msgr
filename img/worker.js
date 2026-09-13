@@ -1,11 +1,14 @@
 import { WorkerEntrypoint } from "cloudflare:workers";
+import { Devices, getStub } from "../api/src/devices.js";
+
 import { Router } from "@tsndr/cloudflare-worker-router";
 import { encode, ColorType } from "@cf-wasm/png";
 
-import { from } from "../src/device.js";
 import welcomeRoute from "./src/welcome.js";
 import boardRoute from "./src/board.js";
 import { greyscale, validateDisplay } from "./src/image.js";
+
+export { Devices };
 
 // Initialize Router
 const router = new Router();
@@ -13,18 +16,23 @@ const router = new Router();
 // Enabling build in CORS support
 router.cors();
 
-let welcome = welcomeRoute("/api/screen-v2/welcome", router, greyPngResponse);
-let board = boardRoute("/api/screen-v2/board", router, greyPngResponse);
+let welcome = welcomeRoute("/api/screen/welcome", router, greyPngResponse);
+let board = boardRoute("/api/screen/board", router, greyPngResponse);
 
 router.use(async ({ env, req }) => {
-  req.device = (await from(env.TRMNL_DEVICES, req.headers)).device;
-  // TODO improve auth
-  if (req.url.indexOf(req.device.screen) < 0) {
-    console.log(
-      `[WARN] Device screen (${req.device.screen}) doesn't match url (${req.url})`,
-    );
-    return greyPngResponse(await welcome(req.device), req.device);
+  req.deviceStub = getStub(env, req);
+  let device = (req.device = await req.deviceStub.from(req.headers));
+  if (!device.updated) {
+    console.log("[WARN img] Unknow device", device.id);
   }
+  // TODO improve auth
+  if (req.url.indexOf(device.screen) < 0) {
+    console.log(
+      `[WARN img] Device screen (${device.screen}) doesn't match url (${req.url})`,
+    );
+    return greyPngResponse(await welcome(req), device);
+  }
+  console.log(`[INFO ${device.screen}/${device.id}]`, req.url);
 });
 
 // Listen Cloudflare Workers Fetch Event

@@ -1,9 +1,12 @@
+import { Devices, getStub } from "./src/devices.js";
 import { Router } from "@tsndr/cloudflare-worker-router";
-import { from } from "../src/device.js";
 
 import display from "./src/display.js";
 import log from "./src/log.js";
 import setup from "./src/setup.js";
+
+// export DurableObject
+export { Devices };
 
 // Initialize Router
 const router = new Router();
@@ -11,8 +14,22 @@ const router = new Router();
 // get current user profile
 router.use(async ({ env, req }) => {
   console.log("[", req.method, new URL(req.url).pathname, "]");
-  req.device = await from(env.TRMNL_DEVICES, req.headers);
-  metrics(req.device, env);
+  req.devices_stub = getStub(env, req);
+  req.device = await req.devices_stub.from(req.headers);
+  if (!req.device.updated) {
+    console.log(
+      "[INFO api] Unknow device",
+      req.device.id,
+      await req.devices_stub.keys(),
+    );
+  } else {
+    console.log(
+      `[INFO api/${req.device.id}] from`,
+      await req.devices_stub.keys(),
+    );
+  }
+  req.analytics = env.TRMNL_ANALYTICS;
+  metrics(req);
 });
 
 router.get(`/api/setup`, async ({ req }) => setup(req));
@@ -25,28 +42,28 @@ export default {
   },
 };
 
-async function metrics(data, env) {
-  if (env.TRMNL_ANALYTICS) {
-    env.TRMNL_ANALYTICS.writeDataPoint({
+async function metrics(req) {
+  if (req.analytics) {
+    req.analytics.writeDataPoint({
       blobs: [
-        data.device["x-real-ip"],
-        data.device.model,
-        data.device["fw-version"],
-        data.device.friendly_id,
-        data.getFilename(),
+        req.device["x-real-ip"],
+        req.device.model,
+        req.device["fw-version"],
+        req.device.friendly_id,
+        await req.devices_stub.getFilename(req.device),
       ],
       doubles: [
-        Number(data.device["wake-time"]),
-        Number(data.device["battery-voltage"]),
-        Number(data.device.refresh_rate),
+        Number(req.device["wake-time"]),
+        Number(req.device["battery-voltage"]),
+        Number(req.device.refresh_rate),
       ],
-      indexes: [data.device.id],
+      indexes: [req.device.id],
     });
   } else {
     // no analytics just save to KV
     console.log(
-      `[INFO /api/display/${data.device.id}] ${JSON.stringify(data.device)}`,
+      `[INFO /api/display/${req.device.id}] ${JSON.stringify(req.device)}`,
     );
-    await data.save();
+    await req.devices_stub.save(req.device);
   }
 }

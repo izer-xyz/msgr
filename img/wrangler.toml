@@ -15,3 +15,8 @@ id = "93fbad6022314b8995a3c5d952a0d7cf"
 [[kv_namespaces]]
 binding = "TRMNL_BOARD"
 id = "5fd6e1078bfd4781bc1b0e379618e45e"
+
+[[durable_objects.bindings]]
+name = "DEVICES"
+class_name = "Devices"
+script_name = "trmnl-api"

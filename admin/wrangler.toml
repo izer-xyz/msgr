@@ -26,3 +26,8 @@ dataset = "trmnl_audit"
 [[services]]
 binding = "TRMNL_IMG"
 service = "trmnl-img"
+
+[[durable_objects.bindings]]
+name = "DEVICES"
+class_name = "Devices"
+script_name = "trmnl-api"

@@ -1,3 +1,4 @@
+import { Devices } from "../api/src/devices.js";
 import { Router } from "@tsndr/cloudflare-worker-router";
 import { jwtDecode } from "jwt-decode";
 import { WorkerEntrypoint } from "cloudflare:workers";
@@ -5,6 +6,8 @@ import { default as profile, PROFILE_PREFIX } from "./src/api/profile.js";
 import device from "./src/api/device.js";
 import messages from "./src/api/messages.js";
 import events from "./src/api/events.js";
+
+export { Devices };
 
 // Initialize Router
 const router = new Router();
@@ -28,6 +31,7 @@ router.use(async ({ env, req }) => {
         email,
         ip,
     };
+    console.log("[", req.method, new URL(req.url).pathname, "]", req.user.name);
     // default name to email
     req.user.name = req.user.name || req.user.email;
 });

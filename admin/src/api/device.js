@@ -1,4 +1,4 @@
-import { from, list, deviceDateTime } from "../../../src/device.js";
+import { getStub } from "../../../api/src/devices.js";
 
 export default function (path, router) {
   router.get(path, listDevices);
@@ -6,27 +6,24 @@ export default function (path, router) {
   router.get(`${path}/preview`, ({ req, env }) => preview(req, env));
 
   router.post(path, async ({ env, req, ctx }) => {
-    let device = await from(env.TRMNL_DEVICES, null, await req.json());
+    let request = await req.json();
+    let stub = getStub(env, req);
+    let device = await stub.from(undefined, request);
 
-    await device.save();
-    await ctx.exports.Audit.audit(
-      req.user,
-      `D.${device.device.id}`,
-      "update",
-      device.device,
-    );
+    console.log(`[INFO /api/device/${device.id}] Save `, request, device);
 
-    return listDevices({ env });
+    await stub.save(device);
+    await ctx.exports.Audit.audit(req.user, `D.${device.id}`, "update", device);
+
+    let devices = await stub.list();
+    return Response.json({ devices });
   });
 }
 
 async function preview(req, env) {
-  let device = (
-    await from(env.TRMNL_DEVICES, new Map(Object.entries(req.query)))
-  ).device;
-
-  let now = deviceDateTime(device).split(" ");
-
+  let stub = getStub(env, req);
+  let device = await stub.from(new Map(Object.entries(req.query)));
+  let now = (await stub.deviceDateTime(device)).split(" ");
   console.log("[INFO] /api/admin/device/preview", device.id, now);
 
   return await env.TRMNL_IMG.preview(device, {
@@ -35,7 +32,8 @@ async function preview(req, env) {
   });
 }
 
-async function listDevices({ env }) {
-  let devices = await list(env.TRMNL_DEVICES);
+async function listDevices({ env, req }) {
+  let stub = getStub(env, req);
+  let devices = await stub.list();
   return Response.json({ devices });
 }

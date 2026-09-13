@@ -5,13 +5,14 @@ import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff
 
 export default function (path, router, greyPngResponse) {
   router.get(path, async ({ req }) =>
-    greyPngResponse(await screen(req.device), req.device),
+    greyPngResponse(await screen(req), req.device),
   );
   return screen;
 }
 
-export async function screen(device) {
-  let dateTime = new Date();
+export async function screen(req) {
+  let device = req.device;
+  let dateTime = new Date(await req.deviceStub.deviceDateTime(device));
   let date = dateTime.toLocaleDateString("fr-FR", {
     weekday: "long",
     year: "numeric",

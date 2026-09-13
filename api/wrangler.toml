@@ -12,6 +12,14 @@ enabled = true
 binding = "TRMNL_DEVICES"
 id = "93fbad6022314b8995a3c5d952a0d7cf"
 
+[[durable_objects.bindings]]
+name = "DEVICES"
+class_name = "Devices"
+
+[exports.Devices]
+type = "durable-object"
+storage = "sqlite"
+
 [[analytics_engine_datasets]]
 binding = "TRMNL_ANALYTICS"
 dataset = "trmnl_analytics"
