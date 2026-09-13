@@ -16,7 +16,8 @@
 				<img
 					@load="$el.parent.class = 'bg-[#566035]'"
 					:src="selected.id && `/api/admin/device/preview?id=${selected.id}`"
-					class="w-full h-auto opacity-80 bg-[#566035]"
+					class="w-full h-auto opacity-80"
+					style="filter: invert(15%) sepia(20%) grayscale(100%)"
 				/>
 			</div>
 		</div>
