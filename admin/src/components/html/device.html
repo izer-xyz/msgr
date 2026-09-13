@@ -12,11 +12,11 @@
 	</div>
 	<div class="md:w-[80%] md:mx-auto flex-1">
 		<div class="border-2 border-light p-2 pb-6">
-			<div class="bg-[#566035]">
+			<div x-show="!loading">
 				<img
-					x-show="!loading"
+					@load="$el.parent.class = 'bg-[#566035]'"
 					:src="selected.id && `/api/admin/device/preview?id=${selected.id}`"
-					class="w-full h-auto opacity-80"
+					class="w-full h-auto opacity-80 bg-[#566035]"
 				/>
 			</div>
 		</div>
@@ -25,16 +25,6 @@
 		@submit.prevent="save(selected, $el)"
 		class="max-w-96 md:w-96 md:mx-auto flex-1 mt-4 flex flex-col gap-2"
 	>
-		<div class="flex flex-col">
-			<label for="battery-voltage">Batterie (V)</label>
-			<input
-				id="battery-voltage"
-				type="text"
-				readonly
-				x-model="selected['battery-voltage']"
-				class="rounded-md p-1 ml-2 text-right"
-			/>
-		</div>
 		<div class="flex flex-col">
 			<label for="sleep_from"
 				>En Veille <span x-text="selected.sleep ? '(actif)' : ''"></span
@@ -77,6 +67,16 @@
 			</button>
 		</div>
 		<div class="my-2 text-lg font-bold capitalize">Technique</div>
+		<div class="flex flex-col">
+			<label for="battery-voltage">Batterie (V)</label>
+			<input
+				id="battery-voltage"
+				type="text"
+				readonly
+				x-model="selected['battery-voltage']"
+				class="rounded-md p-1 ml-2 text-right"
+			/>
+		</div>
 		<div class="flex flex-col">
 			<label for="id">Identifient</label>
 			<select
