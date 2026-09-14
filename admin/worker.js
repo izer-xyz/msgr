@@ -31,7 +31,12 @@ router.use(async ({ env, req }) => {
         email,
         ip,
     };
-    console.log("[", req.method, new URL(req.url).pathname, "]", req.user.name);
+    console.log(
+        { level: "info" },
+        req.method,
+        new URL(req.url).pathname,
+        req.user.name,
+    );
     // default name to email
     req.user.name = req.user.name || req.user.email;
 });

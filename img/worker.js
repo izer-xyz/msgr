@@ -44,11 +44,11 @@ export default class Img extends WorkerEntrypoint {
   async fetch(request) {
     return router.handle(request, this.env, this.ctx, null, { device: {} });
   }
-  async preview(device, request) {
+  async preview(device, params) {
     return greyPngResponse(
       await ({ welcome, board }[device.screen] || welcome)(
         device,
-        request,
+        params,
         this.env,
       ),
       device,

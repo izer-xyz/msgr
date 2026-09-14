@@ -2,6 +2,7 @@
 	x-data="events"
 	x-init="list"
 	class="md:max-w-full mx-auto max-w-96 flex flex-col md:flex-row text-md/6 border-4 border-white gap-x-8 justify-center"
+	:class="{ 'animate-pulse': loading }"
 >
 	<div class="md:max-w-96 flex-1 mt-4">
 		<span class="flex text-lg font-bold mb-4">Programme</span>

@@ -13,7 +13,7 @@ const router = new Router();
 
 // get current user profile
 router.use(async ({ env, req }) => {
-  console.log("[", req.method, new URL(req.url).pathname, "]");
+  console.log({ level: "info" }, req.method, new URL(req.url).pathname);
   req.devices_stub = getStub(env, req);
   req.device = await req.devices_stub.from(req.headers);
   if (!req.device.updated) {

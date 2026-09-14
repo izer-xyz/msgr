@@ -10,7 +10,7 @@ export default function (path, router) {
     let stub = getStub(env, req);
     let device = await stub.from(undefined, request);
 
-    console.log(`[INFO /api/device/${device.id}] Save `, request, device);
+    console.log(`[INFO] ${path} Save`, request, device);
 
     await stub.save(device);
     await ctx.exports.Audit.audit(req.user, `D.${device.id}`, "update", device);
@@ -24,7 +24,7 @@ async function preview(req, env) {
   let stub = getStub(env, req);
   let device = await stub.from(new Map(Object.entries(req.query)));
   let now = (await stub.deviceDateTime(device)).split(" ");
-  console.log("[INFO] /api/admin/device/preview", device.id, now);
+  console.log("[NFO] /api/admin/device/preview", device.id, now);
 
   return await env.TRMNL_IMG.preview(device, {
     date: now[0],
