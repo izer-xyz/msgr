@@ -114,7 +114,6 @@ export default {
         )
       ).json();
       this.events = response.events;
-      console.log("!!!!!!!!!!!!", this.events);
       this.loading = false;
       return response;
     },
