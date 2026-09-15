@@ -10,6 +10,7 @@ export default function (path, router, greyPngResponse) {
   );
 
   router.get(path, async ({ req }) => {
+    console.log("[INFO] IMG Board Headers", Object.fromEntries(req.headers));
     return Response.redirect(
       new URL(
         `${path}/../${await req.deviceStub.getFilename(req.device)}`,
@@ -44,7 +45,7 @@ async function screen(device, params, env) {
     time = "--:--";
   }
 
-  console.log(`[INFO /api/screen/board/${device.id}]`, params);
+  console.log("[INFO] IMG borard", device.id, params);
 
   return render(
     `<div tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">

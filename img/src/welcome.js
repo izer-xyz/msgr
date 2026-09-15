@@ -5,22 +5,14 @@ import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff
 
 export default function (path, router, greyPngResponse) {
   router.get(path, async ({ req }) =>
-    greyPngResponse(
-      await screen(req.device, await toDeviceTimeParams(req)),
-      req.device,
-    ),
+    greyPngResponse(await screen(req), req.device),
   );
   return screen;
 }
 
-async function toDeviceTimeParams(req) {
-  let dateTime = await req.deviceStub.deviceDateTime(req.device);
-  let split = dateTime.split(" ");
-  return { date: split[0], time: split[1] };
-}
-
-export async function screen(device, params) {
-  let dateTime = new Date(params.date + " " + params.time);
+export async function screen(req) {
+  let device = req.device;
+  let dateTime = new Date(await req.deviceStub.deviceDateTime(req.device));
   let date = dateTime.toLocaleDateString("fr-FR", {
     weekday: "long",
     year: "numeric",
@@ -33,7 +25,7 @@ export async function screen(device, params) {
     timeZone: device.time_zone,
   });
 
-  console.log(`[INFO /api/screen/${device.id}]`, params, date, time);
+  console.log("[INFO] IMG Welcome", device.id, dateTime.toISOString());
 
   return render(
     `<div tw="flex h-full w-full flex-col justify-center bg-white p-20">

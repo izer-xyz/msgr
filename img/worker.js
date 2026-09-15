@@ -21,20 +21,16 @@ router.use(async ({ env, req }) => {
   req.deviceStub = deviceStub(env, req);
   let device = (req.device = await req.deviceStub.from(req.headers));
   if (!device.updated) {
-    console.log("[WARN img] Unknow device", device.id);
+    console.log("[WARN] IMG Unknow device", device.id);
   }
   // TODO improve auth
   if (req.url.indexOf(device.screen) < 0) {
     console.log(
-      `[WARN img] Device screen (${device.screen}) doesn't match url (${req.url})`,
+      `[WARN] IMG Device screen (${device.screen}) doesn't match url (${req.url})`,
     );
     return greyPngResponse(await welcome(req), device);
   }
-  console.log(`[INFO ${device.screen}/${device.id}]`, req.url);
-  console.log(
-    `[INFO ${device.screen}/${device.id}]`,
-    Object.fromEntries(req.headers),
-  );
+  console.log(`[INFO] IMG ${device.screen}/${device.id}`);
 });
 
 // Listen Cloudflare Workers Fetch Event
