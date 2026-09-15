@@ -1,9 +1,9 @@
-export default async function setup(req) {
+export default async function setup(req, ctx) {
   let device = req.device;
   // TODO generate access token
   device.api_key = device.id;
   device.friendly_id = device.id.slice(-5);
-  await req.devices_stub.save(device);
+  ctx.waitUntil(req.devices_stub.save(device));
 
   return Response.json({
     api_key: device.api_key,

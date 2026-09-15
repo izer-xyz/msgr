@@ -1,6 +1,8 @@
-export default async function display(req) {
+export default async function display(req, ctx) {
   let device = req.device;
-  await req.devices_stub.save(device);
+
+  ctx.waitUntil(req.devices_stub.save(device));
+
   let filename = await req.devices_stub.getFilename(device);
 
   return Response.json({

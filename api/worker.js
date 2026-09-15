@@ -13,28 +13,20 @@ const router = new Router();
 
 // get current user profile
 router.use(async ({ env, req }) => {
-  console.log({ level: "info" }, req.method, new URL(req.url).pathname);
   req.devices_stub = getStub(env, req);
   req.device = await req.devices_stub.from(req.headers);
   req.device.storage_id = req.devices_stub.name;
-  if (!req.device.updated) {
-    console.log(
-      "[INFO api] Unknow device",
-      req.device.id,
-      await req.devices_stub.keys(),
-    );
-  } else {
-    console.log(
-      `[INFO api/${req.device.id}] from`,
-      await req.devices_stub.keys(),
-    );
-  }
+  console.log(
+    "[INFO] API Device",
+    req.device.id,
+    await req.devices_stub.keys(),
+  );
   req.analytics = env.TRMNL_ANALYTICS;
   metrics(req);
 });
 
-router.get(`/api/setup`, async ({ req }) => setup(req));
-router.get(`/api/display`, async ({ req, env }) => display(req, env));
+router.get(`/api/setup`, async ({ req, ctx }) => setup(req, ctx));
+router.get(`/api/display`, async ({ req, ctx }) => display(req, ctx));
 router.post(`/api/log`, async ({ req }) => log(req));
 
 export default {
@@ -62,9 +54,6 @@ async function metrics(req) {
     });
   } else {
     // no analytics just save to KV
-    console.log(
-      `[INFO /api/display/${req.device.id}] ${JSON.stringify(req.device)}`,
-    );
-    await req.devices_stub.save(req.device);
+    console.log("[INFO] API Metrics", req.device.id, req.device);
   }
 }

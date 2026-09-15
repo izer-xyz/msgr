@@ -17,7 +17,7 @@ const DEFAULTS = {
 
 export function getStub(env, req) {
   let name = /:\/\/([^\/\.]+)/.exec(req.url)[1] || "default";
-  console.log("[INFO] DO:Devices", name);
+  console.log("[INFO] Devices Strub", name);
   let stub = env.DEVICES.getByName(name, { locationHint: "weur" });
   return stub;
 }
@@ -141,7 +141,7 @@ export class Devices extends DurableObject {
 
   getFilename(device, now = new Date()) {
     let dateTime = this.deviceDateTime(device, now).replaceAll(" ", "/");
-    return `${device.screen}/${dateTime}/0.png`;
+    return `${device.screen}/${dateTime}/screen.png`;
   }
 
   deviceDateTime(device, now = new Date()) {
