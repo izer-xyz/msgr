@@ -59,7 +59,7 @@ export default {
       let b = Math.round(
         (Number(this.selected["battery-voltage"] || 0) - 3.2) * 7,
       );
-      return b <= 0 ? 0 : b > 7 ? "full" : b;
+      return b <= 0 ? 0 : b >= 7 ? "full" : b;
     },
   }),
 };
