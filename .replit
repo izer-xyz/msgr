@@ -23,10 +23,6 @@ author = 3410761
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd img && npm install && npm run dev"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
 args = "cd admin && npm install && npm run dev"
 
 [[workflows.workflow]]

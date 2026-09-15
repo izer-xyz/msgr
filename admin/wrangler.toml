@@ -11,14 +11,6 @@ run_worker_first = [ "/api/*" ]
 [observability]
 enabled = true
 
-[[kv_namespaces]]
-binding = "TRMNL_DEVICES"
-id = "93fbad6022314b8995a3c5d952a0d7cf"
-
-[[kv_namespaces]]
-binding = "TRMNL_BOARD"
-id = "5fd6e1078bfd4781bc1b0e379618e45e"
-
 [[analytics_engine_datasets]]
 binding = "TRMNL_AUDIT"
 dataset = "trmnl_audit"
@@ -31,3 +23,11 @@ service = "trmnl-img"
 name = "DEVICES"
 class_name = "Devices"
 script_name = "trmnl-api"
+
+[[durable_objects.bindings]]
+name = "BOARD"
+class_name = "Board"
+
+[exports.Board]
+type = "durable-object"
+storage = "sqlite"

@@ -1,4 +1,4 @@
-import { Devices, getStub } from "./src/devices.js";
+import { Devices, getStub } from "./src/devices_do.js";
 import { Router } from "@tsndr/cloudflare-worker-router";
 
 import display from "./src/display.js";
@@ -16,6 +16,7 @@ router.use(async ({ env, req }) => {
   console.log({ level: "info" }, req.method, new URL(req.url).pathname);
   req.devices_stub = getStub(env, req);
   req.device = await req.devices_stub.from(req.headers);
+  req.device.storage_id = req.devices_stub.name;
   if (!req.device.updated) {
     console.log(
       "[INFO api] Unknow device",

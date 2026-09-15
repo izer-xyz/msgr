@@ -17,7 +17,10 @@
 				<img
 					:src="selected.id && `/api/admin/device/preview?id=${selected.id}`"
 					class="w-full h-auto opacity-80"
-					style="filter: invert(15%) sepia(20%) grayscale(100%)"
+					style="
+						filter: invert(20%) sepia(20%) grayscale(100%) brightness(80%)
+							contrast(150%);
+					"
 				/>
 			</div>
 		</div>
@@ -68,6 +71,13 @@
 			</button>
 		</div>
 		<div class="my-2 text-lg font-bold capitalize">Technique</div>
+		<div class="flex flex-col">
+			<label>Dernier mis-à-jour</label>
+			<span
+				class="rounded-md p-1 ml-2 text-right"
+				x-text="new Date(selected.updated).toLocaleString('fr-FR', {timeZone: selected.time_zone, weekday: 'long', hour: 'numeric', minute: 'numeric'})"
+			></span>
+		</div>
 		<div class="flex flex-col">
 			<label for="battery-voltage">Batterie (V)</label>
 			<input

@@ -17,9 +17,8 @@ const DEFAULTS = {
 
 export function getStub(env, req) {
   let name = /:\/\/([^\/\.]+)/.exec(req.url)[1] || "default";
-  let id = env.DEVICES.idFromName(name);
-  console.log(`[INFO Devices] ID`, name);
-  let stub = env.DEVICES.get(id, { locationHint: "weur" });
+  console.log("[INFO] DO:Devices", name);
+  let stub = env.DEVICES.getByName(name, { locationHint: "weur" });
   return stub;
 }
 
@@ -43,6 +42,7 @@ export class Devices extends DurableObject {
     }
 
     device.updated = new Date().toISOString();
+
     this.ctx.storage.kv.put(device.id, device);
     return device;
   }

@@ -1,5 +1,5 @@
 import { WorkerEntrypoint } from "cloudflare:workers";
-import { Devices, getStub } from "../api/src/devices.js";
+import { getStub as deviceStub } from "../api/src/devices_do.js";
 
 import { Router } from "@tsndr/cloudflare-worker-router";
 import { encode, ColorType } from "@cf-wasm/png";
@@ -7,8 +7,6 @@ import { encode, ColorType } from "@cf-wasm/png";
 import welcomeRoute from "./src/welcome.js";
 import boardRoute from "./src/board.js";
 import { greyscale, validateDisplay } from "./src/image.js";
-
-export { Devices };
 
 // Initialize Router
 const router = new Router();
@@ -20,7 +18,7 @@ let welcome = welcomeRoute("/api/screen/welcome", router, greyPngResponse);
 let board = boardRoute("/api/screen/board", router, greyPngResponse);
 
 router.use(async ({ env, req }) => {
-  req.deviceStub = getStub(env, req);
+  req.deviceStub = deviceStub(env, req);
   let device = (req.device = await req.deviceStub.from(req.headers));
   if (!device.updated) {
     console.log("[WARN img] Unknow device", device.id);

@@ -1,6 +1,3 @@
-import { Message } from "../../src/event.js";
-import { Calendar } from "../../src/event.js";
-
 import { render } from "takumi-js";
 import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2?inline";
 import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2?inline";
@@ -39,8 +36,9 @@ async function screen(device, params, env) {
 
   let day = dateTime.getDay() || 7; // Sun is 7 not 0
 
-  let messages = await new Message({ date, day }, env.TRMNL_BOARD).list(false);
-  let events = await new Calendar({ date, day }, env.TRMNL_BOARD).list(false);
+  let stub = device.storage_id ? env.BOARD.getByName(device.storage_id) : null;
+  let messages = stub ? await stub.listMessages(date, day) : [];
+  let events = stub ? await stub.listEvents(date, day) : [];
 
   if (device.sleep) {
     time = "--:--";
@@ -79,7 +77,10 @@ async function screen(device, params, env) {
 
 function render_events(events) {
   return events.reduce(
-    (html, event) => `${html}
+    (html, event) =>
+      event.hide
+        ? html
+        : `${html}
             <div tw="mb-[44px]">
               <div tw="font-bold text-[54px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
               <div tw="mt-[16px]" x-show="event.content">${event.content}</div>

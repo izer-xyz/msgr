@@ -136,7 +136,7 @@
 						'bg-white': event.id === item.id, 
 						'text-error': event.subject !=='' && event.id !== item.id && (!selected_date || !item.day) && event.time === item.time
 					}"
-					x-show="(item.day === selected_day.toString() && (!events[0].hide || !selected_date)) || item.date && selected_date && !item.hide"
+					x-show="(item.day === selected_day.toString() && (! events[0]?.hide || !selected_date)) || item.date && selected_date && !item.hide"
 				>
 					<div class="mb-[8px] w-[19em] text-md font-bold">
 						<span

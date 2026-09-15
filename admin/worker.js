@@ -1,13 +1,13 @@
-import { Devices } from "../api/src/devices.js";
+import { Board, getStub } from "./src/board_do.js";
 import { Router } from "@tsndr/cloudflare-worker-router";
 import { jwtDecode } from "jwt-decode";
 import { WorkerEntrypoint } from "cloudflare:workers";
-import { default as profile, PROFILE_PREFIX } from "./src/api/profile.js";
+import { default as profile } from "./src/api/profile.js";
 import device from "./src/api/device.js";
 import messages from "./src/api/messages.js";
 import events from "./src/api/events.js";
 
-export { Devices };
+export { Board };
 
 // Initialize Router
 const router = new Router();
@@ -22,23 +22,19 @@ router.use(async ({ env, req }) => {
     let jwt = req.headers.get("cf-access-jwt-assertion");
     let email = jwt ? jwtDecode(jwt).email : "anonymous";
     let ip = req.headers.get("x-real-ip");
-    let profile = await env.TRMNL_BOARD.get(
-        [PROFILE_PREFIX, email].join("."),
-        "json",
-    );
+
+    req.boardStub = getStub(env, req);
+
+    let profile = await req.boardStub.profileByUserId(email);
+
     req.user = {
         ...profile,
         email,
         ip,
     };
-    console.log(
-        { level: "info" },
-        req.method,
-        new URL(req.url).pathname,
-        req.user.name,
-    );
+    console.log("[INFO]", req.method, new URL(req.url).pathname, req.user.name);
     // default name to email
-    req.user.name = req.user.name || req.user.email;
+    req.user.name = req.user.name || req.user.email.split("@")[0];
 });
 
 profile("/api/admin/profile", router);

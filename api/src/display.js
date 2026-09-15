@@ -1,13 +1,6 @@
 export default async function display(req) {
   let device = req.device;
-  // only save twice/3 a day KV limits apply
-  if (
-    new Date(device.updated || 0).toDateString() !==
-      new Date().toDateString() ||
-    device.sleep !== ""
-  ) {
-    await req.devices_stub.save(device);
-  }
+  await req.devices_stub.save(device);
   let filename = await req.devices_stub.getFilename(device);
 
   return Response.json({

@@ -20,3 +20,8 @@ id = "5fd6e1078bfd4781bc1b0e379618e45e"
 name = "DEVICES"
 class_name = "Devices"
 script_name = "trmnl-api"
+
+[[durable_objects.bindings]]
+name = "BOARD"
+class_name = "Board"
+script_name = "trmnl-admin"

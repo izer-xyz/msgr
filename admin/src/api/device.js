@@ -1,4 +1,4 @@
-import { getStub } from "../../../api/src/devices.js";
+import { getStub } from "../../../api/src/devices_do.js";
 
 export default function (path, router) {
   router.get(path, listDevices);

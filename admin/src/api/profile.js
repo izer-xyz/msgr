@@ -1,11 +1,7 @@
-export const PROFILE_PREFIX = "P";
-
 export default function (path, router) {
   router.get(path, ({ req }) => Response.json({ profile: req.user }));
 
-  router.post(path, async ({ env, req, ctx }) => {
-    let id = [PROFILE_PREFIX, req.user.email].join(".");
-
+  router.post(path, async ({ req, ctx }) => {
     let profile = {
       ...req.user,
       ...(await req.json()),
@@ -15,8 +11,8 @@ export default function (path, router) {
       return Response.error();
     }
 
-    await env.TRMNL_BOARD.put(id, JSON.stringify(profile, null, " "));
-    await ctx.exports.Audit.audit(req.user, id, "update", profile);
+    await req.boardStub.saveProfile(profile);
+    await ctx.exports.Audit.audit(req.user, profile.id, "update", profile);
 
     return Response.json({ profile });
   });

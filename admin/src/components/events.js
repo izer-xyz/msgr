@@ -97,7 +97,7 @@ export default {
     },
 
     async remove(event) {
-      this.event = { ...event, id: "", reference: "" };
+      //this.event = { ...event, id: "", reference: "" };
       await this.fetch("DELETE", event);
     },
 
@@ -114,6 +114,7 @@ export default {
         )
       ).json();
       this.events = response.events;
+      console.log("!!!!!!!!!!!!", this.events);
       this.loading = false;
       return response;
     },
