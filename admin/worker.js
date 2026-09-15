@@ -12,8 +12,6 @@ export { Board };
 // Initialize Router
 const router = new Router();
 
-router.debug();
-
 // Enabling build in CORS support
 router.cors();
 
@@ -32,9 +30,13 @@ router.use(async ({ env, req }) => {
         email,
         ip,
     };
-    console.log("[INFO]", req.method, new URL(req.url).pathname, req.user.name);
     // default name to email
     req.user.name = req.user.name || req.user.email.split("@")[0];
+    console.log(
+        `[INFO] ADM @${req.user.name}`,
+        new URL(req.url).pathname,
+        req.method,
+    );
 });
 
 profile("/api/admin/profile", router);
@@ -58,9 +60,7 @@ export class Audit extends WorkerEntrypoint {
                 indexes: [id],
             });
         } else {
-            console.log(
-                `[INFO /${user.ip}/audit/${id}/${action}] ${JSON.stringify(data)}`,
-            );
+            console.log(`[INFO] ADM Audit ${user.ip}/${id} ${action}`, data);
         }
     }
 }
