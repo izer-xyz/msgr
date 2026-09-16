@@ -33,5 +33,10 @@ async function preview(req, env) {
 async function listDevices({ env, req }) {
   let stub = getStub(env, req);
   let devices = await stub.list();
-  return Response.json({ devices });
+  let location = {};
+  try {
+    location = await req.boardStub.location();
+    console.log("[INFO] ADM Board in", location.colo);
+  } catch (e) {}
+  return Response.json({ devices, location });
 }

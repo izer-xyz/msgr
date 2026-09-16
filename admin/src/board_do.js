@@ -86,4 +86,15 @@ export class Board extends DurableObject {
 
     return event;
   }
+
+  async location() {
+    let data = await fetch("http://www.cloudflare.com/cdn-cgi/trace").then(
+      (res) => res.text(),
+    );
+    let arr = data
+      .trim()
+      .split("\n")
+      .map((e) => e.split("="));
+    return Object.fromEntries(arr);
+  }
 }
