@@ -186,4 +186,15 @@ export class Devices extends DurableObject {
     const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(value));
     return match ? (Number(match[1]) * 60 + Number(match[2])) * 60 : null;
   }
+
+  async location() {
+    let data = await fetch("http://www.cloudflare.com/cdn-cgi/trace").then(
+      (res) => res.text(),
+    );
+    let arr = data
+      .trim()
+      .split("\n")
+      .map((e) => e.split("="));
+    return Object.fromEntries(arr);
+  }
 }

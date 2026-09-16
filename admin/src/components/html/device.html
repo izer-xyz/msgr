@@ -151,13 +151,10 @@
 			</div>
 			<div class="flex flex-col">
 				<label for="location">Storage</label>
-				<input
-					id="location"
-					type="text"
-					readonly
-					x-model="location.colo"
+				<span
 					class="rounded-md p-1 ml-2 text-right"
-				/>
+					x-text="`${location[0]?.colo}/${location[1]?.colo}`"
+				></span>
 			</div>
 		</div>
 	</form>

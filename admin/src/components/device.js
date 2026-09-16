@@ -25,7 +25,7 @@ export default {
   data: () => ({
     DEFAULT,
     loading: true,
-    location: {},
+    location: [],
     devices: [],
     selected: {
       ...DEFAULT,
