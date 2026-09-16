@@ -1,7 +1,7 @@
 import { DurableObject } from "cloudflare:workers";
 
-export function getStub(env, req) {
-  let name = /:\/\/([^\/\.]+)/.exec(req.url)[1] || "default";
+export function getStub(env, req, alias) {
+  let name = req ? /:\/\/([^\/\.]+)/.exec(req.url)[1] || "default" : alias;
   console.log("[INFO] DO:Board", name);
   let stub = env.BOARD.getByName(name, { locationHint: "weur" });
   return stub;

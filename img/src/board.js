@@ -1,3 +1,4 @@
+import { getStub } from "../../admin/src/board_do.js";
 import { render } from "takumi-js";
 import font1 from "@fontsource/noto-sans/files/noto-sans-latin-500-normal.woff2?inline";
 import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2?inline";
@@ -37,7 +38,7 @@ async function screen(device, params, env) {
 
   let day = dateTime.getDay() || 7; // Sun is 7 not 0
 
-  let stub = device.storage_id ? env.BOARD.getByName(device.storage_id) : null;
+  let stub = device.storage_id ? getStub(env, null, device.storage_id) : null;
   let messages = stub ? await stub.listMessages(date, day) : [];
   let events = stub ? await stub.listEvents(date, day) : [];
 

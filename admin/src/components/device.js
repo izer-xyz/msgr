@@ -25,6 +25,7 @@ export default {
   data: () => ({
     DEFAULT,
     loading: true,
+    location: {},
     devices: [],
     selected: {
       ...DEFAULT,
@@ -48,6 +49,7 @@ export default {
         })
       ).json();
       this.devices = response.devices;
+      this.location = response.location;
       if (this.selected.id === "" && this.devices.length > 0) {
         this.selected = this.devices[0];
       }

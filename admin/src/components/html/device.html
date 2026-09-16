@@ -4,8 +4,8 @@
 	class="flex flex-col text-md/6 border-4 border-white gap-x-8 justify-center px-5 sm:px-0"
 	:class="{ 'animate-pulse': loading }"
 >
-	<div class="max-w-96 md:w-96 md:mx-auto mt-4 flex justify-between">
-		<span class="flex text-lg font-bold mb-4">Tablette</span>
+	<div class="md:w-[80%] md:mx-auto px-2 mt-4 flex justify-between">
+		<span class="flex text-lg font-bold"> </span>
 		<span
 			class="material-symbols-outlined"
 			x-text="`battery_android_${battery()}`"
@@ -26,8 +26,8 @@
 		</div>
 	</div>
 	<form
+		class="sm:w-96 sm:mx-auto flex-1 mt-4 flex flex-col gap-2"
 		@submit.prevent="save(selected, $el)"
-		class="max-w-96 md:w-96 md:mx-auto flex-1 mt-4 flex flex-col gap-2"
 	>
 		<div class="flex flex-col">
 			<label for="sleep_from"
@@ -146,6 +146,16 @@
 					type="text"
 					readonly
 					x-model="selected.rssi"
+					class="rounded-md p-1 ml-2 text-right"
+				/>
+			</div>
+			<div class="flex flex-col">
+				<label for="location">Storage</label>
+				<input
+					id="location"
+					type="text"
+					readonly
+					x-model="location.colo"
 					class="rounded-md p-1 ml-2 text-right"
 				/>
 			</div>
