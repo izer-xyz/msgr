@@ -49,8 +49,6 @@ async function screen(device, params, env) {
     time = "--:--";
   }
 
-  console.info(`Device#${device.id} board`, params);
-
   return render(
     `<div tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">
       <div tw="flex text-[96px] pb-16">
