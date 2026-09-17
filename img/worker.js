@@ -28,7 +28,7 @@ router.use(async ({ env, req }) => {
     console.log(
       `[WARN] IMG Device screen (${device.screen}) doesn't match url (${req.url})`,
     );
-    return greyPngResponse(await welcome(req), device);
+    return greyPngResponse(await welcome(device), device);
   }
   console.log(`[INFO] IMG ${device.screen}/${device.id}`);
 });
