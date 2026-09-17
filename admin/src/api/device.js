@@ -22,7 +22,7 @@ async function preview(req, env) {
   let stub = getStub(env, req);
   let device = await stub.from(new Map(Object.entries(req.query)));
   let now = (await stub.deviceDateTime(device)).split(" ");
-  console.log("[INFO] ADM Preview", device.id, now);
+  console.info(`Device#${device.id} Preview`, now);
 
   return await env.TRMNL_IMG.preview(device, {
     date: now[0],
@@ -36,7 +36,7 @@ async function listDevices({ env, req }) {
   let location = [];
   try {
     location = [await req.boardStub.location(), await stub.location()];
-    console.log("[INFO] ADM Hosting", location[0].colo, location[1].colo);
+    console.info("Hosting Board/Devices", location[0].colo, location[1].colo);
   } catch (e) {}
   return Response.json({ devices, location });
 }

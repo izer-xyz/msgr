@@ -2,7 +2,7 @@ import { DurableObject } from "cloudflare:workers";
 
 export function getStub(env, req, alias) {
   let name = req ? /:\/\/([^\/\.]+)/.exec(req.url)[1] || "default" : alias;
-  console.log("[INFO] DO:Board", name);
+  console.info(`Board#${name}`);
   let stub = env.BOARD.getByName(name, { locationHint: "weur" });
   return stub;
 }
@@ -59,7 +59,7 @@ export class Board extends DurableObject {
   }
 
   delete(obj) {
-    console.log("[INFO] DO:Board Delete", obj.id);
+    console.info("Board Delete", obj.id);
     this.ctx.storage.kv.delete(obj.id);
     return obj;
   }
@@ -75,7 +75,7 @@ export class Board extends DurableObject {
       event.time,
       event.reference,
     ].join(".");
-    console.log("[INFO] DO:Board Save", event.id, id);
+    console.info("Board Save", event.id, id);
 
     if (event.id && event.id !== id) {
       this.delete(event);

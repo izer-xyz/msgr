@@ -32,11 +32,8 @@ router.use(async ({ env, req }) => {
     };
     // default name to email
     req.user.name = req.user.name || req.user.email.split("@")[0];
-    console.log(
-        `[INFO] ADM @${req.user.name}`,
-        new URL(req.url).pathname,
-        req.method,
-    );
+
+    console.info(req.user.name, req.method, new URL(req.url).pathname);
 });
 
 profile("/api/admin/profile", router);

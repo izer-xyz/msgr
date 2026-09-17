@@ -16,11 +16,7 @@ router.use(async ({ env, req }) => {
   req.devices_stub = getStub(env, req);
   req.device = await req.devices_stub.from(req.headers);
   req.device.storage_id = req.devices_stub.name;
-  console.log(
-    "[INFO] API Device",
-    req.device.id,
-    await req.devices_stub.keys(),
-  );
+  console.info(`Device#${req.device.id}`, await req.devices_stub.keys());
   req.analytics = env.TRMNL_ANALYTICS;
   metrics(req);
 });
@@ -54,6 +50,6 @@ async function metrics(req) {
     });
   } else {
     // no analytics just save to KV
-    console.log("[INFO] API Metrics", req.device.id, req.device);
+    console.info("Metrics", req.device.id, req.device);
   }
 }
