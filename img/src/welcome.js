@@ -5,10 +5,10 @@ import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff
 
 export default function (path, router, greyPngResponse) {
   router.get(path, async ({ req }) =>
-    greyPngResponse(await screen(req.device, req.params, env), req.device),
+    greyPngResponse(await screen(req.device), req.device),
   );
   router.get(`${path}/:date/:time/:filename`, async ({ req }) =>
-    greyPngResponse(await screen(req.device, req.params, env), req.device),
+    greyPngResponse(await screen(req.device), req.device),
   );
   return screen;
 }
