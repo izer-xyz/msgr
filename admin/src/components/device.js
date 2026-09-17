@@ -49,7 +49,7 @@ export default {
         })
       ).json();
       this.devices = response.devices;
-      this.location = response.location;
+      this.location = response.location ?? this.location;
       if (this.selected.id === "" && this.devices.length > 0) {
         this.selected = this.devices[0];
       }

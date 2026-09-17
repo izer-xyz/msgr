@@ -5,34 +5,20 @@ import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff
 
 export default function (path, router, greyPngResponse) {
   router.get(path, async ({ req }) =>
-    greyPngResponse(await screen(req), req.device),
+    greyPngResponse(await screen(req.device, req.params, env), req.device),
   );
   return screen;
 }
 
-export async function screen(req) {
-  let device = req.device;
-  let dateTime = new Date(await req.deviceStub.deviceDateTime(req.device));
-  let date = dateTime.toLocaleDateString("fr-FR", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: device.time_zone,
-  });
-  let time = dateTime.toLocaleTimeString("fr-FR", {
-    timeStyle: "short",
-    timeZone: device.time_zone,
-  });
-
-  console.log("[INFO] IMG Welcome", device.id, dateTime.toISOString());
+export async function screen(device) {
+  console.log("[INFO] IMG Welcome", device.id);
 
   return render(
-    `<div tw="flex h-full w-full flex-col justify-center bg-white p-20">
+    `<div tw="flex h-full w-full flex-col justify-center bg-white text-black p-20">
       <div tw="flex flex-col">
-        <h1 tw="m-0 text-9xl font-normal leading-none text-black"> ${time} </h1>
-        <h1 tw="m-0 text-9xl font-bold leading-none text-black capitalize">
-          ${date}
+        <h1 tw="m-0 text-9xl font-bold">Bienvenue 🏖️</h1>
+        <h1 tw="m-0 text-5xl font-normal py-20">
+          💡 Allumez-moi chez Mami avec la bouton 'on' derrière.   
         </h1>
       </div>
     </div>`,
