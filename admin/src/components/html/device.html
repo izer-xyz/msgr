@@ -61,6 +61,18 @@
 				</select>
 			</div>
 		</div>
+		<div class="flex flex-col">
+			<label for="font_size">Taille de Police</label>
+			<select
+				id="font_size"
+				x-model="selected.font_size"
+				class="rounded-md p-1 ml-2 text-right"
+			>
+				<template x-for="s in 6">
+					<option x-text="s-1"></option>
+				</template>
+			</select>
+		</div>
 		<div class="flex items-center justify-end gap-x-2 mt-4">
 			<button
 				type="submit"

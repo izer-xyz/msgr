@@ -45,22 +45,24 @@ async function screen(device, params, env) {
   let messages = stub ? await stub.listMessages(date, day) : [];
   let events = stub ? await stub.listEvents(date, day) : [];
 
+  console.log(events);
+
   if (device.sleep) {
     time = "--:--";
   }
-
+  let font_size = device.font_size || 5;
   return render(
     `<div tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">
       <div tw="flex text-[96px] pb-16">
         <div tw="grow capitalize self-center">${dayText}, ${dateText}</div>
         <div tw="text-[120px]">${time}</div>
       </div>
-      <div tw="flex justify-between m-4 text-[48px] leading-[1.2] font-normal">
+      <div tw="flex justify-between m-4 text-[${40 + font_size * 8}px] leading-[1.2] font-normal">
         <div tw="w-[1100px] flex flex-col border-r-[2px] border-gray-700 pr-[32px] h-[80vh]">
-          ${render_events(events)}
+          ${render_events(events, font_size)}
         </div>
         <div tw="w-[660px] flex flex-col">
-          ${render_messages(messages)}
+          ${render_messages(messages, font_size)}
         </div>
       </div>
     </div>`,
@@ -78,26 +80,26 @@ async function screen(device, params, env) {
   );
 }
 
-function render_events(events) {
+function render_events(events, font_size) {
   return events.reduce(
     (html, event) =>
-      event.hide
+      event.hide || event.day == events[0].hide
         ? html
         : `${html}
             <div tw="mb-[44px]">
-              <div tw="font-bold text-[54px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
+              <div tw="font-bold text-[${48 + font_size * 8}px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
               <div tw="mt-[16px]" x-show="event.content">${event.content}</div>
             </div>`,
     "",
   );
 }
 
-function render_messages(messages) {
+function render_messages(messages, font_size) {
   return messages.reduce(
     (html, message) => `${html}
             <div tw="mb-[44px] flex flex-col">
               <span tw="border-b-[2px] border-gray-700 px-[24px] py-[16px]">${message.content}</span>
-              <span tw="self-end text-[44px]">${message.from} </span>
+              <span tw="self-end text-[${36 + font_size * 8}px]">${message.from} </span>
             </div>`,
     "",
   );
