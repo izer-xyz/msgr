@@ -68,6 +68,13 @@
 				></textarea>
 			</div>
 			<div class="flex items-center justify-end gap-x-2 font-semibold">
+				<a
+					href=""
+					class="material-symbols-outlined text-error"
+					x-show="msg.id"
+					@click.prevent="remove(msg)"
+					>delete</a
+				>
 				<button
 					type="submit"
 					x-bind:disabled="loading || msg.content ===''"
@@ -106,6 +113,7 @@
 					<a
 						href=""
 						class="material-symbols-outlined p-[8px] text-highlight"
+						x-show="!item.day"
 						@click.prevent="remove(item)"
 						>delete</a
 					>

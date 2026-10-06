@@ -73,6 +73,7 @@ export default {
       if (confirm("Supprimer le message?")) {
         await this.fetch("DELETE", msg);
       }
+      this.msg = { ...DEFAULT };
     },
 
     async fetch(method, msg) {
