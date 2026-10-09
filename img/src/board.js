@@ -45,6 +45,12 @@ async function screen(device, params, env) {
   let messages = stub ? await stub.listMessages(date, day) : [];
   let events = stub ? await stub.listEvents(date, day) : [];
 
+  // hide events more than 1-1.5h old
+  let expiry = `${dateTime.getHours() - 1}:${time.split(":")[1]}`;
+  if (expiry.length == 4) expiry = "0" + expiry;
+  console.log(`!!! EXPIRY ${expiry}`);
+  events = events.filter((e) => !e.time || e.time > expiry);
+
   console.log(events);
 
   if (device.sleep) {
@@ -53,15 +59,15 @@ async function screen(device, params, env) {
   let font_size = device.font_size || 5;
   return render(
     `<div tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">
-      <div tw="flex text-[96px] pb-16">
+      <div tw="flex text-[96px] pb-12">
         <div tw="grow capitalize self-center">${dayText}, ${dateText}</div>
         <div tw="text-[120px]">${time}</div>
       </div>
-      <div tw="flex justify-between m-4 text-[${40 + font_size * 8}px] leading-[1.2] font-normal">
-        <div tw="w-[1100px] flex flex-col border-r-[2px] border-gray-700 pr-[32px] h-[80vh]">
+      <div tw="flex justify-between m-4 text-[${40 + font_size * 8}px] leading-[1.1] font-normal">
+        <div tw="w-[1100px] flex flex-col border-r-[2px] border-gray-700 pr-[8px] h-[80vh]">
           ${render_events(events, font_size)}
         </div>
-        <div tw="w-[660px] flex flex-col">
+        <div tw="w-[680px] flex flex-col">
           ${render_messages(messages, font_size)}
         </div>
       </div>
@@ -86,9 +92,9 @@ function render_events(events, font_size) {
       event.hide || event.day == events[0].hide
         ? html
         : `${html}
-            <div tw="mb-[44px]">
-              <div tw="font-bold text-[${48 + font_size * 8}px] leading-[1em]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
-              <div tw="mt-[16px]" x-show="event.content">${event.content}</div>
+            <div tw="mb-[36px]">
+              <div tw="font-bold text-[${48 + font_size * 8}px]"><span tw="text-gray-800">${event.time} </span>${event.subject}</div>
+              <div tw="" x-show="event.content">${event.content}</div>
             </div>`,
     "",
   );
@@ -97,9 +103,9 @@ function render_events(events, font_size) {
 function render_messages(messages, font_size) {
   return messages.reduce(
     (html, message) => `${html}
-            <div tw="mb-[44px] flex flex-col">
-              <span tw="border-b-[2px] border-gray-700 px-[24px] py-[16px]">${message.content}</span>
-              <span tw="self-end text-[${36 + font_size * 8}px]">${message.from} </span>
+            <div tw="mb-[36px] flex flex-col">
+              <span tw="border-b-[2px] border-gray-700 pb-[8px]">${message.content}</span>
+              <span tw="self-end text-[${24 + font_size * 8}px]">${message.from} </span>
             </div>`,
     "",
   );
