@@ -48,10 +48,7 @@ async function screen(device, params, env) {
   // hide events more than 1-1.5h old
   let expiry = `${dateTime.getHours() - 1}:${time.split(":")[1]}`;
   if (expiry.length == 4) expiry = "0" + expiry;
-  console.log(`!!! EXPIRY ${expiry}`);
   events = events.filter((e) => !e.time || e.time > expiry);
-
-  console.log(events);
 
   if (device.sleep) {
     time = "--:--";
