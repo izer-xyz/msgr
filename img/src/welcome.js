@@ -4,11 +4,25 @@ import font2 from "@fontsource/noto-sans/files/noto-sans-latin-700-normal.woff2?
 import emoji from "@fontsource/noto-emoji/files/noto-emoji-emoji-700-normal.woff2?inline";
 
 export default function (path, router, greyPngResponse) {
-  router.get(path, async ({ req }) =>
-    greyPngResponse(await screen(req.device), req.device),
+  router.get(
+    path,
+    async ({ req }) =>
+      //greyPngResponse(await screen(req.device), req.device),
+      new Response(await screen(req.device), {
+        headers: {
+          "Content-Type": "image/png",
+        },
+      }),
   );
-  router.get(`${path}/:date/:time/:filename`, async ({ req }) =>
-    greyPngResponse(await screen(req.device), req.device),
+  router.get(
+    `${path}/:date/:time/:filename`,
+    async ({ req }) =>
+      //greyPngResponse(await screen(req.device), req.device),
+      new Response(await screen(req.device), {
+        headers: {
+          "Content-Type": "image/png",
+        },
+      }),
   );
   return screen;
 }
@@ -17,7 +31,7 @@ export async function screen(device) {
   return render(
     `<div tw="flex h-full w-full flex-col justify-center bg-white text-black p-20">
       <div tw="flex flex-col">
-        <h1 tw="m-0 text-9xl font-bold">Bienvenue 🏖️</h1>
+        <h1 tw="m-0 text-9xl font-bold text-red-800">Bienvenue 🏖️</h1>
         <h1 tw="m-0 text-5xl font-normal py-20">
           💡 Allumez-moi chez Mamie avec le bouton 'on' derrière.   
         </h1>
@@ -26,7 +40,8 @@ export async function screen(device) {
     {
       width: Number(device.width),
       height: Number(device.height),
-      format: "raw",
+      //format: "raw",
+      format: "png",
       emoji: "from-font",
       fonts: [font1, font2, emoji],
     },
