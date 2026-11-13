@@ -78,8 +78,14 @@ function render_messages(messages, font_size) {
             <div tw="mb-[72px] content-center grid">
               <span tw="font-bold">${message.subject ? message.time + " " + message.subject : ""}</span>
               <span tw="">${message.content}</span>
-              <span tw="text-right border-t-[2px] border-gray-700 pt-[8px] text-[${16 + font_size * 8}px]">${message.from} </span>
+              ${render_from(message, font_size)}
             </div>`,
     "",
   );
+}
+
+function render_from(message, font_size) {
+  return message && message.from
+    ? `<span tw="text-right border-t-[2px] border-gray-700 pt-[8px] text-[${16 + font_size * 8}px]">${message.from} </span>`
+    : "";
 }
