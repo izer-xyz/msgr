@@ -84,6 +84,14 @@
 				</button>
 			</div>
 		</form>
+		<form
+			action="/api/admin/messages/image"
+			method="post"
+			enctype="multipart/form-data"
+		>
+			<input name="image" type="file" @change="$el.form.submit()" />
+			<img src="/api/admin/messages/image" />
+		</form>
 	</div>
 	<div class="md:max-w-74 flex-1 md:order-first mt-4 flex flex-col">
 		<div id="preview" class="flex flex-col px-2 h-[30em] bg-light rounded-lg">

@@ -7,6 +7,7 @@ export function getStub(env, req, alias) {
   return stub;
 }
 
+const IMAGE_PREFIX = "I";
 const PROFILE_PREFIX = "P";
 const MESSAGE_PREFIX = "M";
 const EVENT_PREFIX = "E";
@@ -106,6 +107,18 @@ export class Board extends DurableObject {
     this.ctx.storage.kv.put(id, event);
 
     return event;
+  }
+
+  saveImage(content, type) {
+    this.ctx.storage.kv.put(IMAGE_PREFIX + ".type", type);
+    this.ctx.storage.kv.put(IMAGE_PREFIX, content);
+  }
+
+  getImage() {
+    return {
+      type: this.ctx.storage.kv.get(IMAGE_PREFIX + ".type"),
+      content: this.ctx.storage.kv.get(IMAGE_PREFIX),
+    };
   }
 
   async location() {

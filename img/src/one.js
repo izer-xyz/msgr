@@ -49,8 +49,8 @@ async function screen(device, params, env) {
   }
   let font_size = device.font_size || 5;
   return render(
-    `<div tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">
-      <div tw="flex text-[96px] pb-12">
+    `<div style="background: center no-repeat white url('image')" tw="flex h-full w-full flex-col bg-white text-black px-4 font-bold leading-none">
+      <div tw="bg-white flex text-[96px] pb-12">
         <div tw="grow capitalize self-center">${dayText}, ${dateText}</div>
         <div tw="">${time}</div>
       </div>
@@ -64,6 +64,12 @@ async function screen(device, params, env) {
       format: "raw",
       emoji: "from-font",
       fonts: [font1, font2, emoji],
+      images: [
+        {
+          src: messages.length ? "" : "image",
+          data: async () => (await stub.getImage()).content,
+        },
+      ],
       css: `
         @theme {
         }
