@@ -6,6 +6,7 @@ import { encode, ColorType } from "@cf-wasm/png";
 
 import welcomeRoute from "./src/welcome.js";
 import boardRoute from "./src/board.js";
+import oneRoute from "./src/one.js";
 import { greyscale, validateDisplay } from "./src/image.js";
 
 // Initialize Router
@@ -16,6 +17,7 @@ router.cors();
 
 let welcome = welcomeRoute("/api/screen/welcome", router, greyPngResponse);
 let board = boardRoute("/api/screen/board", router, greyPngResponse);
+let one = oneRoute("/api/screen/one", router, greyPngResponse);
 
 router.use(async ({ env, req }) => {
   req.deviceStub = deviceStub(env, req);
@@ -40,7 +42,7 @@ export default class Img extends WorkerEntrypoint {
   }
   async preview(device, params) {
     return greyPngResponse(
-      await ({ welcome, board }[device.screen] || welcome)(
+      await ({ welcome, board, one }[device.screen] || welcome)(
         device,
         params,
         this.env,

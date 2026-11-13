@@ -28,6 +28,27 @@ export class Board extends DurableObject {
     return profile;
   }
 
+  one(day, date, time = "00:00", duration = 30 * 60 * 1000) {
+    let UTC = (t) => Date.UTC(0, 0, 0, t[0], t[1]);
+    let in_range = (a, b, d) => a >= b && a <= b + d;
+    let now = UTC(time.split(":"));
+    let list = this.list(EVENT_PREFIX, null, date, day);
+    let event = list.find(
+      (e) => e.time && in_range(UTC(e.time.split(":")), now, duration),
+    );
+    let msg = this.list(MESSAGE_PREFIX, null, date, day).pop();
+    if (!msg) {
+      msg = list.shift();
+      if ((msg && msg.time) || time > "10:30") {
+        msg = null;
+      }
+    }
+    list = [];
+    msg && list.push(msg);
+    event && list.push(event);
+    return list;
+  }
+
   listMessages(date, day) {
     let sort = (a, b) =>
       (Number(b.day) - Number(a.day)) * 100 - a.time.localeCompare(b.time) * 10;

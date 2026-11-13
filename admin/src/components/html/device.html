@@ -68,7 +68,7 @@
 				x-model="selected.font_size"
 				class="rounded-md p-1 ml-2 text-right"
 			>
-				<template x-for="s in 6">
+				<template x-for="s in 15">
 					<option x-text="s-1"></option>
 				</template>
 			</select>
@@ -136,6 +136,39 @@
 					type="text"
 					readonly
 					x-model="selected.time_zone"
+					class="rounded-md p-1 ml-2 text-right"
+					@dblclick="$el.readOnly = !$el.readOnly"
+				/>
+			</div>
+			<div class="flex flex-col">
+				<label for="width">Width</label>
+				<input
+					id="width"
+					type="text"
+					readonly
+					x-model="selected.width"
+					class="rounded-md p-1 ml-2 text-right"
+					@dblclick="$el.readOnly = !$el.readOnly"
+				/>
+			</div>
+			<div class="flex flex-col">
+				<label for="height">Height</label>
+				<input
+					id="height"
+					type="text"
+					readonly
+					x-model="selected.height"
+					class="rounded-md p-1 ml-2 text-right"
+					@dblclick="$el.readOnly = !$el.readOnly"
+				/>
+			</div>
+			<div class="flex flex-col">
+				<label for="depth">Bits</label>
+				<input
+					id="depth"
+					type="text"
+					readonly
+					x-model="selected.depth"
 					class="rounded-md p-1 ml-2 text-right"
 					@dblclick="$el.readOnly = !$el.readOnly"
 				/>
