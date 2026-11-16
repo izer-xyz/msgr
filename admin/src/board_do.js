@@ -29,7 +29,7 @@ export class Board extends DurableObject {
     return profile;
   }
 
-  one(day, date, time = "00:00", duration = 30 * 60 * 1000) {
+  one(day, date, time = "00:00", duration = 45 * 60 * 1000) {
     let UTC = (t) => Date.UTC(0, 0, 0, t[0], t[1]);
     let in_range = (a, b, d) => a >= b && a <= b + d;
     let now = UTC(time.split(":"));
